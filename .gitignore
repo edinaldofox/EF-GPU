@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+*.egg-info/
+
+# EDA generated artifacts and waveforms
+results/
+runs/
+reports/
+*.vcd
+*.fsdb
+*.gds
+*.odb
+
+# Local tool and PDK configuration
+.env
+pdks/
