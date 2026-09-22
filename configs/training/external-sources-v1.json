@@ -1,0 +1,34 @@
+{
+  "schema_version": "1.0",
+  "sources": [
+    {
+      "id": "serv-isc-v1",
+      "repository": "https://github.com/olofk/serv.git",
+      "commit": "f200eb2ed7b69ac1c6b8eddd47654522aeee5ce8",
+      "license": "ISC",
+      "license_path": "LICENSE",
+      "review": {
+        "reviewed_at": "2026-09-22",
+        "scope": "rtl/*.v only; no firmware, PDK, generated output, or third-party submodule",
+        "status": "approved-for-temporary-extraction"
+      },
+      "candidate_paths": ["rtl/serv_alu.v", "rtl/serv_aligner.v", "rtl/serv_bufreg.v", "rtl/serv_decode.v", "rtl/serv_immdec.v", "rtl/serv_mem_if.v", "rtl/serv_rf_ram.v", "rtl/serv_state.v"],
+      "split": "train"
+    },
+    {
+      "id": "picorv32-isc-v1",
+      "repository": "https://github.com/YosysHQ/picorv32.git",
+      "commit": "ef203c2b0a3fb793280f5114941416c425c5b461",
+      "license": "ISC",
+      "license_path": "COPYING",
+      "review": {
+        "reviewed_at": "2026-09-22",
+        "scope": "picorv32.v only; no firmware, PDK, generated output, or third-party test images",
+        "status": "approved-for-temporary-extraction"
+      },
+      "candidate_paths": ["picorv32.v"],
+      "split": "benchmark"
+    }
+  ],
+  "admission_policy": "Each extracted row records source commit, path, SHA-256, license, verification command, and split. No source content or hash may occur in more than one split."
+}
