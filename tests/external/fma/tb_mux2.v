@@ -1,0 +1,1 @@
+module tb_mux2; reg [7:0] din; reg sel; wire [3:0] dout; mux2 #(.SIZE(4)) dut(.*); initial begin din=8'hab;sel=0;#1 assert(dout==4'hb);sel=1;#1 assert(dout==4'ha);$display("FMA mux2 passed");$finish;end endmodule

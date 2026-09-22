@@ -64,6 +64,21 @@
       },
       "candidate_paths": ["rtl/fazyrv_hadd.v", "rtl/fazyrv_fadd.v", "rtl/fazyrv_cmp.v", "rtl/fazyrv_shftreg.sv", "rtl/fazyrv_ram_sp.sv", "rtl/fazyrv_ram_dp.sv", "rtl/fazyrv_align.sv", "rtl/fazyrv_spm_a.sv", "rtl/fazyrv_pc.sv"],
       "split": "train"
+    },
+    {
+      "id": "tachyum-fma-apache-2.0-v1",
+      "repository": "https://github.com/Tachyum-Open-Source/fma-rtl.git",
+      "commit": "1e7221349e7b18b1e20f4b301f3b7a34b5ebd490",
+      "license": "Apache-2.0",
+      "license_path": "LICENSE",
+      "review": {
+        "reviewed_at": "2026-09-22",
+        "reviewer": "EF-GPU autonomous intake; human promotion remains required",
+        "scope": "root-level primitive RTL only: mux2, mux5d, dff, dffe, incrementer, incrementer_8, adder10, adder10_no_cin and adder13; no TestFloat/SoftFloat, test harness, generated output, PDK, or FPGA-specific multiplier",
+        "status": "approved-for-temporary-extraction"
+      },
+      "candidate_paths": ["mux2.v", "mux5d.v", "dff.v", "dffe.v", "incrementer.v", "incrementer_8.v", "adder10.v", "adder10_no_cin.v", "adder13.v"],
+      "split": "benchmark"
     }
   ],
   "admission_policy": "Each extracted row records source commit, path, SHA-256, license, verification command, and split. No source content or hash may occur in more than one split."

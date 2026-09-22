@@ -44,6 +44,13 @@ SOURCES: dict[str, dict[str, str]] = {
         "license_path": "rtl/LICENSE.txt",
         "license_sha256": "31beba5b18f79bd120e371525c603f057952effd4d6436a584073f3e50537edc",
     },
+    "fma-rtl": {
+        "repository": "https://github.com/Tachyum-Open-Source/fma-rtl.git",
+        "commit": "1e7221349e7b18b1e20f4b301f3b7a34b5ebd490",
+        "license": "Apache-2.0",
+        "license_path": "LICENSE",
+        "license_sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+    },
 }
 
 EXAMPLES: tuple[dict[str, Any], ...] = (
@@ -155,6 +162,24 @@ EXAMPLES: tuple[dict[str, Any], ...] = (
         "specification": "Implement the pinned FazyRV serial program counter with configurable boot address and half-adder dependency.",
         "verification_command": "./scripts/verify-external-rtl.sh fazyrv && ./scripts/synth-external-rtl.sh fazyrv fazyrv_pc",
     },
+    {
+        "id": "fma-mux2-001", "source_id": "fma-rtl", "split": "benchmark", "design_family": "fma_two_way_mux", "source_path": "mux2.v", "testbench": "tests/external/fma/tb_mux2.v", "specification": "Implement the pinned Tachyum parameterized two-way multiplexer.", "verification_command": "./scripts/verify-external-rtl.sh fma-rtl && ./scripts/synth-external-rtl.sh fma-rtl mux2"},
+    {
+        "id": "fma-mux5d-001", "source_id": "fma-rtl", "split": "benchmark", "design_family": "fma_one_hot_five_way_mux", "source_path": "mux5d.v", "testbench": "tests/external/fma/tb_mux5d.v", "specification": "Implement the pinned Tachyum five-way one-hot multiplexer.", "verification_command": "./scripts/verify-external-rtl.sh fma-rtl && ./scripts/synth-external-rtl.sh fma-rtl mux5d"},
+    {
+        "id": "fma-dff-001", "source_id": "fma-rtl", "split": "benchmark", "design_family": "fma_parameterized_dff", "source_path": "dff.v", "testbench": "tests/external/fma/tb_dff.v", "specification": "Implement the pinned Tachyum parameterized rising-edge D flip-flop.", "verification_command": "./scripts/verify-external-rtl.sh fma-rtl && ./scripts/synth-external-rtl.sh fma-rtl dff"},
+    {
+        "id": "fma-dffe-001", "source_id": "fma-rtl", "split": "benchmark", "design_family": "fma_enabled_dff", "source_path": "dffe.v", "testbench": "tests/external/fma/tb_dffe.v", "specification": "Implement the pinned Tachyum parameterized enabled D flip-flop.", "verification_command": "./scripts/verify-external-rtl.sh fma-rtl && ./scripts/synth-external-rtl.sh fma-rtl dffe"},
+    {
+        "id": "fma-incrementer-001", "source_id": "fma-rtl", "split": "benchmark", "design_family": "fma_parameterized_incrementer", "source_path": "incrementer.v", "testbench": "tests/external/fma/tb_incrementer.v", "specification": "Implement the pinned Tachyum parameterized incrementer with carry output.", "verification_command": "./scripts/verify-external-rtl.sh fma-rtl && ./scripts/synth-external-rtl.sh fma-rtl incrementer"},
+    {
+        "id": "fma-incrementer8-001", "source_id": "fma-rtl", "split": "benchmark", "design_family": "fma_eight_bit_incrementer", "source_path": "incrementer_8.v", "testbench": "tests/external/fma/tb_incrementer_8.v", "specification": "Implement the pinned Tachyum eight-bit incrementer with carry output.", "verification_command": "./scripts/verify-external-rtl.sh fma-rtl && ./scripts/synth-external-rtl.sh fma-rtl incrementer_8"},
+    {
+        "id": "fma-adder10-001", "source_id": "fma-rtl", "split": "benchmark", "design_family": "fma_ten_bit_adder_with_carry_in", "source_path": "adder10.v", "testbench": "tests/external/fma/tb_adder10.v", "specification": "Implement the pinned Tachyum ten-bit adder with carry input and output.", "verification_command": "./scripts/verify-external-rtl.sh fma-rtl && ./scripts/synth-external-rtl.sh fma-rtl adder10"},
+    {
+        "id": "fma-adder10-no-cin-001", "source_id": "fma-rtl", "split": "benchmark", "design_family": "fma_ten_bit_adder", "source_path": "adder10_no_cin.v", "testbench": "tests/external/fma/tb_adder10_no_cin.v", "specification": "Implement the pinned Tachyum ten-bit adder without carry input.", "verification_command": "./scripts/verify-external-rtl.sh fma-rtl && ./scripts/synth-external-rtl.sh fma-rtl adder10_no_cin"},
+    {
+        "id": "fma-adder13-001", "source_id": "fma-rtl", "split": "benchmark", "design_family": "fma_thirteen_bit_adder", "source_path": "adder13.v", "testbench": "tests/external/fma/tb_adder13.v", "specification": "Implement the pinned Tachyum thirteen-bit adder with carry input and output.", "verification_command": "./scripts/verify-external-rtl.sh fma-rtl && ./scripts/synth-external-rtl.sh fma-rtl adder13"},
 )
 
 

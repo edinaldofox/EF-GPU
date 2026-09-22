@@ -1,0 +1,1 @@
+module tb_adder13; reg [12:0] op_a,op_b;reg cin;wire [12:0] result;wire cout;adder13 dut(.*);initial begin op_a=8191;op_b=0;cin=1;#1 assert({cout,result}==14'd8192);$display("FMA adder13 passed");$finish;end endmodule

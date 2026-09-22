@@ -1,0 +1,1 @@
+module tb_mux5d; reg [9:0] din; reg [4:0] sel; wire [1:0] dout; mux5d #(.SIZE(2)) dut(.*); initial begin din=10'b00_01_10_11_01;sel=5'b00001;#1 assert(dout==2'b01);sel=5'b00100;#1 assert(dout==2'b10);sel=5'b10000;#1 assert(dout==2'b00);$display("FMA mux5d passed");$finish;end endmodule

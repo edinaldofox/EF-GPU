@@ -1,0 +1,1 @@
+module tb_incrementer_8; reg [7:0] din; wire [7:0] dout; wire c_out; incrementer_8 dut(.*); initial begin din=8'h7f;#1 assert({c_out,dout}==9'h080);din=8'hff;#1 assert({c_out,dout}==9'h100);$display("FMA incrementer_8 passed");$finish;end endmodule

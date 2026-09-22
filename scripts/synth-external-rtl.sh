@@ -49,6 +49,11 @@ case "${source_id}:${top}" in
     commit="c8d9c7971b91c0c166aef6c236f1134b2c6ac1a1"
     source_glob="/source/rtl/fazyrv_hadd.v /source/rtl/fazyrv_pc.sv"
     ;;
+  fma-rtl:mux2|fma-rtl:mux5d|fma-rtl:dff|fma-rtl:dffe|fma-rtl:incrementer|fma-rtl:incrementer_8|fma-rtl:adder10|fma-rtl:adder10_no_cin|fma-rtl:adder13)
+    repository="https://github.com/Tachyum-Open-Source/fma-rtl.git"
+    commit="1e7221349e7b18b1e20f4b301f3b7a34b5ebd490"
+    source_glob="/source/${top}.v"
+    ;;
   *)
     echo "unreviewed source/top pair: ${source_id}:${top}" >&2
     exit 2

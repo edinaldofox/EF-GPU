@@ -1,0 +1,1 @@
+module tb_adder10_no_cin; reg [9:0] op_a,op_b;wire [9:0] result;wire cout;adder10_no_cin dut(.*);initial begin op_a=600;op_b=500;#1 assert({cout,result}==1100);$display("FMA adder10_no_cin passed");$finish;end endmodule

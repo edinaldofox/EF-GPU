@@ -1,0 +1,1 @@
+module tb_incrementer; reg [3:0] din; wire [3:0] dout; wire cout; incrementer #(.WIDTH(4)) dut(.*); initial begin din=4'he;#1 assert({cout,dout}==5'h0f);din=4'hf;#1 assert({cout,dout}==5'h10);$display("FMA incrementer passed");$finish;end endmodule

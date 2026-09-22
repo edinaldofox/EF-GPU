@@ -1,0 +1,1 @@
+module tb_dff; reg clock=0; reg [3:0] d; wire [3:0] q; dff #(.SIZE(4)) dut(.*); always #5 clock=~clock; initial begin d=4'h3;@(posedge clock);#1 assert(q==4'h3);d=4'hc;@(posedge clock);#1 assert(q==4'hc);$display("FMA dff passed");$finish;end endmodule
