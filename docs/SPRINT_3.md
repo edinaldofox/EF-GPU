@@ -19,3 +19,23 @@ deve conter commit, caminho, hash, licença e comando de verificação.
 
 A admissão só ocorrerá para módulos que compilam/sintetizam no ambiente fixado.
 O benchmark não pode compartilhar conteúdo-fonte com treino ou validação.
+
+## Evidência de extração temporária
+
+Os verificadores abaixo baixam o commit registrado para um diretório temporário,
+confirmam o `HEAD` e o SHA-256 do arquivo de licença antes de montar o código
+como somente leitura no contêiner. Eles não salvam RTL externo no repositório.
+
+```bash
+./scripts/verify-external-rtl.sh serv
+./scripts/synth-external-rtl.sh serv serv_alu
+./scripts/synth-external-rtl.sh serv serv_aligner
+./scripts/verify-external-rtl.sh picorv32
+./scripts/synth-external-rtl.sh picorv32 picorv32_pcpi_mul
+```
+
+As verificações funcionais atuais são testes de fumaça próprios do EF-GPU:
+o alinhador e a ALU serial do SERV, e a instrução `MUL` (7 × 9 = 63) da
+unidade PCPI iterativa do PicoRV32. Os três alvos também sintetizaram com
+Yosys 0.68 na imagem OpenROAD fixada. `serv_rf_ram` permanece excluído por um
+aviso de intervalo de bits observado na síntese; não é exemplo admitido.
