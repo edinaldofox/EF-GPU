@@ -33,3 +33,5 @@
 - Integração somente após contratos, cobertura e resultados físicos estáveis por bloco.
 - Baseline funcional inicial: `vreg8x64`, banco vetorial com duas leituras, uma
   escrita e `r0` imutável; ainda sem PPA ou integração à VMAC.
+- `vpu16_decode`: codifica o primeiro formato de instrução (`VMAC`) e será
+  integrado ao banco vetorial e à unidade SIMD somente após suas baselines.
