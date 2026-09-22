@@ -26,9 +26,52 @@ TEMPLATES: Final = {
     "testbench-pass-message-label": {
         "description": "Labels the existing SIMD4x8 passing-test message as a candidate run.",
         "target_path": TESTBENCH_PATH,
-        "old": '        $display("SIMD4x8 C-reference RTL test passed: %0d vectors", vector_count);\n',
-        "new": '        $display("SIMD4x8 candidate C-reference RTL test passed: %0d vectors", vector_count);\n',
-    }
+        "replacements": (
+            (
+                '        $display("SIMD4x8 C-reference RTL test passed: %0d vectors", vector_count);\n',
+                '        $display("SIMD4x8 candidate C-reference RTL test passed: %0d vectors", vector_count);\n',
+            ),
+        ),
+    },
+    "testbench-iter-completion-timeout": {
+        "description": (
+            "Bounds combinational and iterative VMAC completion waits so a protocol failure is reproducible."
+        ),
+        "target_path": TESTBENCH_PATH,
+        "replacements": (
+            (
+                "        input logic [63:0] vector_expected;\n        begin\n",
+                "        input logic [63:0] vector_expected;\n"
+                "        integer wait_cycles;\n"
+                "        begin\n",
+            ),
+            (
+                "            wait (comb_done);\n",
+                "            wait_cycles = 0;\n"
+                "            while (!comb_done && wait_cycles < 2) begin\n"
+                "                @(posedge clk);\n"
+                "                wait_cycles = wait_cycles + 1;\n"
+                "            end\n"
+                "            assert (comb_done) else $fatal(1, \"comb VMAC timeout at vector %0d\", vector_count);\n",
+            ),
+            (
+                "            wait (iter_busy);\n"
+                "            @(posedge iter_done);\n",
+                "            wait_cycles = 0;\n"
+                "            while (!iter_busy && wait_cycles < 2) begin\n"
+                "                @(posedge clk);\n"
+                "                wait_cycles = wait_cycles + 1;\n"
+                "            end\n"
+                "            assert (iter_busy) else $fatal(1, \"iter VMAC did not become busy at vector %0d\", vector_count);\n"
+                "            wait_cycles = 0;\n"
+                "            while (!iter_done && wait_cycles < 16) begin\n"
+                "                @(posedge clk);\n"
+                "                wait_cycles = wait_cycles + 1;\n"
+                "            end\n"
+                "            assert (iter_done) else $fatal(1, \"iter VMAC timeout at vector %0d\", vector_count);\n",
+            ),
+        ),
+    },
 }
 TEMPLATE_IDS: Final = frozenset(TEMPLATES)
 
@@ -61,13 +104,14 @@ def render_simd4x8_template_patch(template_id: str) -> str:
     target_path = str(recipe["target_path"])
     source_path = ROOT / target_path
     source = source_path.read_text(encoding="utf-8")
-    old, new = str(recipe["old"]), str(recipe["new"])
-    occurrences = source.count(old)
-    if occurrences != 1:
-        raise ValueError(
-            f"template {template_id!r} expected one occurrence in {target_path}, found {occurrences}"
-        )
-    candidate = source.replace(old, new, 1)
+    candidate = source
+    for old, new in recipe["replacements"]:
+        occurrences = candidate.count(old)
+        if occurrences != 1:
+            raise ValueError(
+                f"template {template_id!r} expected one occurrence in {target_path}, found {occurrences}"
+            )
+        candidate = candidate.replace(old, new, 1)
     diff = difflib.unified_diff(
         source.splitlines(keepends=True),
         candidate.splitlines(keepends=True),

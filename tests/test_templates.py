@@ -12,17 +12,18 @@ from ef_gpu.templates import (
 )
 
 
-def test_known_template_renders_an_applicable_single_file_patch(tmp_path) -> None:
-    patch = render_simd4x8_template_patch("testbench-pass-message-label")
-    path = tmp_path / "candidate.patch"
-    path.write_text(patch, encoding="utf-8")
-    checked = subprocess.run(
-        ["git", "apply", "--check", str(path)], cwd=ROOT, text=True, stderr=subprocess.PIPE, check=False
-    )
-    assert checked.returncode == 0, checked.stderr
-    assert "designs/simd4x8/tb/tb_simd4x8_c_ref.sv" in patch
-    assert "candidate C-reference RTL test passed" in patch
-    assert TEMPLATE_IDS == {"testbench-pass-message-label"}
+def test_known_templates_render_an_applicable_single_file_patch(tmp_path) -> None:
+    for template_id in TEMPLATE_IDS:
+        patch = render_simd4x8_template_patch(template_id)
+        path = tmp_path / f"{template_id}.patch"
+        path.write_text(patch, encoding="utf-8")
+        checked = subprocess.run(
+            ["git", "apply", "--check", str(path)], cwd=ROOT, text=True, stderr=subprocess.PIPE, check=False
+        )
+        assert checked.returncode == 0, checked.stderr
+        assert "designs/simd4x8/tb/tb_simd4x8_c_ref.sv" in patch
+    assert "candidate C-reference RTL test passed" in render_simd4x8_template_patch("testbench-pass-message-label")
+    assert "iter VMAC timeout" in render_simd4x8_template_patch("testbench-iter-completion-timeout")
 
 
 def test_emit_records_template_provenance_and_does_not_overwrite(tmp_path) -> None:
