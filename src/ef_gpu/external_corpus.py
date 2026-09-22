@@ -119,6 +119,30 @@ EXAMPLES: tuple[dict[str, Any], ...] = (
         "specification": "Implement the pinned FazyRV parameterized chunk comparator, including signed-MSB inversion.",
         "verification_command": "./scripts/verify-external-rtl.sh fazyrv && ./scripts/synth-external-rtl.sh fazyrv fazyrv_cmp",
     },
+    {
+        "id": "fazyrv-shftreg-001", "source_id": "fazyrv", "split": "train", "design_family": "fazyrv_shift_register",
+        "source_path": "rtl/fazyrv_shftreg.sv", "testbench": "tests/external/fazyrv/tb_fazyrv_shftreg.sv",
+        "specification": "Implement the pinned FazyRV parameterized serial shift register.",
+        "verification_command": "./scripts/verify-external-rtl.sh fazyrv && ./scripts/synth-external-rtl.sh fazyrv fazyrv_shftreg",
+    },
+    {
+        "id": "fazyrv-ram-sp-001", "source_id": "fazyrv", "split": "train", "design_family": "fazyrv_single_port_ram",
+        "source_path": "rtl/fazyrv_ram_sp.sv", "testbench": "tests/external/fazyrv/tb_fazyrv_ram_sp.sv",
+        "specification": "Implement the pinned FazyRV synchronous single-port register RAM.",
+        "verification_command": "./scripts/verify-external-rtl.sh fazyrv && ./scripts/synth-external-rtl.sh fazyrv fazyrv_ram_sp",
+    },
+    {
+        "id": "fazyrv-ram-dp-001", "source_id": "fazyrv", "split": "train", "design_family": "fazyrv_dual_port_ram",
+        "source_path": "rtl/fazyrv_ram_dp.sv", "testbench": "tests/external/fazyrv/tb_fazyrv_ram_dp.sv",
+        "specification": "Implement the pinned FazyRV synchronous dual-read-port register RAM.",
+        "verification_command": "./scripts/verify-external-rtl.sh fazyrv && ./scripts/synth-external-rtl.sh fazyrv fazyrv_ram_dp",
+    },
+    {
+        "id": "fazyrv-align-001", "source_id": "fazyrv", "split": "train", "design_family": "fazyrv_memory_aligner",
+        "source_path": "rtl/fazyrv_align.sv", "testbench": "tests/external/fazyrv/tb_fazyrv_align.sv",
+        "specification": "Implement the pinned FazyRV memory-bus aligner for aligned and half-word-offset transactions.",
+        "verification_command": "./scripts/verify-external-rtl.sh fazyrv && ./scripts/synth-external-rtl.sh fazyrv fazyrv_align",
+    },
 )
 
 
