@@ -93,8 +93,11 @@ O Qwen pode gerar esse diff restrito em um arquivo de execução:
 ef-gpu draft-simd4x8-patch PROPOSTA.json
 ```
 
-O comando aceita somente um patch que passe `git apply --check` e mude o único
-arquivo permitido; em seguida, use `stage-simd4x8` para a verificação isolada.
+O comando aceita somente um patch que passe `git apply --check`, mude o único
+arquivo permitido **e contenha exatamente** a substituição de mensagem pedida.
+Ele inclui o fonte atual no prompt, mas essa resposta continua não confiável:
+qualquer linha extra ou substituição diferente é salva como rejeitada. Em
+seguida, use `stage-simd4x8` para a verificação isolada.
 
 ### Portas de qualidade e segurança
 
@@ -216,6 +219,18 @@ ef-gpu stage-simd4x8 examples/agent/simd4x8-request.json \
 In this first version, only `designs/simd4x8/tb/tb_simd4x8_c_ref.sv` may change.
 The temporary worktree is removed afterwards; logs and the manifest remain under
 `runs/`.
+
+The Qwen can draft this restricted diff into a run file:
+
+```bash
+ef-gpu draft-simd4x8-patch PROPOSAL.json
+```
+
+The command accepts only a patch that passes `git apply --check`, changes the
+one allowed file, **and contains exactly** the requested message replacement.
+It supplies the current source in the prompt, but the response remains
+untrusted: any extra line or different replacement is saved as rejected. Then
+use `stage-simd4x8` for isolated verification.
 
 ### Quality gates and safety
 

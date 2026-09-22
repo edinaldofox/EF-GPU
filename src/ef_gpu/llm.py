@@ -222,23 +222,39 @@ def generate_simd4x8_proposal(
     return output_path
 
 
+def _is_exact_testbench_message_patch(patch: str) -> bool:
+    """Allow exactly the requested display-message replacement, nothing else."""
+    expected_removed = '-        $display("SIMD4x8 C-reference RTL test passed: %0d vectors", vector_count);'
+    expected_added = '+        $display("SIMD4x8 candidate C-reference RTL test passed: %0d vectors", vector_count);'
+    changed_lines = [
+        line
+        for line in patch.splitlines()
+        if (line.startswith("+") and not line.startswith("+++"))
+        or (line.startswith("-") and not line.startswith("---"))
+    ]
+    return changed_lines == [expected_removed, expected_added]
+
+
 def generate_simd4x8_testbench_patch(proposal_path: Path, output_path: Path, *, seed: int = 42) -> Path:
     """Generate a narrowly scoped unified diff; it is not applied here."""
     proposal = json.loads(proposal_path.read_text(encoding="utf-8"))
     errors = validate_proposal(proposal)
     if errors or proposal.get("design_id") != "simd4x8-vmac":
         raise ValueError("invalid SIMD4x8 proposal: " + "; ".join(errors))
+    target_path = "designs/simd4x8/tb/tb_simd4x8_c_ref.sv"
+    target_source = (ROOT / target_path).read_text(encoding="utf-8")
     prompt = (
         "Return only a unified git diff, with no JSON, explanation, or markdown fences. "
-        "Modify only designs/simd4x8/tb/tb_simd4x8_c_ref.sv. "
+        f"Modify only {target_path}. "
         "Change exactly this display string: SIMD4x8 C-reference RTL test passed: %0d vectors. "
         "Replace it with: SIMD4x8 candidate C-reference RTL test passed: %0d vectors. "
-        "Do not change any other line and do not use markdown fences."
+        "Do not change any other line. Use the exact source below; do not invent lines, modules, or line numbers.\n"
+        f"--- BEGIN {target_path} ---\n{target_source}--- END {target_path} ---"
     )
     response = _post_json(
         "chat",
         {"model": DEFAULT_MODEL, "messages": [{"role": "user", "content": prompt}], "stream": False,
-         "options": {"temperature": 0, "seed": seed, "num_ctx": 1024, "num_predict": 256}, "keep_alive": "1m"},
+         "options": {"temperature": 0, "seed": seed, "num_ctx": 2048, "num_predict": 256}, "keep_alive": "1m"},
     )
     try:
         patch = response["message"]["content"]
@@ -253,9 +269,16 @@ def generate_simd4x8_testbench_patch(proposal_path: Path, output_path: Path, *, 
     checked = subprocess.run(["git", "apply", "--check", str(output_path)], cwd=ROOT, text=True, stderr=subprocess.PIPE)
     paths = subprocess.run(["git", "apply", "--numstat", "--", str(output_path)], cwd=ROOT, text=True, stdout=subprocess.PIPE).stdout
     changed = {line.split("\t")[-1] for line in paths.splitlines() if line}
-    if checked.returncode or changed != {"designs/simd4x8/tb/tb_simd4x8_c_ref.sv"}:
+    semantic_match = _is_exact_testbench_message_patch(patch)
+    if checked.returncode or changed != {target_path} or not semantic_match:
         rejected = output_path.with_suffix(output_path.suffix + ".rejected.txt")
         rejected.write_text(patch, encoding="utf-8")
         output_path.unlink(missing_ok=True)
-        raise RuntimeError(f"generated patch rejected; raw response saved to {rejected}: {checked.stderr.strip() or sorted(changed)}")
+        if checked.returncode:
+            reason = checked.stderr.strip()
+        elif changed != {target_path}:
+            reason = str(sorted(changed))
+        else:
+            reason = "does not contain exactly the requested display replacement"
+        raise RuntimeError(f"generated patch rejected; raw response saved to {rejected}: {reason}")
     return output_path
