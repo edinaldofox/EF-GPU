@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from pathlib import Path
 
 from ef_gpu.llm import (
@@ -100,6 +101,9 @@ def test_patch_generation_accepts_only_the_exact_patch(monkeypatch, tmp_path) ->
     output = tmp_path / "candidate.patch"
     assert generate_simd4x8_testbench_patch(proposal_path, output) == output
     assert output.read_text(encoding="utf-8") == VALID_MESSAGE_PATCH
+    metadata = json.loads(output.with_suffix(".patch.meta.json").read_text(encoding="utf-8"))
+    assert metadata["status"] == "accepted"
+    assert metadata["validation"]["exact_requested_replacement"] is True
 
 
 def test_patch_generation_rejects_extra_model_changes(monkeypatch, tmp_path) -> None:
@@ -120,3 +124,6 @@ def test_patch_generation_rejects_extra_model_changes(monkeypatch, tmp_path) -> 
         raise AssertionError("patch with an extra model change was accepted")
     assert not output.exists()
     assert output.with_suffix(".patch.rejected.txt").read_text(encoding="utf-8") == UNREQUESTED_PATCH
+    metadata = json.loads(output.with_suffix(".patch.meta.json").read_text(encoding="utf-8"))
+    assert metadata["status"] == "rejected"
+    assert metadata["validation"]["exact_requested_replacement"] is False

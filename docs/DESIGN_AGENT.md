@@ -96,8 +96,10 @@ ef-gpu draft-simd4x8-patch PROPOSTA.json
 O comando aceita somente um patch que passe `git apply --check`, mude o único
 arquivo permitido **e contenha exatamente** a substituição de mensagem pedida.
 Ele inclui o fonte atual no prompt, mas essa resposta continua não confiável:
-qualquer linha extra ou substituição diferente é salva como rejeitada. Em
-seguida, use `stage-simd4x8` para a verificação isolada.
+qualquer linha extra ou substituição diferente é salva como rejeitada. Para
+Para toda resposta do modelo, o arquivo vizinho `.patch.meta.json` registra
+prompt, hashes das entradas e resposta, versão/seed do modelo e o resultado das
+portas do patch. Em seguida, use `stage-simd4x8` para a verificação isolada.
 
 ### Portas de qualidade e segurança
 
@@ -229,8 +231,10 @@ ef-gpu draft-simd4x8-patch PROPOSAL.json
 The command accepts only a patch that passes `git apply --check`, changes the
 one allowed file, **and contains exactly** the requested message replacement.
 It supplies the current source in the prompt, but the response remains
-untrusted: any extra line or different replacement is saved as rejected. Then
-use `stage-simd4x8` for isolated verification.
+untrusted: any extra line or different replacement is saved as rejected. For
+every model response, the neighboring `.patch.meta.json` records the prompt,
+input and response hashes, model version/seed, and patch-gate outcome. Then use
+`stage-simd4x8` for isolated verification.
 
 ### Quality gates and safety
 

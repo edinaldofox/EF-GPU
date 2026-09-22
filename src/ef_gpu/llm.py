@@ -6,6 +6,7 @@ to write into the repository or applies text returned by the model.
 
 from __future__ import annotations
 
+import hashlib
 import json
 import os
 import subprocess
@@ -235,9 +236,78 @@ def _is_exact_testbench_message_patch(patch: str) -> bool:
     return changed_lines == [expected_removed, expected_added]
 
 
+def _sha256_text(value: str) -> str:
+    return hashlib.sha256(value.encode("utf-8")).hexdigest()
+
+
+def _write_patch_attempt_metadata(
+    output_path: Path,
+    *,
+    proposal_path: Path,
+    proposal_source: str,
+    proposal: dict[str, Any],
+    target_path: str,
+    target_source: str,
+    prompt: str,
+    response: dict[str, Any],
+    seed: int,
+    patch: str,
+    accepted: bool,
+    reason: str | None,
+    changed_paths: set[str],
+    git_apply_check_passed: bool,
+    exact_requested_replacement: bool,
+    rejected_path: Path | None = None,
+) -> Path:
+    """Write the run-local audit record for a model patch response."""
+    metadata_path = output_path.with_suffix(output_path.suffix + ".meta.json")
+    artifact_path = output_path if accepted else rejected_path
+    metadata = {
+        "schema_version": "1.0",
+        "generated_at": datetime.now(UTC).isoformat(),
+        "command": "draft-simd4x8-patch",
+        "status": "accepted" if accepted else "rejected",
+        "reason": reason,
+        "git_commit": _git_head(),
+        "model": {
+            "id": DEFAULT_MODEL,
+            "revision": DEFAULT_MODEL_DIGEST,
+            "backend": "ollama-local",
+            "seed": seed,
+            "options": {"temperature": 0, "num_ctx": 2048, "num_predict": 256},
+        },
+        "inputs": {
+            "proposal_path": str(proposal_path),
+            "proposal_sha256": _sha256_text(proposal_source),
+            "proposal_id": proposal.get("proposal_id"),
+            "proposal_base_commit": proposal.get("base_commit"),
+            "target_path": target_path,
+            "target_sha256": _sha256_text(target_source),
+            "prompt": prompt,
+            "prompt_sha256": _sha256_text(prompt),
+        },
+        "response": {
+            "sha256": _sha256_text(patch),
+            "metrics": {
+                key: response.get(key)
+                for key in ("total_duration", "load_duration", "prompt_eval_count", "eval_count")
+            },
+        },
+        "validation": {
+            "git_apply_check_passed": git_apply_check_passed,
+            "changed_paths": sorted(changed_paths),
+            "exact_requested_replacement": exact_requested_replacement,
+        },
+        "artifact_path": str(artifact_path) if artifact_path else None,
+    }
+    metadata_path.write_text(json.dumps(metadata, indent=2) + "\n", encoding="utf-8")
+    return metadata_path
+
+
 def generate_simd4x8_testbench_patch(proposal_path: Path, output_path: Path, *, seed: int = 42) -> Path:
     """Generate a narrowly scoped unified diff; it is not applied here."""
-    proposal = json.loads(proposal_path.read_text(encoding="utf-8"))
+    proposal_source = proposal_path.read_text(encoding="utf-8")
+    proposal = json.loads(proposal_source)
     errors = validate_proposal(proposal)
     if errors or proposal.get("design_id") != "simd4x8-vmac":
         raise ValueError("invalid SIMD4x8 proposal: " + "; ".join(errors))
@@ -265,7 +335,8 @@ def generate_simd4x8_testbench_patch(proposal_path: Path, output_path: Path, *, 
     if patch.startswith("```"):
         patch = "\n".join(patch.splitlines()[1:-1])
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    output_path.write_text(patch.rstrip() + "\n", encoding="utf-8")
+    patch = patch.rstrip() + "\n"
+    output_path.write_text(patch, encoding="utf-8")
     checked = subprocess.run(["git", "apply", "--check", str(output_path)], cwd=ROOT, text=True, stderr=subprocess.PIPE)
     paths = subprocess.run(["git", "apply", "--numstat", "--", str(output_path)], cwd=ROOT, text=True, stdout=subprocess.PIPE).stdout
     changed = {line.split("\t")[-1] for line in paths.splitlines() if line}
@@ -280,5 +351,40 @@ def generate_simd4x8_testbench_patch(proposal_path: Path, output_path: Path, *, 
             reason = str(sorted(changed))
         else:
             reason = "does not contain exactly the requested display replacement"
+        _write_patch_attempt_metadata(
+            output_path,
+            proposal_path=proposal_path,
+            proposal_source=proposal_source,
+            proposal=proposal,
+            target_path=target_path,
+            target_source=target_source,
+            prompt=prompt,
+            response=response,
+            seed=seed,
+            patch=patch,
+            accepted=False,
+            reason=reason,
+            changed_paths=changed,
+            git_apply_check_passed=checked.returncode == 0,
+            exact_requested_replacement=semantic_match,
+            rejected_path=rejected,
+        )
         raise RuntimeError(f"generated patch rejected; raw response saved to {rejected}: {reason}")
+    _write_patch_attempt_metadata(
+        output_path,
+        proposal_path=proposal_path,
+        proposal_source=proposal_source,
+        proposal=proposal,
+        target_path=target_path,
+        target_source=target_source,
+        prompt=prompt,
+        response=response,
+        seed=seed,
+        patch=patch,
+        accepted=True,
+        reason=None,
+        changed_paths=changed,
+        git_apply_check_passed=True,
+        exact_requested_replacement=True,
+    )
     return output_path
