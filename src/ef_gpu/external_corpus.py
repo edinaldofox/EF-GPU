@@ -143,6 +143,18 @@ EXAMPLES: tuple[dict[str, Any], ...] = (
         "specification": "Implement the pinned FazyRV memory-bus aligner for aligned and half-word-offset transactions.",
         "verification_command": "./scripts/verify-external-rtl.sh fazyrv && ./scripts/synth-external-rtl.sh fazyrv fazyrv_align",
     },
+    {
+        "id": "fazyrv-spm-a-001", "source_id": "fazyrv", "split": "train", "design_family": "fazyrv_address_serializer",
+        "source_path": "rtl/fazyrv_spm_a.sv", "testbench": "tests/external/fazyrv/tb_fazyrv_spm_a.sv",
+        "specification": "Implement the pinned FazyRV serial-to-parallel 32-bit address register.",
+        "verification_command": "./scripts/verify-external-rtl.sh fazyrv && ./scripts/synth-external-rtl.sh fazyrv fazyrv_spm_a",
+    },
+    {
+        "id": "fazyrv-pc-001", "source_id": "fazyrv", "split": "train", "design_family": "fazyrv_serial_program_counter",
+        "source_path": "rtl/fazyrv_pc.sv", "dependencies": ("rtl/fazyrv_hadd.v",), "testbench": "tests/external/fazyrv/tb_fazyrv_pc.sv",
+        "specification": "Implement the pinned FazyRV serial program counter with configurable boot address and half-adder dependency.",
+        "verification_command": "./scripts/verify-external-rtl.sh fazyrv && ./scripts/synth-external-rtl.sh fazyrv fazyrv_pc",
+    },
 )
 
 
