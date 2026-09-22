@@ -211,7 +211,7 @@ def generate_simd4x8_proposal(
         "For this first planning task, propose exactly one testbench-only verification improvement in designs/simd4x8/tb/tb_simd4x8_c_ref.sv. "
         "Do not add modules, RTL, ports, or files. preserves_interface must be true and target_files must contain that testbench path. "
         "validation must explicitly say C-reference RTL regression. changes must be a non-empty list; assumptions must be a list. "
-        "For this planning task, set patch_template to testbench-iter-done-pulse. "
+        "For this planning task, set patch_template to testbench-iter-busy-rejects-start. "
         f"Design request summary: {json.dumps(request_summary, separators=(',', ':'))}"
     )
     response = _post_json(

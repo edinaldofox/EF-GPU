@@ -311,6 +311,9 @@ The current catalog includes a presentation-only smoke template and
 events into bounded, reproducible test failures without changing RTL. It also
 includes `testbench-iter-done-pulse`, which checks that completion is a
 one-cycle event and the result remains valid in the following cycle.
+`testbench-iter-busy-rejects-start` injects a second request with different
+operands while the iterative unit is busy and verifies that the original VMAC
+still completes, documenting the no-replacement behavior of this interface.
 
 To run this path without intervention between gates, use:
 

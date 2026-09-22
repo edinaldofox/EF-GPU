@@ -87,6 +87,29 @@ TEMPLATES: Final = {
             ),
         ),
     },
+    "testbench-iter-busy-rejects-start": {
+        "description": (
+            "Pulses a second start with different inputs while iterative VMAC is busy and checks the original result."
+        ),
+        "target_path": TESTBENCH_PATH,
+        "replacements": (
+            (
+                "            assert (!comb_busy) else $fatal(1, \"comb VMAC busy at vector %0d\", vector_count);\n\n"
+                "            wait (iter_busy);\n",
+                "            assert (!comb_busy) else $fatal(1, \"comb VMAC busy at vector %0d\", vector_count);\n"
+                "            assert (iter_busy) else $fatal(1, \"iter VMAC did not assert busy at vector %0d\", vector_count);\n"
+                "            // A second request while busy must not replace the in-flight iterative VMAC.\n"
+                "            @(negedge clk);\n"
+                "            a = ~vector_a;\n"
+                "            b = ~vector_b;\n"
+                "            acc = ~vector_acc;\n"
+                "            start = 1'b1;\n"
+                "            @(negedge clk);\n"
+                "            start = 1'b0;\n\n"
+                "            wait (iter_busy);\n",
+            ),
+        ),
+    },
 }
 TEMPLATE_IDS: Final = frozenset(TEMPLATES)
 

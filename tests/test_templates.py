@@ -25,6 +25,7 @@ def test_known_templates_render_an_applicable_single_file_patch(tmp_path) -> Non
     assert "candidate C-reference RTL test passed" in render_simd4x8_template_patch("testbench-pass-message-label")
     assert "iter VMAC timeout" in render_simd4x8_template_patch("testbench-iter-completion-timeout")
     assert "done wider than one cycle" in render_simd4x8_template_patch("testbench-iter-done-pulse")
+    assert "second request while busy" in render_simd4x8_template_patch("testbench-iter-busy-rejects-start")
 
 
 def test_emit_records_template_provenance_and_does_not_overwrite(tmp_path) -> None:
