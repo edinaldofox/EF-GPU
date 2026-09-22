@@ -42,3 +42,6 @@
   de ocupação por VMAC e estabelece a porta de entrada para um scheduler.
 - Scheduler inicial: `ENABLE_QUEUE=1` retém uma instrução VMAC enquanto a
   unidade iterativa trabalha e a inicia depois do write-back.
+- `scratchpad16x64`: memória local independente com 16 palavras vetoriais de
+  64 bits, duas leituras e uma escrita; será integrada ao núcleo somente após
+  definir instruções de carga e armazenamento e seus riscos de dados.
