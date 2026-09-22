@@ -59,10 +59,10 @@
       "review": {
         "reviewed_at": "2026-09-22",
         "reviewer": "EF-GPU autonomous intake; human promotion remains required",
-      "scope": "rtl/fazyrv_{hadd,fadd,cmp,shftreg,ram_sp,ram_dp,align,spm_a,pc}.{v,sv} only; no firmware, formal suites, submodules, PDK, generated output, or SoC integration",
+      "scope": "rtl/fazyrv_{hadd,fadd,cmp,shftreg,ram_sp,ram_dp,align,spm_a,pc,rvc}.{v,sv} only; no firmware, formal suites, submodules, PDK, generated output, or SoC integration",
         "status": "approved-for-temporary-extraction"
       },
-      "candidate_paths": ["rtl/fazyrv_hadd.v", "rtl/fazyrv_fadd.v", "rtl/fazyrv_cmp.v", "rtl/fazyrv_shftreg.sv", "rtl/fazyrv_ram_sp.sv", "rtl/fazyrv_ram_dp.sv", "rtl/fazyrv_align.sv", "rtl/fazyrv_spm_a.sv", "rtl/fazyrv_pc.sv"],
+      "candidate_paths": ["rtl/fazyrv_hadd.v", "rtl/fazyrv_fadd.v", "rtl/fazyrv_cmp.v", "rtl/fazyrv_shftreg.sv", "rtl/fazyrv_ram_sp.sv", "rtl/fazyrv_ram_dp.sv", "rtl/fazyrv_align.sv", "rtl/fazyrv_spm_a.sv", "rtl/fazyrv_pc.sv", "rtl/fazyrv_rvc.sv"],
       "split": "train"
     },
     {

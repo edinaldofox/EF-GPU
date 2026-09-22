@@ -163,6 +163,12 @@ EXAMPLES: tuple[dict[str, Any], ...] = (
         "verification_command": "./scripts/verify-external-rtl.sh fazyrv && ./scripts/synth-external-rtl.sh fazyrv fazyrv_pc",
     },
     {
+        "id": "fazyrv-rvc-001", "source_id": "fazyrv", "split": "train", "design_family": "fazyrv_compressed_instruction_decoder",
+        "source_path": "rtl/fazyrv_rvc.sv", "testbench": "tests/external/fazyrv/tb_fazyrv_rvc.sv",
+        "specification": "Implement the pinned FazyRV compressed-instruction decoder with acknowledgement-qualified compressed flag.",
+        "verification_command": "./scripts/verify-external-rtl.sh fazyrv && ./scripts/synth-external-rtl.sh fazyrv fazyrv_rvc",
+    },
+    {
         "id": "fma-mux2-001", "source_id": "fma-rtl", "split": "benchmark", "design_family": "fma_two_way_mux", "source_path": "mux2.v", "testbench": "tests/external/fma/tb_mux2.v", "specification": "Implement the pinned Tachyum parameterized two-way multiplexer.", "verification_command": "./scripts/verify-external-rtl.sh fma-rtl && ./scripts/synth-external-rtl.sh fma-rtl mux2"},
     {
         "id": "fma-mux5d-001", "source_id": "fma-rtl", "split": "benchmark", "design_family": "fma_one_hot_five_way_mux", "source_path": "mux5d.v", "testbench": "tests/external/fma/tb_mux5d.v", "specification": "Implement the pinned Tachyum five-way one-hot multiplexer.", "verification_command": "./scripts/verify-external-rtl.sh fma-rtl && ./scripts/synth-external-rtl.sh fma-rtl mux5d"},

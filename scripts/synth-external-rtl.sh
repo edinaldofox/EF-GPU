@@ -49,6 +49,11 @@ case "${source_id}:${top}" in
     commit="c8d9c7971b91c0c166aef6c236f1134b2c6ac1a1"
     source_glob="/source/rtl/fazyrv_hadd.v /source/rtl/fazyrv_pc.sv"
     ;;
+  fazyrv:fazyrv_rvc)
+    repository="https://github.com/meiniKi/FazyRV.git"
+    commit="c8d9c7971b91c0c166aef6c236f1134b2c6ac1a1"
+    source_glob="/source/rtl/fazyrv_rvc.sv"
+    ;;
   fma-rtl:mux2|fma-rtl:mux5d|fma-rtl:dff|fma-rtl:dffe|fma-rtl:incrementer|fma-rtl:incrementer_8|fma-rtl:incrementer_11|fma-rtl:adder10|fma-rtl:adder10_no_cin|fma-rtl:adder13|fma-rtl:adder13_no_cin|fma-rtl:adder161_no_cin_no_cout|fma-rtl:adder162_no_cin|fma-rtl:left_shifter_28|fma-rtl:left_shifter_76|fma-rtl:left_shifter_163|fma-rtl:right_shifter_26_with_outside_bits|fma-rtl:right_shifter_74_with_outside_bits|fma-rtl:right_shifter_161_with_outside_bits)
     repository="https://github.com/Tachyum-Open-Source/fma-rtl.git"
     commit="1e7221349e7b18b1e20f4b301f3b7a34b5ebd490"
