@@ -31,3 +31,5 @@
 
 - ALU, registradores, scheduler simples e unidades de memória como benchmarks incrementais.
 - Integração somente após contratos, cobertura e resultados físicos estáveis por bloco.
+- Baseline funcional inicial: `vreg8x64`, banco vetorial com duas leituras, uma
+  escrita e `r0` imutável; ainda sem PPA ou integração à VMAC.
