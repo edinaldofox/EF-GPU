@@ -38,3 +38,5 @@
 - Integração inicial: `mini_gpu_vmac_core` aceita uma instrução VMAC, lê três
   registradores vetoriais e escreve o resultado no destino; fetch, scheduler e
   memória continuam fora deste primeiro núcleo.
+- Configuração iterativa da integração: `USE_ITERATIVE=1` introduz dez ciclos
+  de ocupação por VMAC e estabelece a porta de entrada para um scheduler.

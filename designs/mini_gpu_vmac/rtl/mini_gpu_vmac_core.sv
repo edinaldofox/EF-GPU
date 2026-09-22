@@ -1,5 +1,7 @@
 // First integrated EF-GPU execution core: decode, vector registers, and VMAC.
-module mini_gpu_vmac_core (
+module mini_gpu_vmac_core #(
+    parameter bit USE_ITERATIVE = 1'b0
+) (
     input  logic        clk,
     input  logic        rst_n,
     input  logic        host_write_enable,
@@ -75,17 +77,19 @@ module mini_gpu_vmac_core (
                      vreg_read_data_b[23:16], vreg_read_data_b[7:0]};
     assign debug_read_data = vreg_read_data_a;
 
-    simd4x8_mac_comb_top vmac (
-        .clk,
-        .rst_n,
-        .start(issue_accept),
-        .a(vmac_a),
-        .b(vmac_b),
-        .acc(vreg_read_data_c),
-        .busy(vmac_busy),
-        .done(vmac_done),
-        .result(vmac_result)
-    );
+    generate
+        if (USE_ITERATIVE) begin : iterative_vmac
+            simd4x8_mac_iter_top vmac (
+                .clk, .rst_n, .start(issue_accept), .a(vmac_a), .b(vmac_b), .acc(vreg_read_data_c),
+                .busy(vmac_busy), .done(vmac_done), .result(vmac_result)
+            );
+        end else begin : combinational_vmac
+            simd4x8_mac_comb_top vmac (
+                .clk, .rst_n, .start(issue_accept), .a(vmac_a), .b(vmac_b), .acc(vreg_read_data_c),
+                .busy(vmac_busy), .done(vmac_done), .result(vmac_result)
+            );
+        end
+    endgenerate
 
     always_ff @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
