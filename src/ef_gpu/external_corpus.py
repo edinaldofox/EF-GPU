@@ -222,6 +222,17 @@ EXAMPLES: tuple[dict[str, Any], ...] = (
         "verification_command": "./scripts/verify-external-rtl.sh learn-fpga && ./scripts/synth-external-rtl.sh learn-fpga SOC_step4",
     },
     {
+        "id": "femtorv-step6-001",
+        "source_id": "learn-fpga",
+        "split": "validation",
+        "design_family": "femtorv_tutorial_alu_execute_stage",
+        "source_path": "FemtoRV/TUTORIALS/FROM_BLINKER_TO_RISCV/step6.v",
+        "dependencies": ("FemtoRV/TUTORIALS/FROM_BLINKER_TO_RISCV/clockworks.v", "FemtoRV/RTL/PLL/femtopll.v"),
+        "testbench": "tests/external/femtorv/tb_femtorv_step6.v",
+        "specification": "Implement the pinned FemtoRV tutorial fetch/decode/execute machine with register-bank writeback for RISC-V ALU operations.",
+        "verification_command": "./scripts/verify-external-rtl.sh learn-fpga && ./scripts/synth-external-rtl.sh learn-fpga SOC_step6",
+    },
+    {
         "id": "femtorv-step5-001",
         "source_id": "learn-fpga",
         "split": "validation",

@@ -12,3 +12,5 @@ iverilog -g2012 -DBENCH -I "$base" -s tb_femtorv_step4 -o /tmp/femtorv-step4 "$b
 vvp /tmp/femtorv-step4
 iverilog -g2012 -DBENCH -I "$base" -s tb_femtorv_step5 -o /tmp/femtorv-step5 "$base/step5.v" /workspace/tests/external/femtorv/tb_femtorv_step5.v
 vvp /tmp/femtorv-step5
+iverilog -g2012 -DBENCH -I "$base" -s tb_femtorv_step6 -o /tmp/femtorv-step6 "$base/step6.v" /workspace/tests/external/femtorv/tb_femtorv_step6.v
+vvp /tmp/femtorv-step6
