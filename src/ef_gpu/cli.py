@@ -9,6 +9,7 @@ from datetime import datetime
 from pathlib import Path
 
 from ef_gpu.contracts import validate_proposal, validate_request
+from ef_gpu.llm import generate_simd4x8_proposal
 from ef_gpu.pipeline import run_simd4x8_iteration
 
 
@@ -25,6 +26,11 @@ def main() -> int:
     iteration.add_argument("--output", type=Path, help="directory for logs and manifest")
     iteration.add_argument("--physical", action="store_true", help="run OpenROAD after functional gates pass")
     iteration.add_argument("--allow-dirty", action="store_true", help="record, but allow, an uncommitted worktree")
+    proposal = subcommands.add_parser("propose-simd4x8", help="create a planning proposal using local Ollama")
+    proposal.add_argument("request", type=Path, help="approved design request JSON")
+    proposal.add_argument("--output", type=Path, help="proposal JSON path; defaults under runs/")
+    proposal.add_argument("--model", default="qwen2.5-coder:1.5b-instruct", help="local Ollama model tag")
+    proposal.add_argument("--seed", type=int, default=42, help="deterministic Ollama seed")
     args = parser.parse_args()
 
     if args.command == "doctor":
@@ -62,6 +68,15 @@ def main() -> int:
             physical=args.physical,
             allow_dirty=args.allow_dirty,
         )
+    if args.command == "propose-simd4x8":
+        output = args.output or Path("runs") / f"proposal-simd4x8-{datetime.now().strftime('%Y%m%dT%H%M%S')}.json"
+        try:
+            proposal_path = generate_simd4x8_proposal(args.request, output, model=args.model, seed=args.seed)
+        except (RuntimeError, ValueError) as error:
+            print(f"proposal generation failed: {error}")
+            return 2
+        print(f"proposal written: {proposal_path}")
+        return 0
     return 1
 
 

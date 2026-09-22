@@ -64,6 +64,17 @@ duas portas. Todo resultado é escrito em `runs/<id>/`, ignorado pelo Git, com
 `manifest.json` e um log por etapa. O estado `functional-valid` não é uma
 aprovação física; `physical-valid` tampouco é sign-off.
 
+Para gerar uma proposta de planejamento local com o Qwen instalado, use:
+
+```bash
+ef-gpu propose-simd4x8 examples/agent/simd4x8-request.json
+```
+
+Esta primeira integração pede apenas `changes` e `assumptions` em JSON e o
+EF-GPU preenche e valida o contrato completo. Ela **não aplica RTL gerado** nem
+executa o pipeline automaticamente; uma proposta só pode seguir quando seus
+artefatos e alterações estiverem em um candidato versionado.
+
 ### Portas de qualidade e segurança
 
 | Etapa | Condição para avançar | Saída de feedback |
@@ -161,6 +172,17 @@ then runs C+RTL and Yosys. `--physical` adds OpenROAD only after both gates. Eac
 result is written to a Git-ignored `runs/<id>/` directory with `manifest.json`
 and one log per stage. `functional-valid` is not physical approval;
 `physical-valid` is not sign-off.
+
+To generate a local planning proposal with the installed Qwen model, run:
+
+```bash
+ef-gpu propose-simd4x8 examples/agent/simd4x8-request.json
+```
+
+This first integration asks only for JSON `changes` and `assumptions`, then
+EF-GPU fills and validates the complete contract. It **does not apply generated
+RTL** or run the pipeline automatically; a proposal advances only after its
+artifacts and changes exist in a versioned candidate.
 
 ### Quality gates and safety
 

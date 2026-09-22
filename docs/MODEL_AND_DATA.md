@@ -25,6 +25,19 @@ e a [lista oficial da família](https://github.com/QwenLM/Qwen2.5-Coder).
 O projeto não baixa nem executa pesos automaticamente: isso exige escolha do
 backend, revisão de licença e orçamento de disco/memória.
 
+### Execução local registrada
+
+Com autorização do mantenedor, o perfil local foi baixado via Ollama em
+2026-09-22 como `qwen2.5-coder:1.5b-instruct`, digest
+`d7372fd828518a4d38b1eb196c673c31a85f2ed302b3d1e406c4c2d1b64a0668` (Q4_K_M,
+986 MB). O primeiro smoke test usou contexto de 1024, temperatura zero, seed 42
+e gerou uma proposta estruturalmente válida de melhoria do testbench. Isso
+valida a integração Ollama→contrato; não mede capacidade de gerar RTL nem PPA.
+
+O comando `ef-gpu propose-simd4x8` nunca aplica a saída da LLM. Ele registra a
+proposta e as métricas da resposta em `runs/`, e rejeita planos que mudem a
+interface, criem módulos/arquivos ou não indiquem a regressão C+RTL.
+
 Modelos maiores, como Qwen3-Coder, podem ser comparados depois, mas não são a
 baseline inicial: o objetivo desta fase é validar o ciclo EDA, não maximizar a
 capacidade do modelo.
