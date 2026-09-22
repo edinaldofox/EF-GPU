@@ -19,6 +19,11 @@ case "${source_id}:${top}" in
     commit="ef203c2b0a3fb793280f5114941416c425c5b461"
     source_glob="/source/picorv32.v"
     ;;
+  rtl-riscv32:alu|rtl-riscv32:pc|rtl-riscv32:instr_decode)
+    repository="https://github.com/VaradaGovind/rtl-riscv32.git"
+    commit="c8b8d95d15d8099b02091cf9a6ed53686541e096"
+    source_glob="/source/RiscV-32bit/RiscV-32bit.srcs/sources_1/new/${top}.v"
+    ;;
   *)
     echo "unreviewed source/top pair: ${source_id}:${top}" >&2
     exit 2

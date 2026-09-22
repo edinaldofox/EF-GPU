@@ -10,6 +10,7 @@ Elas foram fixadas por commit e revisadas somente no escopo de RTL Verilog:
 | --- | --- | --- | --- |
 | SERV | ISC | treino | módulos `rtl/serv_*.v` pequenos |
 | PicoRV32 | ISC | benchmark | `picorv32.v` e seus módulos internos |
+| RTL-RISCV32 | MIT | validação | contador de programa isolado |
 
 Ambas são extraídas somente em diretórios temporários. Firmware, PDK, saídas
 geradas, submódulos e arquivos não listados são excluídos. Cada linha admitida
@@ -39,6 +40,9 @@ o alinhador e a ALU serial do SERV, e a instrução `MUL` (7 × 9 = 63) da
 unidade PCPI iterativa do PicoRV32. Os três alvos também sintetizaram com
 Yosys 0.68 na imagem OpenROAD fixada. `serv_rf_ram` permanece excluído por um
 aviso de intervalo de bits observado na síntese; não é exemplo admitido.
+No RTL-RISCV32, os módulos `alu` e `instr_decode` também foram excluídos: o
+Yosys encontrou latches implícitos. O contador de programa passou simulação e
+síntese sem esse alerta e é a única família admitida dessa fonte.
 
 ## Corpus candidato e benchmark congelado
 

@@ -23,6 +23,13 @@ case "${source_id}" in
     license_sha256="041ebc727233e5bf096dd41260cbb81014d3d29ca007a15f3b1807d4e9ff288e"
     test_command="iverilog -g2012 -s tb_picorv32_pcpi_mul -o /tmp/picorv32-mul /source/picorv32.v /workspace/tests/external/picorv32/tb_picorv32_pcpi_mul.sv && vvp /tmp/picorv32-mul"
     ;;
+  rtl-riscv32)
+    repository="https://github.com/VaradaGovind/rtl-riscv32.git"
+    commit="c8b8d95d15d8099b02091cf9a6ed53686541e096"
+    license_path="LICENSE"
+    license_sha256="5d77a4df434a9f088476a91acefa0f98c46b39ae60e89e8213c4a460ae7fef4e"
+    test_command="iverilog -g2012 -s tb_alu -o /tmp/rv-alu /source/RiscV-32bit/RiscV-32bit.srcs/sources_1/new/alu.v /workspace/tests/external/rtl_riscv32/tb_alu.v && vvp /tmp/rv-alu && iverilog -g2012 -s tb_pc -o /tmp/rv-pc /source/RiscV-32bit/RiscV-32bit.srcs/sources_1/new/pc.v /workspace/tests/external/rtl_riscv32/tb_pc.v && vvp /tmp/rv-pc && iverilog -g2012 -s tb_instr_decode -o /tmp/rv-decode /source/RiscV-32bit/RiscV-32bit.srcs/sources_1/new/instr_decode.v /workspace/tests/external/rtl_riscv32/tb_instr_decode.v && vvp /tmp/rv-decode"
+    ;;
   *)
     echo "unsupported reviewed source: ${source_id}" >&2
     exit 2

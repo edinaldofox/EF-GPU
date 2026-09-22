@@ -30,6 +30,25 @@
       },
       "candidate_paths": ["picorv32.v"],
       "split": "benchmark"
+    },
+    {
+      "id": "rtl-riscv32-mit-v1",
+      "repository": "https://github.com/VaradaGovind/rtl-riscv32.git",
+      "commit": "c8b8d95d15d8099b02091cf9a6ed53686541e096",
+      "license": "MIT",
+      "license_path": "LICENSE",
+      "review": {
+        "reviewed_at": "2026-09-22",
+        "reviewer": "EF-GPU autonomous intake; human promotion remains required",
+        "scope": "RiscV-32bit/RiscV-32bit.srcs/sources_1/new/{alu,pc,instr_decode}.v only; no Xilinx project files, firmware, generated output, PDK, or constraints",
+        "status": "approved-for-temporary-extraction"
+      },
+      "candidate_paths": ["RiscV-32bit/RiscV-32bit.srcs/sources_1/new/pc.v"],
+      "rejected_paths": {
+        "RiscV-32bit/RiscV-32bit.srcs/sources_1/new/alu.v": "Yosys reported an inferred tmp latch",
+        "RiscV-32bit/RiscV-32bit.srcs/sources_1/new/instr_decode.v": "Yosys reported an inferred opc latch"
+      },
+      "split": "validation"
     }
   ],
   "admission_policy": "Each extracted row records source commit, path, SHA-256, license, verification command, and split. No source content or hash may occur in more than one split."

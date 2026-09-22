@@ -30,6 +30,13 @@ SOURCES: dict[str, dict[str, str]] = {
         "license_path": "COPYING",
         "license_sha256": "041ebc727233e5bf096dd41260cbb81014d3d29ca007a15f3b1807d4e9ff288e",
     },
+    "rtl-riscv32": {
+        "repository": "https://github.com/VaradaGovind/rtl-riscv32.git",
+        "commit": "c8b8d95d15d8099b02091cf9a6ed53686541e096",
+        "license": "MIT",
+        "license_path": "LICENSE",
+        "license_sha256": "5d77a4df434a9f088476a91acefa0f98c46b39ae60e89e8213c4a460ae7fef4e",
+    },
 }
 
 EXAMPLES: tuple[dict[str, Any], ...] = (
@@ -63,6 +70,16 @@ EXAMPLES: tuple[dict[str, Any], ...] = (
         "testbench": "tests/external/picorv32/tb_picorv32_pcpi_mul.sv",
         "specification": "Implement the pinned PicoRV32 iterative PCPI multiplier for the RISC-V M-extension MUL instruction.",
         "verification_command": "./scripts/verify-external-rtl.sh picorv32 && ./scripts/synth-external-rtl.sh picorv32 picorv32_pcpi_mul",
+    },
+    {
+        "id": "rtl-riscv32-pc-001",
+        "source_id": "rtl-riscv32",
+        "split": "validation",
+        "design_family": "rtl_riscv32_program_counter",
+        "source_path": "RiscV-32bit/RiscV-32bit.srcs/sources_1/new/pc.v",
+        "testbench": "tests/external/rtl_riscv32/tb_pc.v",
+        "specification": "Implement the pinned RTL-RISCV32 program counter with asynchronous reset and synchronous next-PC capture.",
+        "verification_command": "./scripts/verify-external-rtl.sh rtl-riscv32 && ./scripts/synth-external-rtl.sh rtl-riscv32 pc",
     },
 )
 
@@ -110,6 +127,8 @@ def build_external_circuit_corpus(output: Path, source_roots: dict[str, Path]) -
             raise ValueError(f"missing reviewed example input for {example['id']}")
         source_text = source_path.read_text(encoding="utf-8")
         rtl = _extract_module(source_text, example["module"]) if "module" in example else source_text
+        license_text = (source_roots[example["source_id"]] / source["license_path"]).read_text(encoding="utf-8")
+        rtl = f"/* External source license ({source['license']}):\n{license_text.rstrip()}\n*/\n\n{rtl}"
         testbench = testbench_path.read_text(encoding="utf-8")
         records.append(
             {
@@ -131,9 +150,9 @@ def build_external_circuit_corpus(output: Path, source_roots: dict[str, Path]) -
                     "license_sha256": source["license_sha256"],
                     "dependencies": [],
                     "transformation": (
-                        "verbatim selected RTL file; EF-GPU-authored focused smoke testbench appended as separate target field"
+                        "verbatim selected RTL file preceded by its complete license text; EF-GPU-authored focused smoke testbench appended as separate target field"
                         if "module" not in example
-                        else f"verbatim extraction of module {example['module']} from a monolithic reviewed RTL file; EF-GPU-authored focused smoke testbench appended as separate target field"
+                        else f"verbatim extraction of module {example['module']} from a monolithic reviewed RTL file, preceded by its complete license text; EF-GPU-authored focused smoke testbench appended as separate target field"
                     ),
                 },
             }
