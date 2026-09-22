@@ -72,6 +72,21 @@ TEMPLATES: Final = {
             ),
         ),
     },
+    "testbench-iter-done-pulse": {
+        "description": (
+            "Checks that iterative VMAC done is a one-cycle pulse and its completed result stays valid."
+        ),
+        "target_path": TESTBENCH_PATH,
+        "replacements": (
+            (
+                "            assert (!iter_busy) else $fatal(1, \"iter VMAC busy at vector %0d\", vector_count);\n",
+                "            assert (!iter_busy) else $fatal(1, \"iter VMAC busy at vector %0d\", vector_count);\n"
+                "            @(posedge clk);\n"
+                "            #1 assert (!iter_done) else $fatal(1, \"iter VMAC done wider than one cycle at vector %0d\", vector_count);\n"
+                "            assert (iter_result == vector_expected) else $fatal(1, \"iter VMAC result changed after done at vector %0d\", vector_count);\n",
+            ),
+        ),
+    },
 }
 TEMPLATE_IDS: Final = frozenset(TEMPLATES)
 

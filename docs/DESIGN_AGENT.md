@@ -308,7 +308,9 @@ The generated proposal's `changes` field is filled from that reviewed recipe;
 the model's free-form planning text remains only in proposal metadata for audit.
 The current catalog includes a presentation-only smoke template and
 `testbench-iter-completion-timeout`, which converts missing completion protocol
-events into bounded, reproducible test failures without changing RTL.
+events into bounded, reproducible test failures without changing RTL. It also
+includes `testbench-iter-done-pulse`, which checks that completion is a
+one-cycle event and the result remains valid in the following cycle.
 
 To run this path without intervention between gates, use:
 
