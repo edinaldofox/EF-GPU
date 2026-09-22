@@ -11,7 +11,7 @@ Elas foram fixadas por commit e revisadas somente no escopo de RTL Verilog:
 | SERV | ISC | treino | módulos `rtl/serv_*.v` pequenos |
 | PicoRV32 | ISC | benchmark | `picorv32.v` e seus módulos internos |
 | RTL-RISCV32 | MIT | validação | contador de programa isolado |
-| FazyRV | MIT | treino | adders, comparador, registradores seriais, RAMs, alinhador e PC |
+| FazyRV | MIT | treino | adders, comparador, registradores seriais, RAMs, alinhador, PC e decodificador RVC |
 | Tachyum FMA RTL | Apache-2.0 | benchmark | primitivas de mux, registrador, incremento, soma e deslocamento |
 
 Ambas são extraídas somente em diretórios temporários. Firmware, PDK, saídas
