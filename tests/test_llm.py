@@ -66,6 +66,10 @@ def test_plan_is_wrapped_in_a_complete_proposal(monkeypatch) -> None:
         "Apply reviewed deterministic template testbench-pass-message-label: "
         "Labels the existing SIMD4x8 passing-test message as a candidate run."
     ]
+    assert proposal["assumptions"] == [
+        "Only the reviewed deterministic template is compiled; no model-authored RTL is used.",
+        "Public interfaces, clock/reset behavior, constraints, and physical configuration are unchanged.",
+    ]
 
 
 def test_interface_changing_plan_is_rejected() -> None:

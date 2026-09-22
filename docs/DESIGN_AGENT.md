@@ -306,6 +306,8 @@ operator must explicitly select `--patch-source template`. The model selects a
 reviewed identifier only. It does not author or modify the diff.
 The generated proposal's `changes` field is filled from that reviewed recipe;
 the model's free-form planning text remains only in proposal metadata for audit.
+Its public `assumptions` field is likewise generated from reviewed template
+policy, so an unsupported model claim cannot become a candidate contract.
 The current catalog includes a presentation-only smoke template and
 `testbench-iter-completion-timeout`, which converts missing completion protocol
 events into bounded, reproducible test failures without changing RTL. It also
