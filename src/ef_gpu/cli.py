@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import json
 import shutil
+import subprocess
 from datetime import datetime
 from pathlib import Path
 
@@ -16,6 +17,7 @@ from ef_gpu.iteration import run_autonomous_simd4x8_iteration
 from ef_gpu.llm import MODEL_REVISIONS, generate_simd4x8_proposal, generate_simd4x8_testbench_patch
 from ef_gpu.pipeline import run_simd4x8_iteration
 from ef_gpu.staging import stage_simd4x8_patch
+from ef_gpu.templates import TEMPLATE_IDS, emit_simd4x8_template_patch
 
 
 def main() -> int:
@@ -41,6 +43,11 @@ def main() -> int:
     patch.add_argument("--output", type=Path, help="patch path; defaults under runs/")
     patch.add_argument("--model", default="qwen2.5-coder:1.5b-instruct", help="local Ollama patch model")
     patch.add_argument("--seed", type=int, default=42, help="deterministic Ollama seed")
+    template = subcommands.add_parser(
+        "emit-simd4x8-template-patch", help="render a reviewed deterministic SIMD4x8 patch template"
+    )
+    template.add_argument("template_id", choices=sorted(TEMPLATE_IDS), help="reviewed template identifier")
+    template.add_argument("--output", type=Path, required=True, help="new patch path under a run directory")
     autonomous = subcommands.add_parser("iterate-simd4x8", help="run the safe autonomous SIMD4x8 candidate loop")
     autonomous.add_argument("request", type=Path, help="approved SIMD4x8 design request JSON")
     autonomous.add_argument("--output", type=Path, help="directory for the complete attempt record")
@@ -124,6 +131,14 @@ def main() -> int:
             print(f"patch generation failed: {error}")
             return 2
         print(f"patch written: {patch_path}")
+        return 0
+    if args.command == "emit-simd4x8-template-patch":
+        try:
+            patch_path = emit_simd4x8_template_patch(args.template_id, args.output)
+        except (OSError, ValueError, subprocess.CalledProcessError) as error:
+            print(f"template patch generation failed: {error}")
+            return 2
+        print(f"template patch written: {patch_path}")
         return 0
     if args.command == "iterate-simd4x8":
         output = args.output or Path("runs") / f"autonomous-simd4x8-{datetime.now().strftime('%Y%m%dT%H%M%S')}"

@@ -267,6 +267,32 @@ input and response hashes, model version/seed, and patch-gate outcome. Then use
 The generation protocol requires a structured JSON object with a `patch` field;
 this reduces transport/formatting errors but does not make the content trusted.
 
+### Templates determinísticos / Deterministic templates
+
+O próximo degrau seguro não pede um diff à LLM. Um catálogo pequeno de receitas
+revisadas produz o patch de modo determinístico; futuramente a LLM poderá apenas
+escolher um identificador de template permitido. Isso separa a decisão limitada
+do agente da autoria de código e cria candidatos positivos reproduzíveis para
+testar o worktree e as portas EDA.
+
+```bash
+ef-gpu emit-simd4x8-template-patch testbench-pass-message-label \
+  --output runs/template-smoke/candidate.patch
+```
+
+O comando nunca edita a árvore principal, recusa sobrescrever uma saída e grava
+`candidate.patch.template.meta.json` com o commit, hash do fonte, hash do patch
+e identificador da receita. O patch ainda precisa passar por `stage-simd4x8`;
+um template não equivale a aprovação funcional, física ou de produção.
+
+The next safe step does not ask an LLM for a diff. A small catalog of reviewed
+recipes renders the patch deterministically; later an LLM may only select an
+allowed template identifier. This separates the agent's limited decision from
+code authorship and creates reproducible positive candidates for exercising the
+disposable worktree and EDA gates. The command never edits the main worktree,
+refuses to overwrite output, records provenance, and still requires
+`stage-simd4x8`; a template is not functional, physical, or production approval.
+
 To run this path without intervention between gates, use:
 
 ```bash

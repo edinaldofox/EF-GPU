@@ -59,6 +59,11 @@ porque elas são sinais de preferência/erro; duplicatas de mesma resposta são
 removidas. Antes de qualquer LoRA, é obrigatório revisar licenças, remover dados
 indevidos, congelar a divisão treino/validação/benchmark e aprovar o uso.
 
+Patches emitidos por templates determinísticos são referência de processo, não
+aceitações da LLM. Eles podem registrar uma execução positiva de simulação e
+síntese, mas devem manter `source: deterministic-template` e ficar separados de
+exemplos de treinamento ou métricas de capacidade do modelo.
+
 ### Avaliação de fumaça comparável
 
 Para comparar os perfis instalados na mesma tarefa mínima de patch, execute:
