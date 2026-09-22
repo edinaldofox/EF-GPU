@@ -12,6 +12,7 @@ from pathlib import Path
 from ef_gpu.contracts import validate_proposal, validate_request
 from ef_gpu.circuit_data import export_circuit_sft, validate_circuit_dataset
 from ef_gpu.internal_corpus import build_internal_circuit_corpus
+from ef_gpu.external_corpus import build_external_circuit_corpus
 from ef_gpu.readiness import write_circuit_corpus_readiness
 from ef_gpu.campaign import run_simd4x8_campaign
 from ef_gpu.evaluation import evaluate_patch_models
@@ -86,6 +87,12 @@ def main() -> int:
         "build-internal-circuit-corpus", help="materialize the licensed EF-GPU seed corpus from verified source blocks"
     )
     internal_corpus.add_argument("--output", type=Path, required=True, help="new internal corpus JSONL path")
+    external_corpus = subcommands.add_parser(
+        "build-external-circuit-corpus", help="materialize reviewed external RTL from pinned temporary checkouts"
+    )
+    external_corpus.add_argument("--serv-source", type=Path, required=True, help="SERV checkout at the registered commit")
+    external_corpus.add_argument("--picorv32-source", type=Path, required=True, help="PicoRV32 checkout at the registered commit")
+    external_corpus.add_argument("--output", type=Path, required=True, help="new external corpus JSONL path")
     readiness = subcommands.add_parser("circuit-corpus-readiness", help="report Sprint 2 corpus readiness")
     readiness.add_argument("source", type=Path, help="validated circuit corpus JSONL")
     readiness.add_argument("--output", type=Path, required=True, help="new readiness JSON report")
@@ -213,6 +220,16 @@ def main() -> int:
             print(f"internal circuit corpus build failed: {error}")
             return 2
         print(f"internal circuit corpus written: {summary['output']} ({summary['records']} records)")
+        return 0
+    if args.command == "build-external-circuit-corpus":
+        try:
+            manifest = build_external_circuit_corpus(
+                args.output, {"serv": args.serv_source, "picorv32": args.picorv32_source}
+            )
+        except (OSError, ValueError, subprocess.CalledProcessError) as error:
+            print(f"external circuit corpus build failed: {error}")
+            return 2
+        print(f"external circuit corpus written: {manifest['output']} ({manifest['validation']['records']} records)")
         return 0
     if args.command == "circuit-corpus-readiness":
         try:

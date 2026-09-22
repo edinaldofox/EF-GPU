@@ -39,3 +39,14 @@ o alinhador e a ALU serial do SERV, e a instrução `MUL` (7 × 9 = 63) da
 unidade PCPI iterativa do PicoRV32. Os três alvos também sintetizaram com
 Yosys 0.68 na imagem OpenROAD fixada. `serv_rf_ram` permanece excluído por um
 aviso de intervalo de bits observado na síntese; não é exemplo admitido.
+
+## Corpus candidato e benchmark congelado
+
+`./scripts/build-external-circuit-corpus.sh <novo-arquivo.jsonl>` refaz os
+clones temporários, extrai somente os três exemplos que passaram ambas as
+portas e grava um manifesto com o SHA-256 do benchmark. A extração é literal,
+inclui os hashes de RTL/testbench/licença e registra que os testbenches são
+criações do EF-GPU. O construtor rejeita checkout, licença ou destino já
+existente incorretos. Este artefato ainda está abaixo da meta da Sprint 3
+(100/20/20); portanto é candidato rastreável, não corpus autorizado para
+treinar pesos.

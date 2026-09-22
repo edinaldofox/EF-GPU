@@ -9,6 +9,7 @@
       "license_path": "LICENSE",
       "review": {
         "reviewed_at": "2026-09-22",
+        "reviewer": "EF-GPU autonomous intake; human promotion remains required",
         "scope": "rtl/*.v only; no firmware, PDK, generated output, or third-party submodule",
         "status": "approved-for-temporary-extraction"
       },
@@ -23,6 +24,7 @@
       "license_path": "COPYING",
       "review": {
         "reviewed_at": "2026-09-22",
+        "reviewer": "EF-GPU autonomous intake; human promotion remains required",
         "scope": "picorv32.v only; no firmware, PDK, generated output, or third-party test images",
         "status": "approved-for-temporary-extraction"
       },

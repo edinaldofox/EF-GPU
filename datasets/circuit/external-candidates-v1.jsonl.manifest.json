@@ -1,0 +1,23 @@
+{
+  "schema_version": "1.0",
+  "command": "build-external-circuit-corpus",
+  "output": "datasets/circuit/external-candidates-v1.jsonl",
+  "output_sha256": "6801de13f1495a3c9e3b89494ee8dcd88c6f111db25aeff7e8c3acc4d0468af0",
+  "benchmark_records": [
+    "picorv32-pcpi-mul-001"
+  ],
+  "frozen_benchmark_sha256": "532a3a0dcbc4d997a36d0abf24f8e52fdf00eed57c89dae43e4e0adc2c81ae08",
+  "created_at_utc": "2026-09-22T17:46:14.045120+00:00",
+  "validation": {
+    "schema_version": "1.0",
+    "records": 3,
+    "splits": {
+      "train": 2,
+      "validation": 0,
+      "benchmark": 1
+    },
+    "families": 3,
+    "training_status": "validated-data-only; no model weights trained"
+  },
+  "training_status": "candidate-data-only; below Sprint 3 volume floor and no model weights trained"
+}
