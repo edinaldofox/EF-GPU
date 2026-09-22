@@ -33,3 +33,11 @@ outcome, is stored under `runs/qwen3b-patch-smoke.patch.meta.json` and is not
 versioned. This is not a model-quality benchmark: one request is insufficient
 to compare models. It confirms that the 3B profile is pinned, executable on the
 current hardware, and constrained by the same safety gates as the 1.5B profile.
+
+## Structured-output follow-up
+
+The patch protocol was then changed to require a JSON object with a `patch`
+field. This removed non-JSON transport output, but did not make the proposed
+change correct: the 3B response still contained a malformed diff and an
+unrequested line. `git apply --check` rejected it after 27.9 seconds. The
+result is recorded in `runs/qwen3b-structured-patch.patch.meta.json`.

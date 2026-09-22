@@ -111,7 +111,7 @@ def test_patch_generation_accepts_only_the_exact_patch(monkeypatch, tmp_path) ->
 
     def response(_endpoint, payload):
         requests.append(payload)
-        return {"message": {"content": VALID_MESSAGE_PATCH}}
+        return {"message": {"content": json.dumps({"patch": VALID_MESSAGE_PATCH})}}
 
     monkeypatch.setattr("ef_gpu.llm._post_json", response)
     output = tmp_path / "candidate.patch"
@@ -124,6 +124,7 @@ def test_patch_generation_accepts_only_the_exact_patch(monkeypatch, tmp_path) ->
     assert metadata["validation"]["exact_requested_replacement"] is True
     assert requests[0]["model"] == "qwen2.5-coder:3b-instruct"
     assert requests[0]["options"]["num_ctx"] == 1536
+    assert requests[0]["format"]["required"] == ["patch"]
     assert metadata["model"]["revision"].startswith("4a188102")
 
 
@@ -134,7 +135,8 @@ def test_patch_generation_rejects_extra_model_changes(monkeypatch, tmp_path) -> 
         encoding="utf-8",
     )
     monkeypatch.setattr(
-        "ef_gpu.llm._post_json", lambda *_args, **_kwargs: {"message": {"content": UNREQUESTED_PATCH}}
+        "ef_gpu.llm._post_json",
+        lambda *_args, **_kwargs: {"message": {"content": json.dumps({"patch": UNREQUESTED_PATCH})}},
     )
     output = tmp_path / "candidate.patch"
     try:

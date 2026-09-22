@@ -41,6 +41,12 @@ ALLOWED_TARGET_FILES = {
     "designs/simd4x8/rtl/simd4x8_mac_iter_top.sv",
     "designs/simd4x8/tb/tb_simd4x8_c_ref.sv",
 }
+PATCH_RESPONSE_SCHEMA = {
+    "type": "object",
+    "additionalProperties": False,
+    "required": ["patch"],
+    "properties": {"patch": {"type": "string", "minLength": 1}},
+}
 
 
 def _post_json(endpoint: str, payload: dict[str, Any]) -> dict[str, Any]:
@@ -346,7 +352,8 @@ def generate_simd4x8_testbench_patch(
     target_path = "designs/simd4x8/tb/tb_simd4x8_c_ref.sv"
     target_source = (ROOT / target_path).read_text(encoding="utf-8")
     prompt = (
-        "Return only a unified git diff, with no JSON, explanation, or markdown fences. "
+        "Return a JSON object with exactly one key, patch. Its patch value must be a unified git diff; "
+        "do not include an explanation or markdown fences. "
         f"Modify only {target_path}. "
         "Change exactly this display string: SIMD4x8 C-reference RTL test passed: %0d vectors. "
         "Replace it with: SIMD4x8 candidate C-reference RTL test passed: %0d vectors. "
@@ -356,14 +363,22 @@ def generate_simd4x8_testbench_patch(
     response = _post_json(
         "chat",
         {"model": model, "messages": [{"role": "user", "content": prompt}], "stream": False,
+         "format": PATCH_RESPONSE_SCHEMA,
          "options": {"temperature": 0, "seed": seed, "num_ctx": PATCH_CONTEXT_TOKENS[model], "num_predict": 256}, "keep_alive": "1m"},
     )
     try:
-        patch = response["message"]["content"]
+        content = response["message"]["content"]
     except (KeyError, TypeError) as error:
-        raise RuntimeError(f"Ollama returned no patch text: {error}") from error
+        raise RuntimeError(f"Ollama returned no patch JSON: {error}") from error
+    if not isinstance(content, str):
+        raise RuntimeError("Ollama patch response must be a JSON string")
+    try:
+        generated = json.loads(content)
+    except json.JSONDecodeError as error:
+        raise RuntimeError(f"Ollama returned invalid patch JSON: {error}") from error
+    patch = generated.get("patch") if isinstance(generated, dict) else None
     if not isinstance(patch, str):
-        raise RuntimeError("Ollama patch must be a string")
+        raise RuntimeError("Ollama patch JSON must contain a patch string")
     if patch.startswith("```"):
         patch = "\n".join(patch.splitlines()[1:-1])
     output_path.parent.mkdir(parents=True, exist_ok=True)

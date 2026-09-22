@@ -100,6 +100,8 @@ qualquer linha extra ou substituição diferente é salva como rejeitada. Para
 toda resposta do modelo, o arquivo vizinho `.patch.meta.json` registra
 prompt, hashes das entradas e resposta, versão/seed do modelo e o resultado das
 portas do patch. Em seguida, use `stage-simd4x8` para a verificação isolada.
+O protocolo de geração exige um objeto JSON estruturado com o campo `patch`;
+isso reduz erros de transporte/formatação, mas não torna o conteúdo confiável.
 
 Para executar esse percurso sem intervenção entre as portas, use:
 
@@ -262,6 +264,8 @@ untrusted: any extra line or different replacement is saved as rejected. For
 every model response, the neighboring `.patch.meta.json` records the prompt,
 input and response hashes, model version/seed, and patch-gate outcome. Then use
 `stage-simd4x8` for isolated verification.
+The generation protocol requires a structured JSON object with a `patch` field;
+this reduces transport/formatting errors but does not make the content trusted.
 
 To run this path without intervention between gates, use:
 
