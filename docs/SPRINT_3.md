@@ -8,7 +8,7 @@ Elas foram fixadas por commit e revisadas somente no escopo de RTL Verilog:
 
 | Fonte | Licença | Split | Escopo inicial |
 | --- | --- | --- | --- |
-| SERV | ISC | treino | módulos `rtl/serv_*.v` pequenos |
+| SERV | ISC | treino | ALU serial, alinhador e RAM de registradores parametrizada |
 | PicoRV32 | ISC | benchmark | `picorv32.v` e seus módulos internos |
 | RTL-RISCV32 | MIT | validação | contador de programa isolado |
 | FazyRV | MIT | treino | adders, comparador, registradores seriais, RAMs, alinhador, PC e decodificador RVC |
@@ -68,5 +68,5 @@ PYTHONPATH=src python3 -m ef_gpu.cli sprint3-corpus-readiness \
 
 O relatório confere o conteúdo exato do benchmark congelado e exige 100 exemplos
 de treino, 20 de validação e 20 de benchmark. Ele nunca autoriza pesos por si só.
-No corpus externo v9 atual, a contagem é 12/1/20; os déficits são 88/19/0. A
+No corpus externo v10 atual, a contagem é 13/1/20; os déficits são 87/19/0. A
 porta, portanto, permanece fechada de propósito.

@@ -14,6 +14,13 @@ case "${source_id}:${top}" in
     commit="f200eb2ed7b69ac1c6b8eddd47654522aeee5ce8"
     source_glob="/source/rtl/${top}.v"
     ;;
+  serv:serv_rf_ram)
+    repository="https://github.com/olofk/serv.git"
+    commit="f200eb2ed7b69ac1c6b8eddd47654522aeee5ce8"
+    source_glob="/source/rtl/serv_rf_ram.v"
+    read_options="-defer"
+    parameterize="chparam -set width 8 -set csr_regs 0 -set depth 128 serv_rf_ram; "
+    ;;
   picorv32:picorv32_pcpi_mul)
     repository="https://github.com/YosysHQ/picorv32.git"
     commit="ef203c2b0a3fb793280f5114941416c425c5b461"
@@ -69,4 +76,4 @@ git clone --quiet "${repository}" "${tmp}/source"
 git -C "${tmp}/source" checkout --quiet --detach "${commit}"
 test "$(git -C "${tmp}/source" rev-parse HEAD)" = "${commit}"
 docker run --rm --user "$(id -u):$(id -g)" --volume "${tmp}/source:/source:ro" \
-  "${image}" yosys -p "read_verilog -sv ${source_glob}; synth -top ${top}; stat"
+  "${image}" yosys -p "read_verilog ${read_options:-} -sv ${source_glob}; ${parameterize:-}synth -top ${top}; stat"

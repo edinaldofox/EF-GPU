@@ -75,6 +75,16 @@ EXAMPLES: tuple[dict[str, Any], ...] = (
         "verification_command": "./scripts/verify-external-rtl.sh serv && ./scripts/synth-external-rtl.sh serv serv_aligner",
     },
     {
+        "id": "serv-rf-ram-001",
+        "source_id": "serv",
+        "split": "train",
+        "design_family": "serv_parameterized_register_file_ram",
+        "source_path": "rtl/serv_rf_ram.v",
+        "testbench": "tests/external/serv/tb_serv_rf_ram.sv",
+        "specification": "Implement the pinned SERV parameterized synchronous register-file RAM, including masked reads of architectural register x0.",
+        "verification_command": "./scripts/verify-external-rtl.sh serv && ./scripts/synth-external-rtl.sh serv serv_rf_ram",
+    },
+    {
         "id": "picorv32-pcpi-mul-001",
         "source_id": "picorv32",
         "split": "benchmark",

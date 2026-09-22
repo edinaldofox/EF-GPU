@@ -14,7 +14,7 @@ case "${source_id}" in
     commit="f200eb2ed7b69ac1c6b8eddd47654522aeee5ce8"
     license_path="LICENSE"
     license_sha256="d9a1bd691f04280a8369a4aa69b6be20c0e2ee6d164a17ad8a8ef49da8ea0ea9"
-    test_command="iverilog -g2012 -s tb_serv_alu -o /tmp/serv-alu /source/rtl/serv_alu.v /workspace/tests/external/serv/tb_serv_alu.sv && vvp /tmp/serv-alu && iverilog -g2012 -s tb_serv_aligner -o /tmp/serv-aligner /source/rtl/serv_aligner.v /workspace/tests/external/serv/tb_serv_aligner.sv && vvp /tmp/serv-aligner"
+    test_command="bash /workspace/scripts/verify-serv-primitives.sh"
     ;;
   picorv32)
     repository="https://github.com/YosysHQ/picorv32.git"
