@@ -49,6 +49,21 @@ tentativa não entram na comparação.
 Os exemplos em [`examples/agent/`](../examples/agent/) são contratos de formato,
 não resultados de benchmark.
 
+### Execução automatizada atual
+
+O primeiro pipeline implementado é o da VMAC SIMD4x8:
+
+```bash
+ef-gpu run-simd4x8 examples/agent/simd4x8-request.json \
+  examples/agent/simd4x8-baseline-proposal.json
+```
+
+Ele rejeita contratos inválidos, artefatos ausentes e árvore Git suja por padrão;
+depois executa C+RTL e Yosys. `--physical` acrescenta OpenROAD somente após essas
+duas portas. Todo resultado é escrito em `runs/<id>/`, ignorado pelo Git, com
+`manifest.json` e um log por etapa. O estado `functional-valid` não é uma
+aprovação física; `physical-valid` tampouco é sign-off.
+
 ### Portas de qualidade e segurança
 
 | Etapa | Condição para avançar | Saída de feedback |
@@ -131,6 +146,21 @@ are excluded from comparisons.
 
 The examples in [`examples/agent/`](../examples/agent/) define formats, not
 benchmark results.
+
+### Current automated execution
+
+The first implemented pipeline is the SIMD4x8 VMAC:
+
+```bash
+ef-gpu run-simd4x8 examples/agent/simd4x8-request.json \
+  examples/agent/simd4x8-baseline-proposal.json
+```
+
+It rejects invalid contracts, missing artifacts, and a dirty Git tree by default,
+then runs C+RTL and Yosys. `--physical` adds OpenROAD only after both gates. Each
+result is written to a Git-ignored `runs/<id>/` directory with `manifest.json`
+and one log per stage. `functional-valid` is not physical approval;
+`physical-valid` is not sign-off.
 
 ### Quality gates and safety
 

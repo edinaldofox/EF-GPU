@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.0",
+  "design_id": "simd4x8-vmac",
+  "objective": "Validar as duas variantes da unidade VMAC SIMD de quatro lanes unsigned de 8 bits.",
+  "interfaces": [
+    {"name": "clk", "direction": "input", "width": 1, "clock_domain": "core"},
+    {"name": "rst_n", "direction": "input", "width": 1, "clock_domain": "core"},
+    {"name": "start", "direction": "input", "width": 1, "clock_domain": "core"},
+    {"name": "a", "direction": "input", "width": 32},
+    {"name": "b", "direction": "input", "width": 32},
+    {"name": "acc", "direction": "input", "width": 64},
+    {"name": "busy", "direction": "output", "width": 1, "clock_domain": "core"},
+    {"name": "done", "direction": "output", "width": 1, "clock_domain": "core"},
+    {"name": "result", "direction": "output", "width": 64}
+  ],
+  "constraints": {"target_clock_mhz": 100, "technology": "sky130hd"},
+  "acceptance": {"testbench": "designs/simd4x8/tb/tb_simd4x8_c_ref.sv", "formal": false},
+  "references": ["designs/simd4x8/README.md", "designs/simd4x8/model/vmac_ref.c"]
+}

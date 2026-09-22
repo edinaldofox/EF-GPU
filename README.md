@@ -43,6 +43,16 @@ tests/                Testes do orquestrador e das validações
 4. Valide os contratos de exemplo com `ef-gpu check-request examples/agent/alu8-request.json` e `ef-gpu check-proposal examples/agent/alu8-proposal.json`.
 5. Comece por um design pequeno e verificável em `designs/examples/`; não use uma LLM para gerar blocos de GPU complexos antes de estabelecer os testes e as métricas de referência.
 
+Para executar uma iteração automática da baseline SIMD4x8 e registrar seus logs
+em `runs/`, use:
+
+```bash
+ef-gpu run-simd4x8 examples/agent/simd4x8-request.json \
+  examples/agent/simd4x8-baseline-proposal.json
+```
+
+Acrescente `--physical` para solicitar OpenROAD depois das portas funcionais.
+
 O primeiro design de referência é a [ALU8](designs/alu8/spec.md). Verifique exaustivamente o núcleo combinacional com `./scripts/verify-alu8.sh`.
 
 ### Princípios
@@ -96,6 +106,15 @@ tests/                Orchestrator and validation tests
 3. Read the [architecture](docs/ARCHITECTURE.md) and [OpenROAD guide](docs/OPENROAD.md).
 4. Validate the example contracts with `ef-gpu check-request examples/agent/alu8-request.json` and `ef-gpu check-proposal examples/agent/alu8-proposal.json`.
 5. Begin with a small, verifiable design in `designs/examples/`; do not use an LLM to generate complex GPU blocks before baseline tests and metrics exist.
+
+To run an automated SIMD4x8 baseline iteration and save logs under `runs/`, use:
+
+```bash
+ef-gpu run-simd4x8 examples/agent/simd4x8-request.json \
+  examples/agent/simd4x8-baseline-proposal.json
+```
+
+Add `--physical` to request OpenROAD after the functional gates.
 
 The first reference design is [ALU8](designs/alu8/spec.md). Exhaustively verify its combinational core with `./scripts/verify-alu8.sh`.
 

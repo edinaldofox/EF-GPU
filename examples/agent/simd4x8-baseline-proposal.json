@@ -1,0 +1,27 @@
+{
+  "schema_version": "1.0",
+  "proposal_id": "simd4x8-c-reference-baseline",
+  "design_id": "simd4x8-vmac",
+  "base_commit": "fb38c61",
+  "model": {
+    "id": "baseline/c-reference-oracle",
+    "revision": "1.0",
+    "seed": 464367618,
+    "temperature": 0.0,
+    "context_sources": ["designs/simd4x8/README.md", "designs/simd4x8/model/vmac_ref.c"]
+  },
+  "artifacts": {
+    "rtl": [
+      "designs/simd4x8/rtl/mult8_comb.sv",
+      "designs/simd4x8/rtl/mult8_iter.sv",
+      "designs/simd4x8/rtl/simd4x8_mult_iter4.sv",
+      "designs/simd4x8/rtl/simd4x8_mac_comb_top.sv",
+      "designs/simd4x8/rtl/simd4x8_mac_iter_top.sv"
+    ],
+    "testbench": "designs/simd4x8/tb/tb_simd4x8_c_ref.sv",
+    "sdc": "configs/openroad/simd4x8/comb/constraints.sdc",
+    "openroad_config": "configs/openroad/simd4x8"
+  },
+  "changes": ["Estabelece a baseline C + RTL; não altera a microarquitetura."],
+  "assumptions": ["A variante iterativa possui quatro multiplicadores, um por lane."]
+}
