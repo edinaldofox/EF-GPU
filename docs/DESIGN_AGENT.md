@@ -112,6 +112,18 @@ proposta, o patch ou resposta rejeitada, metadados e um `manifest.json` de topo.
 Somente um patch aceito alcança o worktree descartável, onde C+RTL e Yosys são
 executados. Esta etapa não executa OpenROAD, altera RTL nem aprova produção.
 
+Uma campanha executa várias dessas tentativas independentes e para na primeira
+candidata válida. O limite é obrigatório (máximo 20), e os seeds aumentam a
+cada tentativa para evitar repetir a mesma amostra:
+
+```bash
+ef-gpu campaign-simd4x8 examples/agent/simd4x8-request.json --attempts 3
+```
+
+O manifesto da campanha enumera cada tentativa, seed, estado e motivo de parada.
+Uma campanha sem candidata válida é um resultado experimental, não uma falha de
+segurança; ela não modifica o `main` e não substitui a revisão humana.
+
 ### Portas de qualidade e segurança
 
 | Etapa | Condição para avançar | Saída de feedback |
@@ -258,6 +270,18 @@ the proposal, patch or rejected response, metadata, and a top-level
 `manifest.json`. Only an accepted patch reaches the disposable worktree, where
 C+RTL and Yosys run. This step does not run OpenROAD, change RTL, or approve
 production.
+
+A campaign runs several independent attempts and stops at the first valid
+candidate. A bound is mandatory (maximum 20), and the seed increments for each
+attempt to avoid sampling the same response repeatedly:
+
+```bash
+ef-gpu campaign-simd4x8 examples/agent/simd4x8-request.json --attempts 3
+```
+
+The campaign manifest lists every attempt, seed, state, and stop reason. A
+campaign without a valid candidate is an experimental result, not a safety
+failure; it never changes `main` or replaces human review.
 
 ### Quality gates and safety
 

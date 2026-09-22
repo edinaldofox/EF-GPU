@@ -9,6 +9,7 @@ from datetime import datetime
 from pathlib import Path
 
 from ef_gpu.contracts import validate_proposal, validate_request
+from ef_gpu.campaign import run_simd4x8_campaign
 from ef_gpu.iteration import run_autonomous_simd4x8_iteration
 from ef_gpu.llm import generate_simd4x8_proposal, generate_simd4x8_testbench_patch
 from ef_gpu.pipeline import run_simd4x8_iteration
@@ -42,6 +43,12 @@ def main() -> int:
     autonomous.add_argument("--output", type=Path, help="directory for the complete attempt record")
     autonomous.add_argument("--model", default="qwen2.5-coder:1.5b-instruct", help="local Ollama planning model")
     autonomous.add_argument("--seed", type=int, default=42, help="deterministic Ollama seed")
+    campaign = subcommands.add_parser("campaign-simd4x8", help="run bounded safe SIMD4x8 agent attempts")
+    campaign.add_argument("request", type=Path, help="approved SIMD4x8 design request JSON")
+    campaign.add_argument("--attempts", type=int, default=3, help="number of attempts, from 1 to 20")
+    campaign.add_argument("--output", type=Path, help="directory for the campaign record")
+    campaign.add_argument("--model", default="qwen2.5-coder:1.5b-instruct", help="local Ollama planning model")
+    campaign.add_argument("--seed", type=int, default=42, help="initial deterministic Ollama seed")
     stage = subcommands.add_parser("stage-simd4x8", help="validate a testbench patch in a disposable Git worktree")
     stage.add_argument("request", type=Path, help="approved design request JSON")
     stage.add_argument("proposal", type=Path, help="proposal JSON with the base commit")
@@ -108,6 +115,15 @@ def main() -> int:
     if args.command == "iterate-simd4x8":
         output = args.output or Path("runs") / f"autonomous-simd4x8-{datetime.now().strftime('%Y%m%dT%H%M%S')}"
         return run_autonomous_simd4x8_iteration(args.request, output, model=args.model, seed=args.seed)
+    if args.command == "campaign-simd4x8":
+        output = args.output or Path("runs") / f"campaign-simd4x8-{datetime.now().strftime('%Y%m%dT%H%M%S')}"
+        try:
+            return run_simd4x8_campaign(
+                args.request, output, attempts=args.attempts, model=args.model, seed=args.seed
+            )
+        except ValueError as error:
+            print(f"campaign configuration invalid: {error}")
+            return 2
     return 1
 
 
