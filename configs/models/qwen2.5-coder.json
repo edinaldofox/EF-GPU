@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
   "family": "Qwen2.5-Coder",
-  "license": "Apache-2.0",
+  "license": "Profile-specific; consult the pinned model manifest before use.",
   "policy": "Weights are downloaded only with maintainer authorization. Pin the exact revision in each experiment manifest.",
   "profiles": {
     "local_smoke": {
@@ -9,6 +9,7 @@
       "ollama_model": "qwen2.5-coder:1.5b-instruct",
       "ollama_digest": "d7372fd828518a4d38b1eb196c673c31a85f2ed302b3d1e406c4c2d1b64a0668",
       "backend": "ollama-local",
+      "license": "Apache-2.0",
       "generation": {"temperature": 0, "seed": 42, "num_ctx": 1024, "num_predict": 256},
       "purpose": "Prompt, contract, and tool-loop development on the current 4 GB GPU.",
       "recommended_quantization": "4-bit",
@@ -17,10 +18,15 @@
     },
     "evaluation_baseline": {
       "model_id": "Qwen/Qwen2.5-Coder-3B-Instruct",
-      "purpose": "First reproducible benchmark model for RTL and testbench proposals.",
-      "recommended_quantization": "4-bit or higher after hardware review",
-      "maximum_context_tokens": 8192,
-      "not_for": "Autonomous tape-out or unverified RTL"
+      "ollama_model": "qwen2.5-coder:3b-instruct",
+      "ollama_digest": "4a188102020e9c9530b687fd6400f775c45e90a0d7baafe65bd0a36963fbb7ba",
+      "backend": "ollama-local",
+      "license": "Qwen Research License Agreement (non-commercial research/evaluation only)",
+      "generation": {"temperature": 0, "seed": 42, "num_ctx": 1536, "num_predict": 256},
+      "purpose": "First reproducible local benchmark model for RTL and testbench proposals on the current GPU.",
+      "recommended_quantization": "Q4_K_M",
+      "maximum_context_tokens": 1536,
+      "not_for": "Commercial use, autonomous tape-out, or unverified RTL"
     }
   }
 }

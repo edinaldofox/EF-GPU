@@ -22,6 +22,16 @@ from ef_gpu.contracts import validate_proposal, validate_request
 ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_MODEL = "qwen2.5-coder:1.5b-instruct"
 DEFAULT_MODEL_DIGEST = "d7372fd828518a4d38b1eb196c673c31a85f2ed302b3d1e406c4c2d1b64a0668"
+EVALUATION_MODEL = "qwen2.5-coder:3b-instruct"
+EVALUATION_MODEL_DIGEST = "4a188102020e9c9530b687fd6400f775c45e90a0d7baafe65bd0a36963fbb7ba"
+MODEL_REVISIONS = {
+    DEFAULT_MODEL: DEFAULT_MODEL_DIGEST,
+    EVALUATION_MODEL: EVALUATION_MODEL_DIGEST,
+}
+PATCH_CONTEXT_TOKENS = {
+    DEFAULT_MODEL: 2048,
+    EVALUATION_MODEL: 1536,
+}
 OLLAMA_API = os.environ.get("EF_GPU_OLLAMA_API", "http://localhost:11434/api")
 ALLOWED_TARGET_FILES = {
     "designs/simd4x8/rtl/mult8_comb.sv",
@@ -52,6 +62,15 @@ def _post_json(endpoint: str, payload: dict[str, Any]) -> dict[str, Any]:
 
 def _git_head() -> str:
     return subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
+
+
+def model_revision(model: str) -> str:
+    """Return the pinned local revision for a supported model profile."""
+    try:
+        return MODEL_REVISIONS[model]
+    except KeyError as error:
+        supported = ", ".join(sorted(MODEL_REVISIONS))
+        raise ValueError(f"unsupported model {model!r}; use one of: {supported}") from error
 
 
 def validate_simd4x8_plan(plan: dict[str, Any]) -> list[str]:
@@ -140,6 +159,7 @@ def generate_simd4x8_proposal(
     seed: int = 42,
 ) -> Path:
     """Ask the local model for a plan, validate it, and write a proposal JSON."""
+    model_digest = model_revision(model)
     try:
         request = json.loads(request_path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as error:
@@ -206,14 +226,14 @@ def generate_simd4x8_proposal(
         raise RuntimeError("Ollama plan must be a JSON object")
 
     proposal = build_simd4x8_proposal(
-        request, plan, model=model, model_digest=DEFAULT_MODEL_DIGEST, seed=seed
+        request, plan, model=model, model_digest=model_digest, seed=seed
     )
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(json.dumps(proposal, indent=2) + "\n", encoding="utf-8")
     metadata_path = output_path.with_suffix(output_path.suffix + ".meta.json")
     metadata = {
         "model": model,
-        "model_digest": DEFAULT_MODEL_DIGEST,
+        "model_digest": model_digest,
         "backend": "ollama-local",
         "options": {"temperature": 0, "seed": seed, "num_ctx": 1024, "num_predict": 256},
         "response_metrics": {key: response.get(key) for key in ("total_duration", "load_duration", "prompt_eval_count", "eval_count")},
@@ -250,6 +270,7 @@ def _write_patch_attempt_metadata(
     target_source: str,
     prompt: str,
     response: dict[str, Any],
+    model: str,
     seed: int,
     patch: str,
     accepted: bool,
@@ -270,11 +291,15 @@ def _write_patch_attempt_metadata(
         "reason": reason,
         "git_commit": _git_head(),
         "model": {
-            "id": DEFAULT_MODEL,
-            "revision": DEFAULT_MODEL_DIGEST,
+            "id": model,
+            "revision": model_revision(model),
             "backend": "ollama-local",
             "seed": seed,
-            "options": {"temperature": 0, "num_ctx": 2048, "num_predict": 256},
+            "options": {
+                "temperature": 0,
+                "num_ctx": PATCH_CONTEXT_TOKENS[model],
+                "num_predict": 256,
+            },
         },
         "inputs": {
             "proposal_path": str(proposal_path),
@@ -304,8 +329,15 @@ def _write_patch_attempt_metadata(
     return metadata_path
 
 
-def generate_simd4x8_testbench_patch(proposal_path: Path, output_path: Path, *, seed: int = 42) -> Path:
+def generate_simd4x8_testbench_patch(
+    proposal_path: Path,
+    output_path: Path,
+    *,
+    model: str = DEFAULT_MODEL,
+    seed: int = 42,
+) -> Path:
     """Generate a narrowly scoped unified diff; it is not applied here."""
+    model_revision(model)
     proposal_source = proposal_path.read_text(encoding="utf-8")
     proposal = json.loads(proposal_source)
     errors = validate_proposal(proposal)
@@ -323,8 +355,8 @@ def generate_simd4x8_testbench_patch(proposal_path: Path, output_path: Path, *, 
     )
     response = _post_json(
         "chat",
-        {"model": DEFAULT_MODEL, "messages": [{"role": "user", "content": prompt}], "stream": False,
-         "options": {"temperature": 0, "seed": seed, "num_ctx": 2048, "num_predict": 256}, "keep_alive": "1m"},
+        {"model": model, "messages": [{"role": "user", "content": prompt}], "stream": False,
+         "options": {"temperature": 0, "seed": seed, "num_ctx": PATCH_CONTEXT_TOKENS[model], "num_predict": 256}, "keep_alive": "1m"},
     )
     try:
         patch = response["message"]["content"]
@@ -360,6 +392,7 @@ def generate_simd4x8_testbench_patch(proposal_path: Path, output_path: Path, *, 
             target_source=target_source,
             prompt=prompt,
             response=response,
+            model=model,
             seed=seed,
             patch=patch,
             accepted=False,
@@ -379,6 +412,7 @@ def generate_simd4x8_testbench_patch(proposal_path: Path, output_path: Path, *, 
         target_source=target_source,
         prompt=prompt,
         response=response,
+        model=model,
         seed=seed,
         patch=patch,
         accepted=True,

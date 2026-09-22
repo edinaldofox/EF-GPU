@@ -98,7 +98,7 @@ def run_autonomous_simd4x8_iteration(
 
     patch_path = output / "candidate.patch"
     try:
-        generate_simd4x8_testbench_patch(proposal_path, patch_path, seed=seed)
+        generate_simd4x8_testbench_patch(proposal_path, patch_path, model=model, seed=seed)
     except (OSError, RuntimeError, ValueError, json.JSONDecodeError) as error:
         manifest["steps"].append(
             {

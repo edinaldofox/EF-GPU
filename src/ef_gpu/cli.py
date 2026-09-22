@@ -37,6 +37,7 @@ def main() -> int:
     patch = subcommands.add_parser("draft-simd4x8-patch", help="draft a restricted testbench diff with local Ollama")
     patch.add_argument("proposal", type=Path, help="validated SIMD4x8 proposal JSON")
     patch.add_argument("--output", type=Path, help="patch path; defaults under runs/")
+    patch.add_argument("--model", default="qwen2.5-coder:1.5b-instruct", help="local Ollama patch model")
     patch.add_argument("--seed", type=int, default=42, help="deterministic Ollama seed")
     autonomous = subcommands.add_parser("iterate-simd4x8", help="run the safe autonomous SIMD4x8 candidate loop")
     autonomous.add_argument("request", type=Path, help="approved SIMD4x8 design request JSON")
@@ -106,7 +107,9 @@ def main() -> int:
     if args.command == "draft-simd4x8-patch":
         output = args.output or Path("runs") / f"draft-simd4x8-{datetime.now().strftime('%Y%m%dT%H%M%S')}.patch"
         try:
-            patch_path = generate_simd4x8_testbench_patch(args.proposal, output, seed=args.seed)
+            patch_path = generate_simd4x8_testbench_patch(
+                args.proposal, output, model=args.model, seed=args.seed
+            )
         except (RuntimeError, ValueError, OSError, json.JSONDecodeError) as error:
             print(f"patch generation failed: {error}")
             return 2

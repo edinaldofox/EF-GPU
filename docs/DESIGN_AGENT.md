@@ -156,9 +156,11 @@ Use o perfil `local_smoke` de
 desenvolver prompts e a integração local. A máquina atual tem GPU de 4 GB, por
 isso ele limita contexto e usa um modelo de 1,5 B quantizado; não é uma medida
 de capacidade para criar RTL. O perfil `evaluation_baseline` usa 3 B e serve
-para comparações reproduzíveis quando houver memória suficiente ou um serviço
-aprovado. Antes da primeira execução, fixe a revisão do peso e registre-a no
-manifesto; pesos não são parte deste repositório.
+para comparações reproduzíveis locais com Q4_K_M e contexto de 1.536 tokens. O
+3B está sob Qwen Research License, portanto é restrito a pesquisa/avaliação não
+comercial. `--model qwen2.5-coder:3b-instruct` seleciona o mesmo peso para a
+proposta e para o patch. Antes da primeira execução, fixe a revisão do peso e
+registre-a no manifesto; pesos não são parte deste repositório.
 
 ## English
 
@@ -316,7 +318,9 @@ Use the `local_smoke` profile in
 [`configs/models/qwen2.5-coder.json`](../configs/models/qwen2.5-coder.json) to
 develop prompts and local integration. The current machine has a 4 GB GPU, so
 it limits context and uses a quantized 1.5B model; it is not a measure of RTL
-generation capability. `evaluation_baseline` uses 3B and is intended for
-reproducible comparisons after sufficient memory or an approved service is
-available. Pin the weight revision and record it in the manifest before the
-first run; model weights are not stored in this repository.
+generation capability. `evaluation_baseline` uses 3B Q4_K_M with a 1,536-token
+local context for reproducible comparisons. The 3B weight is under the Qwen
+Research License and is limited to non-commercial research/evaluation.
+`--model qwen2.5-coder:3b-instruct` selects the same weight for both proposal
+and patch generation. Pin the weight revision and record it in the manifest
+before the first run; model weights are not stored in this repository.

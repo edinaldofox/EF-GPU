@@ -7,6 +7,7 @@ from ef_gpu.llm import (
     _is_exact_testbench_message_patch,
     build_simd4x8_proposal,
     generate_simd4x8_testbench_patch,
+    model_revision,
     validate_simd4x8_plan,
 )
 
@@ -29,6 +30,17 @@ index 1234567..89abcdef 100644
      integer scan_status;
      integer vector_count;
 """
+
+
+def test_supported_model_revisions_are_pinned() -> None:
+    assert model_revision("qwen2.5-coder:1.5b-instruct").startswith("d7372fd8")
+    assert model_revision("qwen2.5-coder:3b-instruct").startswith("4a188102")
+    try:
+        model_revision("untracked-model")
+    except ValueError as error:
+        assert "unsupported model" in str(error)
+    else:
+        raise AssertionError("untracked model was accepted")
 
 
 def test_plan_is_wrapped_in_a_complete_proposal(monkeypatch) -> None:
@@ -95,15 +107,24 @@ def test_patch_generation_accepts_only_the_exact_patch(monkeypatch, tmp_path) ->
         (ROOT / "examples/agent/simd4x8-baseline-proposal.json").read_text(encoding="utf-8"),
         encoding="utf-8",
     )
-    monkeypatch.setattr(
-        "ef_gpu.llm._post_json", lambda *_args, **_kwargs: {"message": {"content": VALID_MESSAGE_PATCH}}
-    )
+    requests = []
+
+    def response(_endpoint, payload):
+        requests.append(payload)
+        return {"message": {"content": VALID_MESSAGE_PATCH}}
+
+    monkeypatch.setattr("ef_gpu.llm._post_json", response)
     output = tmp_path / "candidate.patch"
-    assert generate_simd4x8_testbench_patch(proposal_path, output) == output
+    assert generate_simd4x8_testbench_patch(
+        proposal_path, output, model="qwen2.5-coder:3b-instruct"
+    ) == output
     assert output.read_text(encoding="utf-8") == VALID_MESSAGE_PATCH
     metadata = json.loads(output.with_suffix(".patch.meta.json").read_text(encoding="utf-8"))
     assert metadata["status"] == "accepted"
     assert metadata["validation"]["exact_requested_replacement"] is True
+    assert requests[0]["model"] == "qwen2.5-coder:3b-instruct"
+    assert requests[0]["options"]["num_ctx"] == 1536
+    assert metadata["model"]["revision"].startswith("4a188102")
 
 
 def test_patch_generation_rejects_extra_model_changes(monkeypatch, tmp_path) -> None:
