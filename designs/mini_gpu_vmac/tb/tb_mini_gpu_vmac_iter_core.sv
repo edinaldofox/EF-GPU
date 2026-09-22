@@ -6,6 +6,9 @@ module tb_mini_gpu_vmac_iter_core;
     logic host_write_enable = 1'b0;
     logic [2:0] host_write_address = '0;
     logic [63:0] host_write_data = '0;
+    logic host_memory_write_enable = 1'b0;
+    logic [3:0] host_memory_write_address = '0;
+    logic [63:0] host_memory_write_data = '0;
     logic issue_valid = 1'b0;
     logic [15:0] instruction = '0;
     logic busy;
@@ -13,6 +16,8 @@ module tb_mini_gpu_vmac_iter_core;
     logic queue_full;
     logic [2:0] debug_read_address = '0;
     logic [63:0] debug_read_data;
+    logic [3:0] debug_memory_address = '0;
+    logic [63:0] debug_memory_data;
 
     mini_gpu_vmac_core #(.USE_ITERATIVE(1'b1)) dut (.*);
 

@@ -1,37 +1,48 @@
-# VPU16 decode — instrução vetorial mínima
+# VPU16 decode — instruções vetoriais mínimas
 
 ## Português
 
-`vpu16_decode` é o decodificador combinacional para a primeira instrução da
-mini GPU: `VMAC`. A instrução tem 16 bits:
+`vpu16_decode` é o decodificador combinacional do caminho inicial de computação
+e memória local da mini GPU. Os opcodes reconhecidos são:
+
+| Opcode | Instrução | Efeito arquitetural |
+| --- | --- | --- |
+| `4'h1` | `VMAC dst, src_a, src_b, acc` | `dst = acc + src_a × src_b`, por lane |
+| `4'h2` | `VLOAD dst, [addr]` | carrega a palavra `addr` da scratchpad em `dst` |
+| `4'h3` | `VSTORE src, [addr]` | grava `src` na palavra `addr` da scratchpad |
+
+`VMAC` usa todos os campos abaixo. Para `VLOAD` e `VSTORE`, `dst` (bits
+`11:9`) identifica o registrador de destino ou fonte e `addr` usa os bits
+`3:0`; os bits `8:4` são reservados e devem ser zero nos programas de exemplo.
 
 ```text
 15        12 11       9 8        6 5        3 2        0
 +------------+----------+----------+----------+----------+
-| opcode     | dst      | src_a    | src_b    | acc      |
+| opcode     | dst/src  | src_a    | src_b    | acc/addr |
 +------------+----------+----------+----------+----------+
 ```
 
-`opcode = 4'h1` reconhece `VMAC`; qualquer outro opcode é inválido. Os campos
-de registrador permanecem observáveis mesmo para opcode inválido, mas somente
-`valid=1` autoriza uma futura unidade de execução a escrever estado. O bloco
-não possui clock nem estado, e não executa a multiplicação.
-
-O modelo C e o testbench RTL verificam a mesma codificação. Síntese Yosys é
-executada antes de uma integração com o banco vetorial; não há PPA ou OpenROAD
-para este bloco isolado ainda.
+`valid=1` somente para os três opcodes listados. Os campos permanecem
+observáveis para encoding inválido, mas somente uma instrução válida pode
+atualizar estado. O bloco não possui clock nem estado. O modelo C e o
+testbench RTL verificam cada opcode, os campos e uma codificação inválida.
 
 ## English
 
-`vpu16_decode` is the combinational decoder for the mini GPU's first
-instruction: `VMAC`. The 16-bit layout is opcode, destination, source A,
-source B, and accumulator register, with three bits per register field.
+`vpu16_decode` is the combinational decoder for the mini GPU's initial
+compute and local-memory path. Recognized opcodes are:
 
-`opcode = 4'h1` recognizes `VMAC`; every other opcode is invalid. Register
-fields remain observable for invalid encodings, but only `valid=1` may let a
-future execution unit update state. The block has no clock or state and does
-not perform multiplication.
+| Opcode | Instruction | Architectural effect |
+| --- | --- | --- |
+| `4'h1` | `VMAC dst, src_a, src_b, acc` | `dst = acc + src_a × src_b`, per lane |
+| `4'h2` | `VLOAD dst, [addr]` | load scratchpad word `addr` into `dst` |
+| `4'h3` | `VSTORE src, [addr]` | store `src` into scratchpad word `addr` |
 
-The C model and RTL testbench check the same encoding. Yosys synthesis runs
-before vector-register integration; this isolated block has no PPA or OpenROAD
-claim yet.
+`VMAC` uses every field above. For `VLOAD` and `VSTORE`, `dst` (bits `11:9`)
+identifies the destination or source register and `addr` uses bits `3:0`; bits
+`8:4` are reserved and should be zero in example programs.
+
+`valid=1` only for the three listed opcodes. Fields remain observable for an
+invalid encoding, but only a valid instruction may update state. The block has
+no clock or state. Its C model and RTL testbench cover every opcode, fields,
+and an invalid encoding.

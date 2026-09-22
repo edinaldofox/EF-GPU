@@ -22,6 +22,7 @@ docker run --rm \
         /tmp/mini_gpu_vmac_ref_test
         iverilog -g2012 -s tb_mini_gpu_vmac_core -o /tmp/mini_gpu_vmac_tb \
           designs/vreg8x64/rtl/vreg8x64.sv \
+          designs/scratchpad16x64/rtl/scratchpad16x64.sv \
           designs/vpu16_decode/rtl/vpu16_decode.sv \
           designs/simd4x8/rtl/mult8_comb.sv \
           designs/simd4x8/rtl/simd4x8_mac_comb_top.sv \

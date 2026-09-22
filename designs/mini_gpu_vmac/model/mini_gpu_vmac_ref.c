@@ -15,6 +15,14 @@ uint64_t ef_gpu_mini_gpu_read(const ef_gpu_mini_gpu_vmac_ref *state, uint8_t add
     return (address & 7U) == 0U ? 0U : state->registers[address & 7U];
 }
 
+void ef_gpu_mini_gpu_memory_write(ef_gpu_mini_gpu_vmac_ref *state, uint8_t address, uint64_t value) {
+    state->scratchpad[address & 15U] = value;
+}
+
+uint64_t ef_gpu_mini_gpu_memory_read(const ef_gpu_mini_gpu_vmac_ref *state, uint8_t address) {
+    return state->scratchpad[address & 15U];
+}
+
 void ef_gpu_mini_gpu_issue(ef_gpu_mini_gpu_vmac_ref *state, uint16_t instruction) {
     uint64_t result = 0;
     const uint8_t opcode = instruction >> 12;
@@ -22,6 +30,14 @@ void ef_gpu_mini_gpu_issue(ef_gpu_mini_gpu_vmac_ref *state, uint16_t instruction
     const uint8_t source_a = (instruction >> 6) & 7U;
     const uint8_t source_b = (instruction >> 3) & 7U;
     const uint8_t source_acc = instruction & 7U;
+    if (opcode == 2U) {
+        ef_gpu_mini_gpu_write(state, destination, ef_gpu_mini_gpu_memory_read(state, instruction));
+        return;
+    }
+    if (opcode == 3U) {
+        ef_gpu_mini_gpu_memory_write(state, instruction, ef_gpu_mini_gpu_read(state, destination));
+        return;
+    }
     if (opcode != 1U)
         return;
     for (unsigned lane = 0; lane < 4; ++lane) {

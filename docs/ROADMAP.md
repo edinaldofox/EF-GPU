@@ -33,15 +33,15 @@
 - Integração somente após contratos, cobertura e resultados físicos estáveis por bloco.
 - Baseline funcional inicial: `vreg8x64`, banco vetorial com duas leituras, uma
   escrita e `r0` imutável; ainda sem PPA ou integração à VMAC.
-- `vpu16_decode`: codifica o primeiro formato de instrução (`VMAC`) e será
-  integrado ao banco vetorial e à unidade SIMD somente após suas baselines.
-- Integração inicial: `mini_gpu_vmac_core` aceita uma instrução VMAC, lê três
-  registradores vetoriais e escreve o resultado no destino; fetch, scheduler e
-  memória continuam fora deste primeiro núcleo.
+- `vpu16_decode`: codifica `VMAC`, `VLOAD` e `VSTORE` para computação e memória
+  vetorial local.
+- Integração inicial: `mini_gpu_vmac_core` executa VMAC e transferências entre
+  registradores vetoriais e a scratchpad local; fetch e PC continuam fora deste
+  primeiro núcleo.
 - Configuração iterativa da integração: `USE_ITERATIVE=1` introduz dez ciclos
   de ocupação por VMAC e estabelece a porta de entrada para um scheduler.
 - Scheduler inicial: `ENABLE_QUEUE=1` retém uma instrução VMAC enquanto a
   unidade iterativa trabalha e a inicia depois do write-back.
-- `scratchpad16x64`: memória local independente com 16 palavras vetoriais de
-  64 bits, duas leituras e uma escrita; será integrada ao núcleo somente após
-  definir instruções de carga e armazenamento e seus riscos de dados.
+- `scratchpad16x64`: memória local de 16 palavras vetoriais de 64 bits,
+  integrada por VLOAD/VSTORE. A próxima etapa é definir dependências e hazards
+  de memória para além do descarte seguro de operações recebidas durante `busy`.

@@ -17,6 +17,11 @@ int main(void) {
     ef_gpu_mini_gpu_write(&state, 1, UINT64_C(0x0004000300020001));
     ef_gpu_mini_gpu_write(&state, 2, UINT64_C(0x0008000700060005));
     ef_gpu_mini_gpu_write(&state, 3, UINT64_C(0x0028001e0014000a));
+    ef_gpu_mini_gpu_memory_write(&state, 13, UINT64_C(0x0011002200330044));
+    ef_gpu_mini_gpu_issue(&state, 0x2a0dU);  // VLOAD r5, [13]
+    expect(ef_gpu_mini_gpu_read(&state, 5), UINT64_C(0x0011002200330044), "VLOAD result");
+    ef_gpu_mini_gpu_issue(&state, 0x3604U);  // VSTORE r3, [4]
+    expect(ef_gpu_mini_gpu_memory_read(&state, 4), UINT64_C(0x0028001e0014000a), "VSTORE result");
     ef_gpu_mini_gpu_issue(&state, 0x1853U);  // VMAC r4, r1, r2, r3
     expect(ef_gpu_mini_gpu_read(&state, 4), UINT64_C(0x004800330020000f), "VMAC result");
     ef_gpu_mini_gpu_issue(&state, 0x1e54U);  // VMAC r7, r1, r2, r4
