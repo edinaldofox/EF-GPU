@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# Run the project-pinned OpenROAD installation in Docker from the current directory.
+set -euo pipefail
+
+image="${OPENROAD_IMAGE:-openroad/orfs@sha256:573c1716efa0e286c4f641c26d343e20929d58d27fffbb22be2d0b93f09764f6}"
+binary="/OpenROAD-flow-scripts/tools/install/OpenROAD/bin/openroad"
+
+exec docker run --rm \
+  --user "$(id -u):$(id -g)" \
+  --volume "${PWD}:/workspace" \
+  --workdir /workspace \
+  "${image}" "${binary}" "$@"

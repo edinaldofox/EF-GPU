@@ -4,6 +4,16 @@
 
 OpenROAD é a etapa determinística de implementação física. Ele recebe um netlist sintetizado, bibliotecas/tecnologia e restrições; produz bases de dados, relatórios e, quando o fluxo estiver aprovado, artefatos de layout.
 
+## Instalação local deste projeto
+
+O ambiente usa a imagem Docker `openroad/orfs`, fixada pelo digest no script `scripts/openroad`. Execute OpenROAD a partir da raiz do repositório com:
+
+```bash
+./scripts/openroad -version
+```
+
+O diretório atual é montado como `/workspace` e os arquivos produzidos usam o UID/GID do usuário atual. Para experimentar outra imagem sem alterar o repositório, defina `OPENROAD_IMAGE` para um nome ou digest explícito. Não use `latest` em benchmarks reproduzíveis.
+
 ## Pré-requisitos por execução
 
 - Versão identificável de OpenROAD e Yosys.
