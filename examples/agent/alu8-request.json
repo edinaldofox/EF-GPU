@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.0",
+  "design_id": "alu8-agent-baseline",
+  "objective": "Propor uma variante da ALU de 8 bits sem alterar sua interface pública.",
+  "interfaces": [
+    {"name": "a", "direction": "input", "width": 8},
+    {"name": "b", "direction": "input", "width": 8},
+    {"name": "result", "direction": "output", "width": 8}
+  ],
+  "constraints": {
+    "target_clock_mhz": 100,
+    "technology": "sky130hd"
+  },
+  "acceptance": {
+    "testbench": "designs/alu8/tb/alu8_tb.sv",
+    "formal": true
+  },
+  "references": ["designs/alu8/spec.md"]
+}

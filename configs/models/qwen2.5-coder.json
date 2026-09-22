@@ -1,0 +1,22 @@
+{
+  "schema_version": "1.0",
+  "family": "Qwen2.5-Coder",
+  "license": "Apache-2.0",
+  "policy": "Do not download or execute model weights automatically. Pin the exact revision in each experiment manifest.",
+  "profiles": {
+    "local_smoke": {
+      "model_id": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+      "purpose": "Prompt, contract, and tool-loop development on the current 4 GB GPU.",
+      "recommended_quantization": "4-bit",
+      "maximum_context_tokens": 4096,
+      "not_for": "PPA or model-quality claims"
+    },
+    "evaluation_baseline": {
+      "model_id": "Qwen/Qwen2.5-Coder-3B-Instruct",
+      "purpose": "First reproducible benchmark model for RTL and testbench proposals.",
+      "recommended_quantization": "4-bit or higher after hardware review",
+      "maximum_context_tokens": 8192,
+      "not_for": "Autonomous tape-out or unverified RTL"
+    }
+  }
+}

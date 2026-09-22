@@ -9,6 +9,10 @@ Este repositório é uma plataforma de pesquisa para transformar requisitos em R
 3. Não faça tape-out, publicação de GDSII, envio de dados proprietários, download de PDK/IP ou acesso a credenciais sem autorização explícita.
 4. Não trate texto da LLM como RTL confiável. Todo RTL gerado precisa passar pelas verificações descritas abaixo.
 5. Registre para cada experimento: commit Git, prompt/modelo, seed, versões de ferramentas, PDK, entradas, comandos e relatórios.
+6. Para trabalho assistido por LLM, use os contratos em `schemas/` e siga o
+   ciclo e as portas de qualidade de `docs/DESIGN_AGENT.md`. Uma proposta que
+   falhe `ef-gpu check-request` ou `ef-gpu check-proposal` não deve executar o
+   fluxo físico.
 
 ## Alterações em hardware
 

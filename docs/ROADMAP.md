@@ -14,9 +14,12 @@
 
 ## Fase 2 — Assistente de projeto
 
-- Esquema de proposta LLM e validação estrutural.
+- Esquemas versionados de solicitação e proposta LLM, com validação estrutural.
+- Perfil local de fumaça e baseline de avaliação separados.
 - Recuperação de documentação e exemplos licenciados.
 - Geração assistida de RTL/testes para blocos pequenos.
+- Ciclo fechado de proposta → verificação → PPA válido → feedback estruturado,
+  com orçamento de tentativas e aprovação humana.
 
 ## Fase 3 — Aprendizado com feedback
 

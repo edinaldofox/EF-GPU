@@ -1,0 +1,21 @@
+{
+  "schema_version": "1.0",
+  "proposal_id": "example-alu8-noop",
+  "design_id": "alu8-agent-baseline",
+  "base_commit": "b1f080c",
+  "model": {
+    "id": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+    "revision": "PIN_BEFORE_EXECUTION",
+    "seed": 42,
+    "temperature": 0.0,
+    "context_sources": ["designs/alu8/spec.md", "AGENTS.md"]
+  },
+  "artifacts": {
+    "rtl": ["designs/alu8/rtl/alu8_core.sv"],
+    "testbench": "designs/alu8/tb/alu8_tb.sv",
+    "sdc": "configs/openroad/alu8/constraint.sdc",
+    "openroad_config": "configs/openroad/alu8/config.mk"
+  },
+  "changes": ["Exemplo de proposta; nenhum RTL deve ser alterado."],
+  "assumptions": ["A execução registra versões e resultados em um manifesto fora do Git."]
+}

@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/edinaldofox/EF-GPU/schemas/design-request.schema.json",
+  "title": "EF-GPU design request",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "design_id", "objective", "interfaces", "constraints", "acceptance"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "design_id": {"type": "string", "pattern": "^[a-z][a-z0-9_-]*$"},
+    "objective": {"type": "string", "minLength": 1},
+    "interfaces": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "direction", "width"],
+        "properties": {
+          "name": {"type": "string"},
+          "direction": {"enum": ["input", "output", "inout"]},
+          "width": {"type": "integer", "minimum": 1},
+          "clock_domain": {"type": "string"}
+        }
+      }
+    },
+    "constraints": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["target_clock_mhz"],
+      "properties": {
+        "target_clock_mhz": {"type": "number", "exclusiveMinimum": 0},
+        "max_area_um2": {"type": "number", "exclusiveMinimum": 0},
+        "power_budget_mw": {"type": "number", "exclusiveMinimum": 0},
+        "technology": {"type": "string"}
+      }
+    },
+    "acceptance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["testbench"],
+      "properties": {
+        "testbench": {"type": "string", "minLength": 1},
+        "formal": {"type": "boolean"},
+        "coverage_target_percent": {"type": "number", "minimum": 0, "maximum": 100}
+      }
+    },
+    "references": {"type": "array", "items": {"type": "string"}}
+  }
+}

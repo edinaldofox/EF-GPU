@@ -20,6 +20,11 @@ Requisito → LLM de projeto → RTL + SDC + configuração
                   métricas e feedback para a LLM
 ```
 
+O fluxo completo, os contratos de entrada/saída e as portas de qualidade estão em
+[Agente de projeto](docs/DESIGN_AGENT.md). As especificações e propostas usam
+JSON versionado em [`schemas/`](schemas/), para que o agente seja integrado ao
+fluxo de desenvolvimento, e não tratado como uma caixa-preta.
+
 ### Estrutura inicial
 
 ```text
@@ -35,7 +40,8 @@ tests/                Testes do orquestrador e das validações
 1. Instale Python 3.11+ e as ferramentas EDA necessárias ao experimento (OpenROAD, Yosys e um simulador).
 2. Crie um ambiente local e instale o projeto: `python -m pip install -e '.[dev]'`.
 3. Leia [a arquitetura](docs/ARCHITECTURE.md) e [o guia do OpenROAD](docs/OPENROAD.md).
-4. Comece por um design pequeno e verificável em `designs/examples/`; não use uma LLM para gerar blocos de GPU complexos antes de estabelecer os testes e as métricas de referência.
+4. Valide os contratos de exemplo com `ef-gpu check-request examples/agent/alu8-request.json` e `ef-gpu check-proposal examples/agent/alu8-proposal.json`.
+5. Comece por um design pequeno e verificável em `designs/examples/`; não use uma LLM para gerar blocos de GPU complexos antes de estabelecer os testes e as métricas de referência.
 
 O primeiro design de referência é a [ALU8](designs/alu8/spec.md). Verifique exaustivamente o núcleo combinacional com `./scripts/verify-alu8.sh`.
 
@@ -68,6 +74,11 @@ Requirement → Design LLM → RTL + SDC + configuration
                     metrics and feedback to the LLM
 ```
 
+The full workflow, input/output contracts, and quality gates are described in
+[Design agent](docs/DESIGN_AGENT.md). Specifications and proposals use
+versioned JSON in [`schemas/`](schemas/), so the agent is part of the
+development flow rather than a black box.
+
 ### Initial layout
 
 ```text
@@ -83,7 +94,8 @@ tests/                Orchestrator and validation tests
 1. Install Python 3.11+ and the EDA tools needed by your experiment (OpenROAD, Yosys, and a simulator).
 2. Create a local environment and install the project: `python -m pip install -e '.[dev]'`.
 3. Read the [architecture](docs/ARCHITECTURE.md) and [OpenROAD guide](docs/OPENROAD.md).
-4. Begin with a small, verifiable design in `designs/examples/`; do not use an LLM to generate complex GPU blocks before baseline tests and metrics exist.
+4. Validate the example contracts with `ef-gpu check-request examples/agent/alu8-request.json` and `ef-gpu check-proposal examples/agent/alu8-proposal.json`.
+5. Begin with a small, verifiable design in `designs/examples/`; do not use an LLM to generate complex GPU blocks before baseline tests and metrics exist.
 
 The first reference design is [ALU8](designs/alu8/spec.md). Exhaustively verify its combinational core with `./scripts/verify-alu8.sh`.
 
