@@ -11,7 +11,7 @@ Elas foram fixadas por commit e revisadas somente no escopo de RTL Verilog:
 | SERV | ISC | treino | ALU serial, alinhador, RAM de registradores e buffer de dados/shift |
 | PicoRV32 | ISC | benchmark | `picorv32.v` e seus módulos internos |
 | RTL-RISCV32 | MIT | validação | contador de programa isolado |
-| FemtoRV tutorial | BSD-3-Clause | validação | contadores síncronos de cinco bits, direto e com divisor de clock |
+| FemtoRV tutorial | BSD-3-Clause | validação | contador direto, contador com divisor e sequenciador de padrão em memória |
 | FazyRV | MIT | treino | adders, comparador, registradores seriais, RAMs, alinhador, PC e decodificador RVC |
 | Tachyum FMA RTL | Apache-2.0 | benchmark | primitivas de mux, registrador, incremento, soma e deslocamento |
 
@@ -71,5 +71,5 @@ PYTHONPATH=src python3 -m ef_gpu.cli sprint3-corpus-readiness \
 
 O relatório confere o conteúdo exato do benchmark congelado e exige 100 exemplos
 de treino, 20 de validação e 20 de benchmark. Ele nunca autoriza pesos por si só.
-No corpus externo v13 atual, a contagem é 14/3/20; os déficits são 86/17/0. A
+No corpus externo v14 atual, a contagem é 14/4/20; os déficits são 86/16/0. A
 porta, portanto, permanece fechada de propósito.

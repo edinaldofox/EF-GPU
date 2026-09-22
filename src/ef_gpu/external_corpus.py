@@ -144,6 +144,17 @@ EXAMPLES: tuple[dict[str, Any], ...] = (
         "verification_command": "./scripts/verify-external-rtl.sh learn-fpga && ./scripts/synth-external-rtl.sh learn-fpga SOC_step2",
     },
     {
+        "id": "femtorv-step3-001",
+        "source_id": "learn-fpga",
+        "split": "validation",
+        "design_family": "femtorv_tutorial_bram_led_pattern",
+        "source_path": "FemtoRV/TUTORIALS/FROM_BLINKER_TO_RISCV/step3.v",
+        "dependencies": ("FemtoRV/TUTORIALS/FROM_BLINKER_TO_RISCV/clockworks.v", "FemtoRV/RTL/PLL/femtopll.v"),
+        "testbench": "tests/external/femtorv/tb_femtorv_step3.v",
+        "specification": "Implement the pinned FemtoRV tutorial LED pattern sequencer backed by initialized on-chip memory and a divided clock.",
+        "verification_command": "./scripts/verify-external-rtl.sh learn-fpga && ./scripts/synth-external-rtl.sh learn-fpga SOC_step3",
+    },
+    {
         "id": "fazyrv-hadd-001",
         "source_id": "fazyrv",
         "split": "train",
