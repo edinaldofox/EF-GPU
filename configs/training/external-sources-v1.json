@@ -74,10 +74,10 @@
       "review": {
         "reviewed_at": "2026-09-22",
         "reviewer": "EF-GPU autonomous intake; human promotion remains required",
-        "scope": "FemtoRV/TUTORIALS/FROM_BLINKER_TO_RISCV/{step1,step2,step3,step4}.v with generic Clockworks support only; excludes later tutorial stages, board files, FPGA primitives, firmware, PDKs and generated output",
+        "scope": "FemtoRV/TUTORIALS/FROM_BLINKER_TO_RISCV/{step1,step2,step3,step4,step5}.v with generic Clockworks support only; excludes later tutorial stages, board files, FPGA primitives, firmware, PDKs and generated output",
         "status": "approved-for-temporary-extraction"
       },
-      "candidate_paths": ["FemtoRV/TUTORIALS/FROM_BLINKER_TO_RISCV/step1.v", "FemtoRV/TUTORIALS/FROM_BLINKER_TO_RISCV/step2.v", "FemtoRV/TUTORIALS/FROM_BLINKER_TO_RISCV/step3.v", "FemtoRV/TUTORIALS/FROM_BLINKER_TO_RISCV/step4.v", "FemtoRV/TUTORIALS/FROM_BLINKER_TO_RISCV/clockworks.v", "FemtoRV/RTL/PLL/femtopll.v"],
+      "candidate_paths": ["FemtoRV/TUTORIALS/FROM_BLINKER_TO_RISCV/step1.v", "FemtoRV/TUTORIALS/FROM_BLINKER_TO_RISCV/step2.v", "FemtoRV/TUTORIALS/FROM_BLINKER_TO_RISCV/step3.v", "FemtoRV/TUTORIALS/FROM_BLINKER_TO_RISCV/step4.v", "FemtoRV/TUTORIALS/FROM_BLINKER_TO_RISCV/step5.v", "FemtoRV/TUTORIALS/FROM_BLINKER_TO_RISCV/clockworks.v", "FemtoRV/RTL/PLL/femtopll.v"],
       "split": "validation"
     },
     {

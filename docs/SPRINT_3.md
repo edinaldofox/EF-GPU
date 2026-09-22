@@ -8,10 +8,10 @@ Elas foram fixadas por commit e revisadas somente no escopo de RTL Verilog:
 
 | Fonte | Licença | Split | Escopo inicial |
 | --- | --- | --- | --- |
-| SERV | ISC | treino | ALU serial, alinhador, RAM em seis larguras, buffer de dados/shift e decodificador imediato |
+| SERV | ISC | treino | ALU serial, alinhador, RAM em nove configurações, buffer de dados/shift e decodificador imediato |
 | PicoRV32 | ISC | benchmark | `picorv32.v` e seus módulos internos |
 | RTL-RISCV32 | MIT | validação | contador de programa isolado |
-| FemtoRV tutorial | BSD-3-Clause | validação | contadores, sequenciador de memória e decodificador de classes RISC-V |
+| FemtoRV tutorial | BSD-3-Clause | validação | contadores, sequenciador de memória, decodificador e máquina de estados RISC-V |
 | FazyRV | MIT | treino | adders, comparador, registradores seriais, RAMs, alinhador, PC e decodificador RVC |
 | Tachyum FMA RTL | Apache-2.0 | benchmark | primitivas de mux, registrador, incremento, soma e deslocamento |
 
@@ -52,7 +52,7 @@ síntese sem esse alerta e é a única família admitida dessa fonte.
 ## Corpus candidato e benchmark congelado
 
 `./scripts/build-external-circuit-corpus.sh <novo-arquivo.jsonl>` refaz os
-clones temporários, extrai somente os três exemplos que passaram ambas as
+clones temporários, extrai somente os exemplos admitidos que passaram ambas as
 portas e grava um manifesto com o SHA-256 do benchmark. A extração é literal,
 inclui os hashes de RTL/testbench/licença e registra que os testbenches são
 criações do EF-GPU. O construtor rejeita checkout, licença ou destino já
@@ -71,5 +71,5 @@ PYTHONPATH=src python3 -m ef_gpu.cli sprint3-corpus-readiness \
 
 O relatório confere o conteúdo exato do benchmark congelado e exige 100 exemplos
 de treino, 20 de validação e 20 de benchmark. Ele nunca autoriza pesos por si só.
-No corpus externo v18 atual, a contagem é 23/5/20; os déficits são 77/15/0. A
+No corpus externo v19 atual, a contagem é 23/6/20; os déficits são 77/14/0. A
 porta, portanto, permanece fechada de propósito.

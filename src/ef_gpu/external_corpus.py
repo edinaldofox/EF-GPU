@@ -192,6 +192,17 @@ EXAMPLES: tuple[dict[str, Any], ...] = (
         "verification_command": "./scripts/verify-external-rtl.sh learn-fpga && ./scripts/synth-external-rtl.sh learn-fpga SOC_step4",
     },
     {
+        "id": "femtorv-step5-001",
+        "source_id": "learn-fpga",
+        "split": "validation",
+        "design_family": "femtorv_tutorial_fetch_execute_state_machine",
+        "source_path": "FemtoRV/TUTORIALS/FROM_BLINKER_TO_RISCV/step5.v",
+        "dependencies": ("FemtoRV/TUTORIALS/FROM_BLINKER_TO_RISCV/clockworks.v", "FemtoRV/RTL/PLL/femtopll.v"),
+        "testbench": "tests/external/femtorv/tb_femtorv_step5.v",
+        "specification": "Implement the pinned FemtoRV tutorial three-state fetch, register-read and execute controller.",
+        "verification_command": "./scripts/verify-external-rtl.sh learn-fpga && ./scripts/synth-external-rtl.sh learn-fpga SOC_step5",
+    },
+    {
         "id": "fazyrv-hadd-001",
         "source_id": "fazyrv",
         "split": "train",
