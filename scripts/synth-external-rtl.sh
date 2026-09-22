@@ -24,6 +24,16 @@ case "${source_id}:${top}" in
     commit="c8b8d95d15d8099b02091cf9a6ed53686541e096"
     source_glob="/source/RiscV-32bit/RiscV-32bit.srcs/sources_1/new/${top}.v"
     ;;
+  fazyrv:fazyrv_hadd|fazyrv:fazyrv_cmp)
+    repository="https://github.com/meiniKi/FazyRV.git"
+    commit="c8d9c7971b91c0c166aef6c236f1134b2c6ac1a1"
+    source_glob="/source/rtl/${top}.v"
+    ;;
+  fazyrv:fazyrv_fadd)
+    repository="https://github.com/meiniKi/FazyRV.git"
+    commit="c8d9c7971b91c0c166aef6c236f1134b2c6ac1a1"
+    source_glob="/source/rtl/fazyrv_hadd.v /source/rtl/fazyrv_fadd.v"
+    ;;
   *)
     echo "unreviewed source/top pair: ${source_id}:${top}" >&2
     exit 2

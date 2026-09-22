@@ -93,6 +93,7 @@ def main() -> int:
     external_corpus.add_argument("--serv-source", type=Path, required=True, help="SERV checkout at the registered commit")
     external_corpus.add_argument("--picorv32-source", type=Path, required=True, help="PicoRV32 checkout at the registered commit")
     external_corpus.add_argument("--rtl-riscv32-source", type=Path, required=True, help="RTL-RISCV32 checkout at the registered commit")
+    external_corpus.add_argument("--fazyrv-source", type=Path, required=True, help="FazyRV checkout at the registered commit")
     external_corpus.add_argument("--output", type=Path, required=True, help="new external corpus JSONL path")
     readiness = subcommands.add_parser("circuit-corpus-readiness", help="report Sprint 2 corpus readiness")
     readiness.add_argument("source", type=Path, help="validated circuit corpus JSONL")
@@ -229,7 +230,7 @@ def main() -> int:
     if args.command == "build-external-circuit-corpus":
         try:
             manifest = build_external_circuit_corpus(
-                args.output, {"serv": args.serv_source, "picorv32": args.picorv32_source, "rtl-riscv32": args.rtl_riscv32_source}
+                args.output, {"serv": args.serv_source, "picorv32": args.picorv32_source, "rtl-riscv32": args.rtl_riscv32_source, "fazyrv": args.fazyrv_source}
             )
         except (OSError, ValueError, subprocess.CalledProcessError) as error:
             print(f"external circuit corpus build failed: {error}")

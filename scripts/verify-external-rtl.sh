@@ -30,6 +30,13 @@ case "${source_id}" in
     license_sha256="5d77a4df434a9f088476a91acefa0f98c46b39ae60e89e8213c4a460ae7fef4e"
     test_command="iverilog -g2012 -s tb_alu -o /tmp/rv-alu /source/RiscV-32bit/RiscV-32bit.srcs/sources_1/new/alu.v /workspace/tests/external/rtl_riscv32/tb_alu.v && vvp /tmp/rv-alu && iverilog -g2012 -s tb_pc -o /tmp/rv-pc /source/RiscV-32bit/RiscV-32bit.srcs/sources_1/new/pc.v /workspace/tests/external/rtl_riscv32/tb_pc.v && vvp /tmp/rv-pc && iverilog -g2012 -s tb_instr_decode -o /tmp/rv-decode /source/RiscV-32bit/RiscV-32bit.srcs/sources_1/new/instr_decode.v /workspace/tests/external/rtl_riscv32/tb_instr_decode.v && vvp /tmp/rv-decode"
     ;;
+  fazyrv)
+    repository="https://github.com/meiniKi/FazyRV.git"
+    commit="c8d9c7971b91c0c166aef6c236f1134b2c6ac1a1"
+    license_path="rtl/LICENSE.txt"
+    license_sha256="31beba5b18f79bd120e371525c603f057952effd4d6436a584073f3e50537edc"
+    test_command="iverilog -g2012 -s tb_fazyrv_hadd -o /tmp/fazyrv-hadd /source/rtl/fazyrv_hadd.v /workspace/tests/external/fazyrv/tb_fazyrv_hadd.sv && vvp /tmp/fazyrv-hadd && iverilog -g2012 -s tb_fazyrv_fadd -o /tmp/fazyrv-fadd /source/rtl/fazyrv_hadd.v /source/rtl/fazyrv_fadd.v /workspace/tests/external/fazyrv/tb_fazyrv_fadd.sv && vvp /tmp/fazyrv-fadd && iverilog -g2012 -s tb_fazyrv_cmp -o /tmp/fazyrv-cmp /source/rtl/fazyrv_cmp.v /workspace/tests/external/fazyrv/tb_fazyrv_cmp.sv && vvp /tmp/fazyrv-cmp"
+    ;;
   *)
     echo "unsupported reviewed source: ${source_id}" >&2
     exit 2

@@ -37,6 +37,13 @@ SOURCES: dict[str, dict[str, str]] = {
         "license_path": "LICENSE",
         "license_sha256": "5d77a4df434a9f088476a91acefa0f98c46b39ae60e89e8213c4a460ae7fef4e",
     },
+    "fazyrv": {
+        "repository": "https://github.com/meiniKi/FazyRV.git",
+        "commit": "c8d9c7971b91c0c166aef6c236f1134b2c6ac1a1",
+        "license": "MIT",
+        "license_path": "rtl/LICENSE.txt",
+        "license_sha256": "31beba5b18f79bd120e371525c603f057952effd4d6436a584073f3e50537edc",
+    },
 }
 
 EXAMPLES: tuple[dict[str, Any], ...] = (
@@ -81,6 +88,37 @@ EXAMPLES: tuple[dict[str, Any], ...] = (
         "specification": "Implement the pinned RTL-RISCV32 program counter with asynchronous reset and synchronous next-PC capture.",
         "verification_command": "./scripts/verify-external-rtl.sh rtl-riscv32 && ./scripts/synth-external-rtl.sh rtl-riscv32 pc",
     },
+    {
+        "id": "fazyrv-hadd-001",
+        "source_id": "fazyrv",
+        "split": "train",
+        "design_family": "fazyrv_half_adder",
+        "source_path": "rtl/fazyrv_hadd.v",
+        "testbench": "tests/external/fazyrv/tb_fazyrv_hadd.sv",
+        "specification": "Implement the pinned FazyRV one-bit half-adder with sum and carry outputs.",
+        "verification_command": "./scripts/verify-external-rtl.sh fazyrv && ./scripts/synth-external-rtl.sh fazyrv fazyrv_hadd",
+    },
+    {
+        "id": "fazyrv-fadd-001",
+        "source_id": "fazyrv",
+        "split": "train",
+        "design_family": "fazyrv_full_adder",
+        "source_path": "rtl/fazyrv_fadd.v",
+        "dependencies": ("rtl/fazyrv_hadd.v",),
+        "testbench": "tests/external/fazyrv/tb_fazyrv_fadd.sv",
+        "specification": "Implement the pinned FazyRV one-bit full-adder and its half-adder dependency.",
+        "verification_command": "./scripts/verify-external-rtl.sh fazyrv && ./scripts/synth-external-rtl.sh fazyrv fazyrv_fadd",
+    },
+    {
+        "id": "fazyrv-cmp-001",
+        "source_id": "fazyrv",
+        "split": "train",
+        "design_family": "fazyrv_chunk_comparator",
+        "source_path": "rtl/fazyrv_cmp.v",
+        "testbench": "tests/external/fazyrv/tb_fazyrv_cmp.sv",
+        "specification": "Implement the pinned FazyRV parameterized chunk comparator, including signed-MSB inversion.",
+        "verification_command": "./scripts/verify-external-rtl.sh fazyrv && ./scripts/synth-external-rtl.sh fazyrv fazyrv_cmp",
+    },
 )
 
 
@@ -121,12 +159,16 @@ def build_external_circuit_corpus(output: Path, source_roots: dict[str, Path]) -
     records: list[dict[str, Any]] = []
     for example in EXAMPLES:
         source = checked[example["source_id"]]
-        source_path = source_roots[example["source_id"]] / example["source_path"]
+        relative_paths = (*example.get("dependencies", ()), example["source_path"])
+        source_paths = [source_roots[example["source_id"]] / relative_path for relative_path in relative_paths]
         testbench_path = ROOT / example["testbench"]
-        if not source_path.is_file() or not testbench_path.is_file():
+        if not all(path.is_file() for path in source_paths) or not testbench_path.is_file():
             raise ValueError(f"missing reviewed example input for {example['id']}")
-        source_text = source_path.read_text(encoding="utf-8")
-        rtl = _extract_module(source_text, example["module"]) if "module" in example else source_text
+        rtl_parts = []
+        for relative_path, source_path in zip(relative_paths, source_paths, strict=True):
+            source_text = source_path.read_text(encoding="utf-8")
+            rtl_parts.append(_extract_module(source_text, example["module"]) if relative_path == example["source_path"] and "module" in example else source_text)
+        rtl = "\n".join(rtl_parts)
         license_text = (source_roots[example["source_id"]] / source["license_path"]).read_text(encoding="utf-8")
         rtl = f"/* External source license ({source['license']}):\n{license_text.rstrip()}\n*/\n\n{rtl}"
         testbench = testbench_path.read_text(encoding="utf-8")
@@ -145,10 +187,10 @@ def build_external_circuit_corpus(output: Path, source_roots: dict[str, Path]) -
                     "license": source["license"],
                     "reviewed": True,
                     "source_commit": source["commit"],
-                    "source_paths": [example["source_path"], example["testbench"]],
-                    "source_sha256": {example["source_path"]: _sha256(source_path), example["testbench"]: _sha256(testbench_path)},
+                    "source_paths": [*relative_paths, example["testbench"]],
+                    "source_sha256": {**{relative_path: _sha256(source_path) for relative_path, source_path in zip(relative_paths, source_paths, strict=True)}, example["testbench"]: _sha256(testbench_path)},
                     "license_sha256": source["license_sha256"],
-                    "dependencies": [],
+                    "dependencies": list(example.get("dependencies", ())),
                     "transformation": (
                         "verbatim selected RTL file preceded by its complete license text; EF-GPU-authored focused smoke testbench appended as separate target field"
                         if "module" not in example

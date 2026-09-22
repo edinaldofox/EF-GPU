@@ -49,6 +49,21 @@
         "RiscV-32bit/RiscV-32bit.srcs/sources_1/new/instr_decode.v": "Yosys reported an inferred opc latch"
       },
       "split": "validation"
+    },
+    {
+      "id": "fazyrv-mit-v1",
+      "repository": "https://github.com/meiniKi/FazyRV.git",
+      "commit": "c8d9c7971b91c0c166aef6c236f1134b2c6ac1a1",
+      "license": "MIT",
+      "license_path": "rtl/LICENSE.txt",
+      "review": {
+        "reviewed_at": "2026-09-22",
+        "reviewer": "EF-GPU autonomous intake; human promotion remains required",
+        "scope": "rtl/fazyrv_{hadd,fadd,cmp}.v only; no firmware, formal suites, submodules, PDK, generated output, or SoC integration",
+        "status": "approved-for-temporary-extraction"
+      },
+      "candidate_paths": ["rtl/fazyrv_hadd.v", "rtl/fazyrv_fadd.v", "rtl/fazyrv_cmp.v"],
+      "split": "train"
     }
   ],
   "admission_policy": "Each extracted row records source commit, path, SHA-256, license, verification command, and split. No source content or hash may occur in more than one split."
