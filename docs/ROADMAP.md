@@ -30,6 +30,8 @@
   exportação SFT somente após licença, revisão, simulação RTL e síntese válidas.
 - Adapter LoRA/QLoRA de SystemVerilog somente depois de corpus e benchmark
   suficientes; pesos, downloads e publicação permanecem fora da automação.
+- Sprints 2–6 detalham a progressão de corpus interno, fontes licenciadas,
+  piloto QLoRA, avaliação e canário em `docs/TRAINING_SPRINTS.md`.
 
 ## Fase 4 — Blocos de GPU
 

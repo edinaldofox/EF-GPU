@@ -31,6 +31,8 @@ SystemVerilog — com corpus licenciado, avaliação congelada e validação de 
 — está em [Especialização nativa para circuitos](docs/CIRCUIT_SPECIALIZATION.md).
 A ordem obrigatória para hardware, corpus, treinamento e fluxo físico está em
 [Sequência de processos](docs/PROCESS_SEQUENCE.md).
+As sprints planejadas para levar o corpus ao treinamento e avaliação estão em
+[Sprints de treinamento](docs/TRAINING_SPRINTS.md).
 
 ### Estrutura inicial
 
@@ -102,6 +104,8 @@ with licensed corpus, frozen evaluation, and data validation is documented in
 [Native circuit specialization](docs/CIRCUIT_SPECIALIZATION.md).
 The required order for hardware, corpus, training, and physical flow is in
 [Process sequence](docs/PROCESS_SEQUENCE.md).
+The planned sprints that take the corpus through training and evaluation are in
+[Training sprints](docs/TRAINING_SPRINTS.md).
 
 ### Initial layout
 
