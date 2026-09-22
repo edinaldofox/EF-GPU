@@ -21,3 +21,8 @@ verify tb_adder13_no_cin adder13_no_cin.v tests/external/fma/tb_adder13_no_cin.v
 verify tb_adder161_no_cin_no_cout adder161_no_cin_no_cout.v tests/external/fma/tb_adder161_no_cin_no_cout.v
 verify tb_adder162_no_cin adder162_no_cin.v tests/external/fma/tb_adder162_no_cin.v
 verify tb_left_shifter_28 left_shifter_28.v tests/external/fma/tb_left_shifter_28.v
+verify tb_left_shifter_76 left_shifter_76.v tests/external/fma/tb_left_shifter_76.v
+verify tb_left_shifter_163 left_shifter_163.v tests/external/fma/tb_left_shifter_163.v
+verify tb_right_shifter_26_with_outside_bits right_shifter_26_with_outside_bits.v tests/external/fma/tb_right_shifter_26_with_outside_bits.v
+verify tb_right_shifter_74_with_outside_bits right_shifter_74_with_outside_bits.v tests/external/fma/tb_right_shifter_74_with_outside_bits.v
+verify tb_right_shifter_161_with_outside_bits right_shifter_161_with_outside_bits.v tests/external/fma/tb_right_shifter_161_with_outside_bits.v
