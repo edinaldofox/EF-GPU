@@ -62,6 +62,10 @@ def test_plan_is_wrapped_in_a_complete_proposal(monkeypatch) -> None:
     assert proposal["design_id"] == "simd4x8-vmac"
     assert proposal["model"]["revision"] == "test-digest"
     assert proposal["artifacts"]["rtl"]
+    assert proposal["changes"] == [
+        "Apply reviewed deterministic template testbench-pass-message-label: "
+        "Labels the existing SIMD4x8 passing-test message as a candidate run."
+    ]
 
 
 def test_interface_changing_plan_is_rejected() -> None:

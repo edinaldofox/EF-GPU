@@ -17,7 +17,7 @@ from pathlib import Path
 from typing import Any
 
 from ef_gpu.contracts import validate_proposal, validate_request
-from ef_gpu.templates import TEMPLATE_IDS
+from ef_gpu.templates import TEMPLATE_IDS, template_description
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -129,7 +129,10 @@ def build_simd4x8_proposal(
     errors = validate_simd4x8_plan(plan)
     if errors:
         raise ValueError("invalid model plan: " + "; ".join(errors))
-    changes = plan["changes"]
+    template_id = plan["patch_template"]
+    # Free-form model wording is retained in proposal metadata, but the public
+    # candidate contract must describe the reviewed recipe actually compiled.
+    changes = [f"Apply reviewed deterministic template {template_id}: {template_description(template_id)}"]
     assumptions = plan["assumptions"]
     timestamp = datetime.now(UTC).strftime("%Y%m%dT%H%M%SZ")
     return {
@@ -157,7 +160,7 @@ def build_simd4x8_proposal(
             "openroad_config": "configs/openroad/simd4x8",
         },
         "changes": changes,
-        "patch_template": plan["patch_template"],
+        "patch_template": template_id,
         "assumptions": assumptions,
     }
 

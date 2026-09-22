@@ -304,6 +304,8 @@ ef-gpu iterate-simd4x8 examples/agent/simd4x8-request.json \
 The automatic route requires the LLM proposal to contain `patch_template`; the
 operator must explicitly select `--patch-source template`. The model selects a
 reviewed identifier only. It does not author or modify the diff.
+The generated proposal's `changes` field is filled from that reviewed recipe;
+the model's free-form planning text remains only in proposal metadata for audit.
 
 To run this path without intervention between gates, use:
 
