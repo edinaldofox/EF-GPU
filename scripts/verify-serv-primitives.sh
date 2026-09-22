@@ -18,5 +18,6 @@ verify tb_serv_rf_ram_w32 rtl/serv_rf_ram.v tests/external/serv/tb_serv_rf_ram_w
 verify tb_serv_rf_ram_w8_c4 rtl/serv_rf_ram.v tests/external/serv/tb_serv_rf_ram_w8_c4.sv
 verify tb_serv_rf_ram_w16_c4 rtl/serv_rf_ram.v tests/external/serv/tb_serv_rf_ram_w16_c4.sv
 verify tb_serv_rf_ram_w32_c4 rtl/serv_rf_ram.v tests/external/serv/tb_serv_rf_ram_w32_c4.sv
+verify tb_serv_bufreg rtl/serv_bufreg.v tests/external/serv/tb_serv_bufreg.sv
 verify tb_serv_bufreg2 rtl/serv_bufreg2.v tests/external/serv/tb_serv_bufreg2.sv
 verify tb_serv_immdec rtl/serv_immdec.v tests/external/serv/tb_serv_immdec.sv

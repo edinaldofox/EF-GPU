@@ -108,6 +108,16 @@ EXAMPLES: tuple[dict[str, Any], ...] = (
     {
         "id": "serv-rf-ram-w32-c4-001", "source_id": "serv", "split": "train", "design_family": "serv_register_file_ram_32_bit_lane_with_csrs", "source_path": "rtl/serv_rf_ram.v", "testbench": "tests/external/serv/tb_serv_rf_ram_w32_c4.sv", "specification": "Implement the pinned SERV register-file RAM configured for thirty-two-bit lanes, four CSR slots and 36 words.", "verification_command": "./scripts/verify-external-rtl.sh serv && ./scripts/synth-external-rtl.sh serv serv_rf_ram_w32_c4"},
     {
+        "id": "serv-bufreg-001",
+        "source_id": "serv",
+        "split": "train",
+        "design_family": "serv_serial_address_and_shift_buffer",
+        "source_path": "rtl/serv_bufreg.v",
+        "testbench": "tests/external/serv/tb_serv_bufreg.sv",
+        "specification": "Implement the pinned SERV one-bit serial buffer for address construction and shift data, including low-bit alignment output.",
+        "verification_command": "./scripts/verify-external-rtl.sh serv && ./scripts/synth-external-rtl.sh serv serv_bufreg",
+    },
+    {
         "id": "serv-bufreg2-001",
         "source_id": "serv",
         "split": "train",
