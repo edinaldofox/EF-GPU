@@ -37,6 +37,8 @@ tests/                Testes do orquestrador e das validações
 3. Leia [a arquitetura](docs/ARCHITECTURE.md) e [o guia do OpenROAD](docs/OPENROAD.md).
 4. Comece por um design pequeno e verificável em `designs/examples/`; não use uma LLM para gerar blocos de GPU complexos antes de estabelecer os testes e as métricas de referência.
 
+O primeiro design de referência é a [ALU8](designs/alu8/spec.md). Verifique exaustivamente o núcleo combinacional com `./scripts/verify-alu8.sh`.
+
 ### Princípios
 
 - **Verificação antes de PPA:** corretude funcional é requisito para comparar potência, desempenho e área (PPA).
@@ -82,6 +84,8 @@ tests/                Orchestrator and validation tests
 2. Create a local environment and install the project: `python -m pip install -e '.[dev]'`.
 3. Read the [architecture](docs/ARCHITECTURE.md) and [OpenROAD guide](docs/OPENROAD.md).
 4. Begin with a small, verifiable design in `designs/examples/`; do not use an LLM to generate complex GPU blocks before baseline tests and metrics exist.
+
+The first reference design is [ALU8](designs/alu8/spec.md). Exhaustively verify its combinational core with `./scripts/verify-alu8.sh`.
 
 ### Principles
 
