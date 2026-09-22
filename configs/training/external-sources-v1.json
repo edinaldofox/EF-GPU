@@ -13,7 +13,7 @@
         "scope": "rtl/*.v only; no firmware, PDK, generated output, or third-party submodule",
         "status": "approved-for-temporary-extraction"
       },
-      "candidate_paths": ["rtl/serv_alu.v", "rtl/serv_aligner.v", "rtl/serv_bufreg.v", "rtl/serv_decode.v", "rtl/serv_immdec.v", "rtl/serv_mem_if.v", "rtl/serv_rf_ram.v", "rtl/serv_state.v"],
+      "candidate_paths": ["rtl/serv_alu.v", "rtl/serv_aligner.v", "rtl/serv_bufreg.v", "rtl/serv_bufreg2.v", "rtl/serv_decode.v", "rtl/serv_immdec.v", "rtl/serv_mem_if.v", "rtl/serv_rf_ram.v", "rtl/serv_state.v"],
       "split": "train"
     },
     {

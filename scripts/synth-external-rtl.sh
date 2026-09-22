@@ -9,7 +9,7 @@ tmp="$(mktemp -d)"
 trap 'rm -rf -- "${tmp}"' EXIT
 
 case "${source_id}:${top}" in
-  serv:serv_alu|serv:serv_aligner|serv:serv_bufreg|serv:serv_decode|serv:serv_immdec|serv:serv_mem_if|serv:serv_state)
+  serv:serv_alu|serv:serv_aligner|serv:serv_bufreg|serv:serv_bufreg2|serv:serv_decode|serv:serv_immdec|serv:serv_mem_if|serv:serv_state)
     repository="https://github.com/olofk/serv.git"
     commit="f200eb2ed7b69ac1c6b8eddd47654522aeee5ce8"
     source_glob="/source/rtl/${top}.v"

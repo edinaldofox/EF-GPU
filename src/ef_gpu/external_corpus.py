@@ -92,6 +92,16 @@ EXAMPLES: tuple[dict[str, Any], ...] = (
         "verification_command": "./scripts/verify-external-rtl.sh serv && ./scripts/synth-external-rtl.sh serv serv_rf_ram",
     },
     {
+        "id": "serv-bufreg2-001",
+        "source_id": "serv",
+        "split": "train",
+        "design_family": "serv_store_data_and_shift_buffer",
+        "source_path": "rtl/serv_bufreg2.v",
+        "testbench": "tests/external/serv/tb_serv_bufreg2.sv",
+        "specification": "Implement the pinned SERV one-bit buffer for load/store data and shift state, with byte-lane extraction and selectable operand B.",
+        "verification_command": "./scripts/verify-external-rtl.sh serv && ./scripts/synth-external-rtl.sh serv serv_bufreg2",
+    },
+    {
         "id": "picorv32-pcpi-mul-001",
         "source_id": "picorv32",
         "split": "benchmark",
