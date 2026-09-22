@@ -75,6 +75,18 @@ EF-GPU preenche e valida o contrato completo. Ela **não aplica RTL gerado** nem
 executa o pipeline automaticamente; uma proposta só pode seguir quando seus
 artefatos e alterações estiverem em um candidato versionado.
 
+O candidato atual é aplicado somente em um worktree Git descartável. Para testar
+um patch de testbench sem tocar a árvore principal:
+
+```bash
+ef-gpu stage-simd4x8 examples/agent/simd4x8-request.json \
+  PROPOSTA.json examples/agent/patches/simd4x8-testbench-message.patch
+```
+
+Nesta primeira versão, apenas `designs/simd4x8/tb/tb_simd4x8_c_ref.sv` pode ser
+alterado. O worktree temporário é removido ao final; logs e manifesto permanecem
+em `runs/`.
+
 ### Portas de qualidade e segurança
 
 | Etapa | Condição para avançar | Saída de feedback |
@@ -183,6 +195,18 @@ This first integration asks only for JSON `changes` and `assumptions`, then
 EF-GPU fills and validates the complete contract. It **does not apply generated
 RTL** or run the pipeline automatically; a proposal advances only after its
 artifacts and changes exist in a versioned candidate.
+
+The current candidate is applied only in a disposable Git worktree. To test a
+testbench patch without touching the main worktree:
+
+```bash
+ef-gpu stage-simd4x8 examples/agent/simd4x8-request.json \
+  PROPOSAL.json examples/agent/patches/simd4x8-testbench-message.patch
+```
+
+In this first version, only `designs/simd4x8/tb/tb_simd4x8_c_ref.sv` may change.
+The temporary worktree is removed afterwards; logs and the manifest remain under
+`runs/`.
 
 ### Quality gates and safety
 

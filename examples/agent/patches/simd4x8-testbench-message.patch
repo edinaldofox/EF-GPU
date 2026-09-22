@@ -1,0 +1,13 @@
+diff --git a/designs/simd4x8/tb/tb_simd4x8_c_ref.sv b/designs/simd4x8/tb/tb_simd4x8_c_ref.sv
+index 0d579f3..f3679bd 100644
+--- a/designs/simd4x8/tb/tb_simd4x8_c_ref.sv
++++ b/designs/simd4x8/tb/tb_simd4x8_c_ref.sv
+@@ -70,7 +70,7 @@ module tb_simd4x8_c_ref;
+         end
+         $fclose(vector_file);
+         assert (vector_count == 132) else $fatal(1, "unexpected vector count: %0d", vector_count);
+-        $display("SIMD4x8 C-reference RTL test passed: %0d vectors", vector_count);
++        $display("SIMD4x8 candidate C-reference RTL test passed: %0d vectors", vector_count);
+         $finish;
+     end
+ endmodule

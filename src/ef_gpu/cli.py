@@ -11,6 +11,7 @@ from pathlib import Path
 from ef_gpu.contracts import validate_proposal, validate_request
 from ef_gpu.llm import generate_simd4x8_proposal
 from ef_gpu.pipeline import run_simd4x8_iteration
+from ef_gpu.staging import stage_simd4x8_patch
 
 
 def main() -> int:
@@ -31,6 +32,11 @@ def main() -> int:
     proposal.add_argument("--output", type=Path, help="proposal JSON path; defaults under runs/")
     proposal.add_argument("--model", default="qwen2.5-coder:1.5b-instruct", help="local Ollama model tag")
     proposal.add_argument("--seed", type=int, default=42, help="deterministic Ollama seed")
+    stage = subcommands.add_parser("stage-simd4x8", help="validate a testbench patch in a disposable Git worktree")
+    stage.add_argument("request", type=Path, help="approved design request JSON")
+    stage.add_argument("proposal", type=Path, help="proposal JSON with the base commit")
+    stage.add_argument("patch", type=Path, help="unified diff; only the SIMD4x8 testbench is allowed")
+    stage.add_argument("--output", type=Path, help="directory for candidate logs and manifest")
     args = parser.parse_args()
 
     if args.command == "doctor":
@@ -77,6 +83,9 @@ def main() -> int:
             return 2
         print(f"proposal written: {proposal_path}")
         return 0
+    if args.command == "stage-simd4x8":
+        output = args.output or Path("runs") / f"candidate-simd4x8-{datetime.now().strftime('%Y%m%dT%H%M%S')}"
+        return stage_simd4x8_patch(args.request, args.proposal, args.patch, output)
     return 1
 
 
