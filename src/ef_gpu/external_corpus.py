@@ -128,6 +128,16 @@ EXAMPLES: tuple[dict[str, Any], ...] = (
         "verification_command": "./scripts/verify-external-rtl.sh serv && ./scripts/synth-external-rtl.sh serv serv_bufreg2",
     },
     {
+        "id": "serv-state-001",
+        "source_id": "serv",
+        "split": "train",
+        "design_family": "serv_serial_execution_state_controller",
+        "source_path": "rtl/serv_state.v",
+        "testbench": "tests/external/serv/tb_serv_state.sv",
+        "specification": "Implement the pinned SERV bit-serial execution state controller with reset-gated instruction fetch and four-phase counter enable.",
+        "verification_command": "./scripts/verify-external-rtl.sh serv && ./scripts/synth-external-rtl.sh serv serv_state",
+    },
+    {
         "id": "serv-decode-001",
         "source_id": "serv",
         "split": "train",

@@ -71,5 +71,5 @@ PYTHONPATH=src python3 -m ef_gpu.cli sprint3-corpus-readiness \
 
 O relatório confere o conteúdo exato do benchmark congelado e exige 100 exemplos
 de treino, 20 de validação e 20 de benchmark. Ele nunca autoriza pesos por si só.
-No corpus externo v21 atual, a contagem é 25/6/20; os déficits são 75/14/0. A
+No corpus externo v22 atual, a contagem é 26/6/20; os déficits são 74/14/0. A
 porta, portanto, permanece fechada de propósito.

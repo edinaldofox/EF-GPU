@@ -22,3 +22,4 @@ verify tb_serv_bufreg rtl/serv_bufreg.v tests/external/serv/tb_serv_bufreg.sv
 verify tb_serv_bufreg2 rtl/serv_bufreg2.v tests/external/serv/tb_serv_bufreg2.sv
 verify tb_serv_decode rtl/serv_decode.v tests/external/serv/tb_serv_decode.sv
 verify tb_serv_immdec rtl/serv_immdec.v tests/external/serv/tb_serv_immdec.sv
+verify tb_serv_state rtl/serv_state.v tests/external/serv/tb_serv_state.sv
