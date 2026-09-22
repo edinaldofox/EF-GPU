@@ -35,3 +35,6 @@
   escrita e `r0` imutável; ainda sem PPA ou integração à VMAC.
 - `vpu16_decode`: codifica o primeiro formato de instrução (`VMAC`) e será
   integrado ao banco vetorial e à unidade SIMD somente após suas baselines.
+- Integração inicial: `mini_gpu_vmac_core` aceita uma instrução VMAC, lê três
+  registradores vetoriais e escreve o resultado no destino; fetch, scheduler e
+  memória continuam fora deste primeiro núcleo.

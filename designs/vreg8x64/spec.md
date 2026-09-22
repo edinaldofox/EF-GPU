@@ -4,8 +4,9 @@
 
 `vreg8x64` é o primeiro bloco de estado da mini GPU EF-GPU. Possui oito
 registradores de 64 bits; cada registrador representa quatro lanes de 16 bits,
-compatíveis com o resultado da VMAC SIMD4x8. Há duas portas de leitura
-combinacionais independentes e uma porta de escrita síncrona.
+compatíveis com o resultado da VMAC SIMD4x8. Há três portas de leitura
+combinacionais independentes e uma porta de escrita síncrona. A terceira porta
+é necessária porque VMAC consome `a`, `b` e acumulador no mesmo ciclo.
 
 - `r0` lê sempre zero e ignora escritas.
 - `r1` a `r7` são atualizados na borda de subida quando `write_enable` está alto.
@@ -22,8 +23,9 @@ PPA; primeiro estabelecemos a baseline funcional e de síntese.
 
 `vreg8x64` is the first stateful block in the EF-GPU mini GPU. It has eight
 64-bit registers, each representing four 16-bit lanes compatible with the
-SIMD4x8 VMAC result. It provides two independent combinational read ports and
-one synchronous write port.
+SIMD4x8 VMAC result. It provides three independent combinational read ports and
+one synchronous write port. The third port is required because VMAC consumes
+`a`, `b`, and an accumulator in the same cycle.
 
 - `r0` always reads as zero and ignores writes.
 - `r1` through `r7` update on the rising edge when `write_enable` is high.

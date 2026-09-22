@@ -1,4 +1,5 @@
 // Eight 64-bit vector registers, each holding four 16-bit SIMD lanes.
+// Three read ports supply the two VMAC multiplicands and its accumulator.
 // Register zero is a hard-wired zero source and ignores writes.
 module vreg8x64 (
     input  logic        clk,
@@ -8,8 +9,10 @@ module vreg8x64 (
     input  logic [63:0] write_data,
     input  logic [2:0]  read_address_a,
     input  logic [2:0]  read_address_b,
+    input  logic [2:0]  read_address_c,
     output logic [63:0] read_data_a,
-    output logic [63:0] read_data_b
+    output logic [63:0] read_data_b,
+    output logic [63:0] read_data_c
 );
     logic [63:0] registers [0:7];
     integer index;
@@ -26,5 +29,6 @@ module vreg8x64 (
     always_comb begin
         read_data_a = read_address_a == 3'd0 ? '0 : registers[read_address_a];
         read_data_b = read_address_b == 3'd0 ? '0 : registers[read_address_b];
+        read_data_c = read_address_c == 3'd0 ? '0 : registers[read_address_c];
     end
 endmodule
