@@ -50,3 +50,15 @@ criações do EF-GPU. O construtor rejeita checkout, licença ou destino já
 existente incorretos. Este artefato ainda está abaixo da meta da Sprint 3
 (100/20/20); portanto é candidato rastreável, não corpus autorizado para
 treinar pesos.
+
+Para registrar a porta de escala sem alterar o corpus, execute:
+
+```bash
+PYTHONPATH=src python3 -m ef_gpu.cli sprint3-corpus-readiness \
+  datasets/circuit/external-candidates-v1.jsonl \
+  --manifest datasets/circuit/external-candidates-v1.jsonl.manifest.json \
+  --output <novo-relatorio.json>
+```
+
+O relatório confere o conteúdo exato do benchmark congelado e exige 100 exemplos
+de treino, 20 de validação e 20 de benchmark. Ele nunca autoriza pesos por si só.
