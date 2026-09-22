@@ -50,3 +50,6 @@
   integrada por VLOAD/VSTORE. A próxima etapa é definir dependências e hazards
   de memória para além do protocolo `issue_ready`/`issue_accepted`, que evita
   o aceite de operações durante `busy`.
+- `vpu16_sequencer`: PC e memória de programa de 16 instruções executam um
+  programa VLOAD→VMAC→VSTORE pelo handshake do núcleo; saltos e loops continuam
+  deliberadamente fora deste estágio.
