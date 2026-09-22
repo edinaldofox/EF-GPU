@@ -1,0 +1,28 @@
+{
+  "schema_version": "1.0",
+  "command": "build-internal-circuit-corpus",
+  "output": "datasets/circuit/ef-gpu-internal-v2.jsonl",
+  "output_sha256": "4cf54a2f3330f8957e708f4549758c85294894e072ae19d1660675625fada686",
+  "source_records": [
+    "ef-gpu-vpu16-sequencer-001",
+    "ef-gpu-alu8-001",
+    "ef-gpu-simd4x8-comb-001",
+    "ef-gpu-vreg8x64-001",
+    "ef-gpu-scratchpad16x64-001",
+    "ef-gpu-vpu16-decode-001",
+    "ef-gpu-mini-gpu-vmac-001"
+  ],
+  "created_at_utc": "2026-09-22T17:22:06.175191+00:00",
+  "validation": {
+    "schema_version": "1.0",
+    "records": 7,
+    "splits": {
+      "validation": 2,
+      "train": 3,
+      "benchmark": 2
+    },
+    "families": 7,
+    "training_status": "validated-data-only; no model weights trained"
+  },
+  "training_status": "seed-corpus-only; insufficient for LoRA training"
+}

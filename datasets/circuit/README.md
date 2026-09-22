@@ -23,3 +23,7 @@ ef-gpu build-internal-circuit-corpus \
 The v1 seed is intentionally too small for LoRA training. It establishes the
 format and frozen benchmark discipline while the project curates more licensed,
 verified design families.
+
+`ef-gpu-internal-v2.jsonl` adds `vpu16_sequencer` to the training split while
+keeping v1 unchanged. It has seven families: three train, two validation, and
+two frozen benchmark families. It remains a seed corpus, not training volume.

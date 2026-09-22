@@ -16,6 +16,16 @@ ROOT = Path(__file__).resolve().parents[2]
 
 CORPUS_SOURCES: tuple[dict[str, Any], ...] = (
     {
+        "id": "ef-gpu-vpu16-sequencer-001",
+        "split": "train",
+        "design_family": "vpu16_sequencer",
+        "task": "specification-to-systemverilog-with-testbench",
+        "specification": "designs/vpu16_sequencer/spec.md",
+        "rtl": ("designs/vpu16_sequencer/rtl/vpu16_sequencer.sv",),
+        "testbench": "designs/vpu16_sequencer/tb/tb_vpu16_program.sv",
+        "verification_command": "./scripts/verify-vpu16-sequencer.sh && ./scripts/synth-vpu16-sequencer.sh",
+    },
+    {
         "id": "ef-gpu-alu8-001",
         "split": "train",
         "design_family": "alu8",

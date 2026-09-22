@@ -66,6 +66,10 @@ São somente seis exemplos e, portanto, não devem treinar um LoRA. O próximo
 incremento de dados deve acrescentar novas famílias licenciadas e verificadas,
 sem mover o benchmark v1 para treino.
 
+O corpus v2 adiciona `vpu16_sequencer` ao treino, totalizando sete famílias
+(3 treino, 2 validação e 2 benchmark). Ele preserva todos os arquivos v1 e ainda
+não possui volume suficiente para treinamento.
+
 ### Critério para chamar o modelo de especializado
 
 O nome `EF-GPU-Circuit-LoRA` só poderá ser usado depois de registrar, no mínimo:

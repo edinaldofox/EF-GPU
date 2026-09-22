@@ -10,7 +10,7 @@ def test_internal_corpus_has_frozen_benchmarks_and_exports_train_validation(tmp_
     corpus = tmp_path / "internal.jsonl"
     summary = build_internal_circuit_corpus(corpus)
     records = [json.loads(line) for line in corpus.read_text(encoding="utf-8").splitlines()]
-    assert summary["records"] == 6
+    assert summary["records"] == 7
     assert {record["split"] for record in records} == {"train", "validation", "benchmark"}
     assert all(record["provenance"]["license"] == "Apache-2.0" for record in records)
     assert (tmp_path / "internal.jsonl.manifest.json").is_file()
@@ -24,5 +24,5 @@ def test_internal_corpus_has_frozen_benchmarks_and_exports_train_validation(tmp_
 
     sft = tmp_path / "internal-sft.jsonl"
     sft_summary = export_circuit_sft(corpus, sft)
-    assert sft_summary["examples_exported"] == 4
+    assert sft_summary["examples_exported"] == 5
     assert sft_summary["benchmark_examples_excluded"] == 2
