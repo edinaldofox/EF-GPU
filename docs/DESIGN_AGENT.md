@@ -87,6 +87,15 @@ Nesta primeira versão, apenas `designs/simd4x8/tb/tb_simd4x8_c_ref.sv` pode ser
 alterado. O worktree temporário é removido ao final; logs e manifesto permanecem
 em `runs/`.
 
+O Qwen pode gerar esse diff restrito em um arquivo de execução:
+
+```bash
+ef-gpu draft-simd4x8-patch PROPOSTA.json
+```
+
+O comando aceita somente um patch que passe `git apply --check` e mude o único
+arquivo permitido; em seguida, use `stage-simd4x8` para a verificação isolada.
+
 ### Portas de qualidade e segurança
 
 | Etapa | Condição para avançar | Saída de feedback |

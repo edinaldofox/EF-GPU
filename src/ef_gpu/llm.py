@@ -15,7 +15,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
-from ef_gpu.contracts import validate_request
+from ef_gpu.contracts import validate_proposal, validate_request
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -219,4 +219,43 @@ def generate_simd4x8_proposal(
         "model_plan": plan,
     }
     metadata_path.write_text(json.dumps(metadata, indent=2) + "\n", encoding="utf-8")
+    return output_path
+
+
+def generate_simd4x8_testbench_patch(proposal_path: Path, output_path: Path, *, seed: int = 42) -> Path:
+    """Generate a narrowly scoped unified diff; it is not applied here."""
+    proposal = json.loads(proposal_path.read_text(encoding="utf-8"))
+    errors = validate_proposal(proposal)
+    if errors or proposal.get("design_id") != "simd4x8-vmac":
+        raise ValueError("invalid SIMD4x8 proposal: " + "; ".join(errors))
+    prompt = (
+        "Return only a unified git diff, with no JSON, explanation, or markdown fences. "
+        "Modify only designs/simd4x8/tb/tb_simd4x8_c_ref.sv. "
+        "Change exactly this display string: SIMD4x8 C-reference RTL test passed: %0d vectors. "
+        "Replace it with: SIMD4x8 candidate C-reference RTL test passed: %0d vectors. "
+        "Do not change any other line and do not use markdown fences."
+    )
+    response = _post_json(
+        "chat",
+        {"model": DEFAULT_MODEL, "messages": [{"role": "user", "content": prompt}], "stream": False,
+         "options": {"temperature": 0, "seed": seed, "num_ctx": 1024, "num_predict": 256}, "keep_alive": "1m"},
+    )
+    try:
+        patch = response["message"]["content"]
+    except (KeyError, TypeError) as error:
+        raise RuntimeError(f"Ollama returned no patch text: {error}") from error
+    if not isinstance(patch, str):
+        raise RuntimeError("Ollama patch must be a string")
+    if patch.startswith("```"):
+        patch = "\n".join(patch.splitlines()[1:-1])
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    output_path.write_text(patch.rstrip() + "\n", encoding="utf-8")
+    checked = subprocess.run(["git", "apply", "--check", str(output_path)], cwd=ROOT, text=True, stderr=subprocess.PIPE)
+    paths = subprocess.run(["git", "apply", "--numstat", "--", str(output_path)], cwd=ROOT, text=True, stdout=subprocess.PIPE).stdout
+    changed = {line.split("\t")[-1] for line in paths.splitlines() if line}
+    if checked.returncode or changed != {"designs/simd4x8/tb/tb_simd4x8_c_ref.sv"}:
+        rejected = output_path.with_suffix(output_path.suffix + ".rejected.txt")
+        rejected.write_text(patch, encoding="utf-8")
+        output_path.unlink(missing_ok=True)
+        raise RuntimeError(f"generated patch rejected; raw response saved to {rejected}: {checked.stderr.strip() or sorted(changed)}")
     return output_path

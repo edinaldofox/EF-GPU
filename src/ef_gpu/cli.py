@@ -9,7 +9,7 @@ from datetime import datetime
 from pathlib import Path
 
 from ef_gpu.contracts import validate_proposal, validate_request
-from ef_gpu.llm import generate_simd4x8_proposal
+from ef_gpu.llm import generate_simd4x8_proposal, generate_simd4x8_testbench_patch
 from ef_gpu.pipeline import run_simd4x8_iteration
 from ef_gpu.staging import stage_simd4x8_patch
 
@@ -32,6 +32,10 @@ def main() -> int:
     proposal.add_argument("--output", type=Path, help="proposal JSON path; defaults under runs/")
     proposal.add_argument("--model", default="qwen2.5-coder:1.5b-instruct", help="local Ollama model tag")
     proposal.add_argument("--seed", type=int, default=42, help="deterministic Ollama seed")
+    patch = subcommands.add_parser("draft-simd4x8-patch", help="draft a restricted testbench diff with local Ollama")
+    patch.add_argument("proposal", type=Path, help="validated SIMD4x8 proposal JSON")
+    patch.add_argument("--output", type=Path, help="patch path; defaults under runs/")
+    patch.add_argument("--seed", type=int, default=42, help="deterministic Ollama seed")
     stage = subcommands.add_parser("stage-simd4x8", help="validate a testbench patch in a disposable Git worktree")
     stage.add_argument("request", type=Path, help="approved design request JSON")
     stage.add_argument("proposal", type=Path, help="proposal JSON with the base commit")
@@ -86,6 +90,15 @@ def main() -> int:
     if args.command == "stage-simd4x8":
         output = args.output or Path("runs") / f"candidate-simd4x8-{datetime.now().strftime('%Y%m%dT%H%M%S')}"
         return stage_simd4x8_patch(args.request, args.proposal, args.patch, output)
+    if args.command == "draft-simd4x8-patch":
+        output = args.output or Path("runs") / f"draft-simd4x8-{datetime.now().strftime('%Y%m%dT%H%M%S')}.patch"
+        try:
+            patch_path = generate_simd4x8_testbench_patch(args.proposal, output, seed=args.seed)
+        except (RuntimeError, ValueError, OSError, json.JSONDecodeError) as error:
+            print(f"patch generation failed: {error}")
+            return 2
+        print(f"patch written: {patch_path}")
+        return 0
     return 1
 
 
