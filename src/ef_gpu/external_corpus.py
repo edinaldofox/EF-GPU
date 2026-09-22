@@ -44,6 +44,13 @@ SOURCES: dict[str, dict[str, str]] = {
         "license_path": "rtl/LICENSE.txt",
         "license_sha256": "31beba5b18f79bd120e371525c603f057952effd4d6436a584073f3e50537edc",
     },
+    "learn-fpga": {
+        "repository": "https://github.com/BrunoLevy/learn-fpga.git",
+        "commit": "5c08c870315c09ccd9ec64ccde20ab3375b3f273",
+        "license": "BSD-3-Clause",
+        "license_path": "LICENSE",
+        "license_sha256": "dae852f7354066fe13901a60a49ac4f7e45b9ae16fec901e12e24218da0ea999",
+    },
     "fma-rtl": {
         "repository": "https://github.com/Tachyum-Open-Source/fma-rtl.git",
         "commit": "1e7221349e7b18b1e20f4b301f3b7a34b5ebd490",
@@ -104,6 +111,16 @@ EXAMPLES: tuple[dict[str, Any], ...] = (
         "testbench": "tests/external/rtl_riscv32/tb_pc.v",
         "specification": "Implement the pinned RTL-RISCV32 program counter with asynchronous reset and synchronous next-PC capture.",
         "verification_command": "./scripts/verify-external-rtl.sh rtl-riscv32 && ./scripts/synth-external-rtl.sh rtl-riscv32 pc",
+    },
+    {
+        "id": "femtorv-step1-001",
+        "source_id": "learn-fpga",
+        "split": "validation",
+        "design_family": "femtorv_tutorial_five_bit_blinker",
+        "source_path": "FemtoRV/TUTORIALS/FROM_BLINKER_TO_RISCV/step1.v",
+        "testbench": "tests/external/femtorv/tb_femtorv_step1.v",
+        "specification": "Implement the pinned FemtoRV tutorial five-bit synchronous LED counter with a constant inactive UART transmitter.",
+        "verification_command": "./scripts/verify-external-rtl.sh learn-fpga && ./scripts/synth-external-rtl.sh learn-fpga SOC",
     },
     {
         "id": "fazyrv-hadd-001",

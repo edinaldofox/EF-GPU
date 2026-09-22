@@ -11,6 +11,7 @@ Elas foram fixadas por commit e revisadas somente no escopo de RTL Verilog:
 | SERV | ISC | treino | ALU serial, alinhador e RAM de registradores parametrizada |
 | PicoRV32 | ISC | benchmark | `picorv32.v` e seus módulos internos |
 | RTL-RISCV32 | MIT | validação | contador de programa isolado |
+| FemtoRV tutorial | BSD-3-Clause | validação | contador síncrono de cinco bits do passo inicial |
 | FazyRV | MIT | treino | adders, comparador, registradores seriais, RAMs, alinhador, PC e decodificador RVC |
 | Tachyum FMA RTL | Apache-2.0 | benchmark | primitivas de mux, registrador, incremento, soma e deslocamento |
 
@@ -40,8 +41,10 @@ como somente leitura no contêiner. Eles não salvam RTL externo no repositório
 As verificações funcionais atuais são testes de fumaça próprios do EF-GPU:
 o alinhador e a ALU serial do SERV, e a instrução `MUL` (7 × 9 = 63) da
 unidade PCPI iterativa do PicoRV32. Os três alvos também sintetizaram com
-Yosys 0.68 na imagem OpenROAD fixada. `serv_rf_ram` permanece excluído por um
-aviso de intervalo de bits observado na síntese; não é exemplo admitido.
+Yosys 0.68 na imagem OpenROAD fixada. A `serv_rf_ram` foi elaborada em uma
+configuração explícita de largura oito antes da síntese, eliminando o aviso dos
+parâmetros padrão inválidos da fonte; ela agora é exemplo admitido. O contador
+FemtoRV verifica o estado inicial, três incrementos e UART inativa.
 No RTL-RISCV32, os módulos `alu` e `instr_decode` também foram excluídos: o
 Yosys encontrou latches implícitos. O contador de programa passou simulação e
 síntese sem esse alerta e é a única família admitida dessa fonte.
@@ -68,5 +71,5 @@ PYTHONPATH=src python3 -m ef_gpu.cli sprint3-corpus-readiness \
 
 O relatório confere o conteúdo exato do benchmark congelado e exige 100 exemplos
 de treino, 20 de validação e 20 de benchmark. Ele nunca autoriza pesos por si só.
-No corpus externo v10 atual, a contagem é 13/1/20; os déficits são 87/19/0. A
+No corpus externo v11 atual, a contagem é 13/2/20; os déficits são 87/18/0. A
 porta, portanto, permanece fechada de propósito.

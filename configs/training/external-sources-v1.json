@@ -66,6 +66,21 @@
       "split": "train"
     },
     {
+      "id": "learn-fpga-bsd-3-clause-v1",
+      "repository": "https://github.com/BrunoLevy/learn-fpga.git",
+      "commit": "5c08c870315c09ccd9ec64ccde20ab3375b3f273",
+      "license": "BSD-3-Clause",
+      "license_path": "LICENSE",
+      "review": {
+        "reviewed_at": "2026-09-22",
+        "reviewer": "EF-GPU autonomous intake; human promotion remains required",
+        "scope": "FemtoRV/TUTORIALS/FROM_BLINKER_TO_RISCV/step1.v only; excludes later tutorial stages, board files, FPGA primitives, firmware, PDKs and generated output",
+        "status": "approved-for-temporary-extraction"
+      },
+      "candidate_paths": ["FemtoRV/TUTORIALS/FROM_BLINKER_TO_RISCV/step1.v"],
+      "split": "validation"
+    },
+    {
       "id": "tachyum-fma-apache-2.0-v1",
       "repository": "https://github.com/Tachyum-Open-Source/fma-rtl.git",
       "commit": "1e7221349e7b18b1e20f4b301f3b7a34b5ebd490",
