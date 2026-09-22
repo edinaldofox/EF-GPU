@@ -10,6 +10,7 @@ module tb_mini_gpu_vmac_core;
     logic [15:0] instruction = '0;
     logic busy;
     logic done;
+    logic queue_full;
     logic [2:0] debug_read_address = '0;
     logic [63:0] debug_read_data;
 

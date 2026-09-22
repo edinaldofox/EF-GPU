@@ -40,3 +40,5 @@
   memória continuam fora deste primeiro núcleo.
 - Configuração iterativa da integração: `USE_ITERATIVE=1` introduz dez ciclos
   de ocupação por VMAC e estabelece a porta de entrada para um scheduler.
+- Scheduler inicial: `ENABLE_QUEUE=1` retém uma instrução VMAC enquanto a
+  unidade iterativa trabalha e a inicia depois do write-back.

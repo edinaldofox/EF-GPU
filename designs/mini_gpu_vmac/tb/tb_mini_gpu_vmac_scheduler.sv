@@ -1,6 +1,6 @@
 `timescale 1ns/1ps
 
-module tb_mini_gpu_vmac_iter_core;
+module tb_mini_gpu_vmac_scheduler;
     logic clk = 1'b0;
     logic rst_n = 1'b0;
     logic host_write_enable = 1'b0;
@@ -14,7 +14,7 @@ module tb_mini_gpu_vmac_iter_core;
     logic [2:0] debug_read_address = '0;
     logic [63:0] debug_read_data;
 
-    mini_gpu_vmac_core #(.USE_ITERATIVE(1'b1)) dut (.*);
+    mini_gpu_vmac_core #(.USE_ITERATIVE(1'b1), .ENABLE_QUEUE(1'b1)) dut (.*);
 
     always #5 clk = ~clk;
 
@@ -56,13 +56,18 @@ module tb_mini_gpu_vmac_iter_core;
 
         issue({4'h1, 3'd4, 3'd1, 3'd2, 3'd3});
         wait (busy);
-        // Eight multiplier steps plus completion/write-back keep the core busy for ten clocks.
-        repeat (9) @(posedge clk);
-        assert (busy && !done) else $fatal(1, "iterative VMAC completed too early");
+        issue({4'h1, 3'd7, 3'd1, 3'd2, 3'd4});
+        #1 assert (queue_full) else $fatal(1, "scheduler did not retain queued VMAC");
+
         @(posedge done);
-        #1 assert (!busy) else $fatal(1, "iterative core still busy after completion");
+        #1 assert (!busy && queue_full) else $fatal(1, "first VMAC write-back lost queued work");
+        @(posedge clk);
+        #1 assert (busy && !queue_full) else $fatal(1, "scheduler did not launch queued VMAC");
+        @(posedge done);
+        #1 assert (!busy) else $fatal(1, "scheduler core stayed busy after second VMAC");
         check_register(3'd4, 64'h0048_0033_0020_000f);
-        $display("mini GPU iterative VMAC core RTL test passed");
+        check_register(3'd7, 64'h0068_0048_002c_0014);
+        $display("mini GPU VMAC scheduler RTL test passed");
         $finish;
     end
 endmodule

@@ -1,6 +1,7 @@
 // First integrated EF-GPU execution core: decode, vector registers, and VMAC.
 module mini_gpu_vmac_core #(
-    parameter bit USE_ITERATIVE = 1'b0
+    parameter bit USE_ITERATIVE = 1'b0,
+    parameter bit ENABLE_QUEUE = 1'b0
 ) (
     input  logic        clk,
     input  logic        rst_n,
@@ -11,6 +12,7 @@ module mini_gpu_vmac_core #(
     input  logic [15:0] instruction,
     output logic        busy,
     output logic        done,
+    output logic        queue_full,
     input  logic [2:0]  debug_read_address,
     output logic [63:0] debug_read_data
 );
@@ -21,6 +23,12 @@ module mini_gpu_vmac_core #(
     logic [2:0] decoded_source_b;
     logic [2:0] decoded_source_acc;
     logic [2:0] pending_destination;
+    logic [15:0] queued_instruction;
+    logic queued_valid;
+    logic [15:0] selected_instruction;
+    logic direct_issue;
+    logic queue_capture;
+    logic queue_launch;
     logic issue_accept;
     logic execute_commit;
 
@@ -39,7 +47,7 @@ module mini_gpu_vmac_core #(
     logic [63:0] vmac_result;
 
     vpu16_decode decode (
-        .instruction,
+        .instruction(selected_instruction),
         .valid(decoded_valid),
         .is_vmac(decoded_is_vmac),
         .destination(decoded_destination),
@@ -48,8 +56,13 @@ module mini_gpu_vmac_core #(
         .source_acc(decoded_source_acc)
     );
 
-    assign issue_accept = issue_valid && decoded_valid && !busy;
+    assign selected_instruction = queue_launch ? queued_instruction : instruction;
+    assign direct_issue = issue_valid && decoded_valid && !busy && !queued_valid;
+    assign queue_capture = ENABLE_QUEUE && issue_valid && decoded_valid && busy && !queued_valid;
+    assign queue_launch = ENABLE_QUEUE && !busy && queued_valid;
+    assign issue_accept = direct_issue || queue_launch;
     assign execute_commit = busy && vmac_done;
+    assign queue_full = queued_valid;
     assign vreg_write_enable = execute_commit || (host_write_enable && !busy && !issue_accept);
     assign vreg_write_address = execute_commit ? pending_destination : host_write_address;
     assign vreg_write_data = execute_commit ? vmac_result : host_write_data;
@@ -96,8 +109,16 @@ module mini_gpu_vmac_core #(
             busy <= 1'b0;
             done <= 1'b0;
             pending_destination <= '0;
+            queued_instruction <= '0;
+            queued_valid <= 1'b0;
         end else begin
             done <= 1'b0;
+            if (queue_capture) begin
+                queued_instruction <= instruction;
+                queued_valid <= 1'b1;
+            end else if (queue_launch) begin
+                queued_valid <= 1'b0;
+            end
             if (execute_commit) begin
                 busy <= 1'b0;
                 done <= 1'b1;

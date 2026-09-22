@@ -21,8 +21,11 @@ Por padrão o core usa a VMAC combinacional. O parâmetro versionado
 `USE_ITERATIVE=1` seleciona a VMAC iterativa: ela mantém o core ocupado por dez
 ciclos do aceite ao write-back (oito passos de multiplicação e dois ciclos de
 conclusão/retorno). Este é um núcleo didático de uma instrução, não uma GPU
-completa: não há fetch, PC, memória ou scheduler independente. Não há PPA nem
-configuração OpenROAD ainda.
+completa: não há fetch, PC ou memória. O parâmetro `ENABLE_QUEUE=1` acrescenta
+uma fila de uma instrução: uma VMAC válida recebida durante `busy` é retida e
+iniciada automaticamente no ciclo posterior ao write-back. `queue_full=1`
+informa que uma nova emissão seria descartada. Não há PPA nem configuração
+OpenROAD ainda.
 
 ## English
 
@@ -43,6 +46,8 @@ defined only while idle.
 The core defaults to the combinational VMAC. The versioned `USE_ITERATIVE=1`
 parameter selects the iterative VMAC, which keeps the core busy for ten cycles
 from acceptance through write-back (eight multiply steps plus two
-completion/write-back cycles). It is a didactic one-instruction core, not a
-full GPU: it has no fetch, PC, memory, or independent scheduler. No PPA or
-OpenROAD claim exists yet.
+completion/write-back cycles). `ENABLE_QUEUE=1` adds a one-entry instruction
+queue: one valid VMAC received during `busy` is retained and launches
+automatically in the cycle after write-back. `queue_full=1` tells the host a
+new issue would be discarded. It is a didactic one-instruction core, not a
+full GPU: it has no fetch, PC, or memory. No PPA or OpenROAD claim exists yet.

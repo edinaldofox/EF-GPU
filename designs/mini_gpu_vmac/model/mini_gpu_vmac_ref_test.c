@@ -19,6 +19,8 @@ int main(void) {
     ef_gpu_mini_gpu_write(&state, 3, UINT64_C(0x0028001e0014000a));
     ef_gpu_mini_gpu_issue(&state, 0x1853U);  // VMAC r4, r1, r2, r3
     expect(ef_gpu_mini_gpu_read(&state, 4), UINT64_C(0x004800330020000f), "VMAC result");
+    ef_gpu_mini_gpu_issue(&state, 0x1e54U);  // VMAC r7, r1, r2, r4
+    expect(ef_gpu_mini_gpu_read(&state, 7), UINT64_C(0x00680048002c0014), "dependent VMAC result");
     ef_gpu_mini_gpu_issue(&state, 0xf184U);  // invalid opcode must not write r0/r1/etc.
     expect(ef_gpu_mini_gpu_read(&state, 4), UINT64_C(0x004800330020000f), "invalid opcode");
     ef_gpu_mini_gpu_issue(&state, 0x1053U);  // VMAC r0, r1, r2, r3
