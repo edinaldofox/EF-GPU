@@ -92,6 +92,16 @@ EXAMPLES: tuple[dict[str, Any], ...] = (
         "verification_command": "./scripts/verify-external-rtl.sh serv && ./scripts/synth-external-rtl.sh serv serv_rf_ram",
     },
     {
+        "id": "serv-rf-ram-w1-001", "source_id": "serv", "split": "train", "design_family": "serv_register_file_ram_1_bit_lane", "source_path": "rtl/serv_rf_ram.v", "testbench": "tests/external/serv/tb_serv_rf_ram_w1.sv", "specification": "Implement the pinned SERV register-file RAM configured for one-bit serial lanes and 1024 words, preserving x0 masking.", "verification_command": "./scripts/verify-external-rtl.sh serv && ./scripts/synth-external-rtl.sh serv serv_rf_ram_w1"},
+    {
+        "id": "serv-rf-ram-w2-001", "source_id": "serv", "split": "train", "design_family": "serv_register_file_ram_2_bit_lane", "source_path": "rtl/serv_rf_ram.v", "testbench": "tests/external/serv/tb_serv_rf_ram_w2.sv", "specification": "Implement the pinned SERV register-file RAM configured for two-bit lanes and 512 words, preserving x0 masking.", "verification_command": "./scripts/verify-external-rtl.sh serv && ./scripts/synth-external-rtl.sh serv serv_rf_ram_w2"},
+    {
+        "id": "serv-rf-ram-w4-001", "source_id": "serv", "split": "train", "design_family": "serv_register_file_ram_4_bit_lane", "source_path": "rtl/serv_rf_ram.v", "testbench": "tests/external/serv/tb_serv_rf_ram_w4.sv", "specification": "Implement the pinned SERV register-file RAM configured for four-bit lanes and 256 words, preserving x0 masking.", "verification_command": "./scripts/verify-external-rtl.sh serv && ./scripts/synth-external-rtl.sh serv serv_rf_ram_w4"},
+    {
+        "id": "serv-rf-ram-w16-001", "source_id": "serv", "split": "train", "design_family": "serv_register_file_ram_16_bit_lane", "source_path": "rtl/serv_rf_ram.v", "testbench": "tests/external/serv/tb_serv_rf_ram_w16.sv", "specification": "Implement the pinned SERV register-file RAM configured for sixteen-bit lanes and 64 words, preserving x0 masking.", "verification_command": "./scripts/verify-external-rtl.sh serv && ./scripts/synth-external-rtl.sh serv serv_rf_ram_w16"},
+    {
+        "id": "serv-rf-ram-w32-001", "source_id": "serv", "split": "train", "design_family": "serv_register_file_ram_32_bit_lane", "source_path": "rtl/serv_rf_ram.v", "testbench": "tests/external/serv/tb_serv_rf_ram_w32.sv", "specification": "Implement the pinned SERV register-file RAM configured for thirty-two-bit lanes and 32 words, preserving x0 masking.", "verification_command": "./scripts/verify-external-rtl.sh serv && ./scripts/synth-external-rtl.sh serv serv_rf_ram_w32"},
+    {
         "id": "serv-bufreg2-001",
         "source_id": "serv",
         "split": "train",

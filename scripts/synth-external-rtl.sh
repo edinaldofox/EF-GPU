@@ -14,12 +14,20 @@ case "${source_id}:${top}" in
     commit="f200eb2ed7b69ac1c6b8eddd47654522aeee5ce8"
     source_glob="/source/rtl/${top}.v"
     ;;
-  serv:serv_rf_ram)
+  serv:serv_rf_ram_w1|serv:serv_rf_ram_w2|serv:serv_rf_ram_w4|serv:serv_rf_ram|serv:serv_rf_ram_w16|serv:serv_rf_ram_w32)
     repository="https://github.com/olofk/serv.git"
     commit="f200eb2ed7b69ac1c6b8eddd47654522aeee5ce8"
     source_glob="/source/rtl/serv_rf_ram.v"
     read_options="-defer"
-    parameterize="chparam -set width 8 -set csr_regs 0 -set depth 128 serv_rf_ram; "
+    case "${top}" in
+      serv_rf_ram_w1) parameterize="chparam -set width 1 -set csr_regs 0 -set depth 1024 serv_rf_ram; " ;;
+      serv_rf_ram_w2) parameterize="chparam -set width 2 -set csr_regs 0 -set depth 512 serv_rf_ram; " ;;
+      serv_rf_ram_w4) parameterize="chparam -set width 4 -set csr_regs 0 -set depth 256 serv_rf_ram; " ;;
+      serv_rf_ram) parameterize="chparam -set width 8 -set csr_regs 0 -set depth 128 serv_rf_ram; " ;;
+      serv_rf_ram_w16) parameterize="chparam -set width 16 -set csr_regs 0 -set depth 64 serv_rf_ram; " ;;
+      serv_rf_ram_w32) parameterize="chparam -set width 32 -set csr_regs 0 -set depth 32 serv_rf_ram; " ;;
+    esac
+    top="serv_rf_ram"
     ;;
   picorv32:picorv32_pcpi_mul)
     repository="https://github.com/YosysHQ/picorv32.git"
