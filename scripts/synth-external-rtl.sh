@@ -14,7 +14,7 @@ case "${source_id}:${top}" in
     commit="f200eb2ed7b69ac1c6b8eddd47654522aeee5ce8"
     source_glob="/source/rtl/${top}.v"
     ;;
-  serv:serv_rf_ram_w1|serv:serv_rf_ram_w2|serv:serv_rf_ram_w4|serv:serv_rf_ram|serv:serv_rf_ram_w16|serv:serv_rf_ram_w32)
+  serv:serv_rf_ram_w1|serv:serv_rf_ram_w2|serv:serv_rf_ram_w4|serv:serv_rf_ram|serv:serv_rf_ram_w16|serv:serv_rf_ram_w32|serv:serv_rf_ram_w8_c4|serv:serv_rf_ram_w16_c4|serv:serv_rf_ram_w32_c4)
     repository="https://github.com/olofk/serv.git"
     commit="f200eb2ed7b69ac1c6b8eddd47654522aeee5ce8"
     source_glob="/source/rtl/serv_rf_ram.v"
@@ -26,6 +26,9 @@ case "${source_id}:${top}" in
       serv_rf_ram) parameterize="chparam -set width 8 -set csr_regs 0 -set depth 128 serv_rf_ram; " ;;
       serv_rf_ram_w16) parameterize="chparam -set width 16 -set csr_regs 0 -set depth 64 serv_rf_ram; " ;;
       serv_rf_ram_w32) parameterize="chparam -set width 32 -set csr_regs 0 -set depth 32 serv_rf_ram; " ;;
+      serv_rf_ram_w8_c4) parameterize="chparam -set width 8 -set csr_regs 4 -set depth 144 serv_rf_ram; " ;;
+      serv_rf_ram_w16_c4) parameterize="chparam -set width 16 -set csr_regs 4 -set depth 72 serv_rf_ram; " ;;
+      serv_rf_ram_w32_c4) parameterize="chparam -set width 32 -set csr_regs 4 -set depth 36 serv_rf_ram; " ;;
     esac
     top="serv_rf_ram"
     ;;

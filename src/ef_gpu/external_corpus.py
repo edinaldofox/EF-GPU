@@ -102,6 +102,12 @@ EXAMPLES: tuple[dict[str, Any], ...] = (
     {
         "id": "serv-rf-ram-w32-001", "source_id": "serv", "split": "train", "design_family": "serv_register_file_ram_32_bit_lane", "source_path": "rtl/serv_rf_ram.v", "testbench": "tests/external/serv/tb_serv_rf_ram_w32.sv", "specification": "Implement the pinned SERV register-file RAM configured for thirty-two-bit lanes and 32 words, preserving x0 masking.", "verification_command": "./scripts/verify-external-rtl.sh serv && ./scripts/synth-external-rtl.sh serv serv_rf_ram_w32"},
     {
+        "id": "serv-rf-ram-w8-c4-001", "source_id": "serv", "split": "train", "design_family": "serv_register_file_ram_8_bit_lane_with_csrs", "source_path": "rtl/serv_rf_ram.v", "testbench": "tests/external/serv/tb_serv_rf_ram_w8_c4.sv", "specification": "Implement the pinned SERV register-file RAM configured for eight-bit lanes, four CSR slots and 144 words.", "verification_command": "./scripts/verify-external-rtl.sh serv && ./scripts/synth-external-rtl.sh serv serv_rf_ram_w8_c4"},
+    {
+        "id": "serv-rf-ram-w16-c4-001", "source_id": "serv", "split": "train", "design_family": "serv_register_file_ram_16_bit_lane_with_csrs", "source_path": "rtl/serv_rf_ram.v", "testbench": "tests/external/serv/tb_serv_rf_ram_w16_c4.sv", "specification": "Implement the pinned SERV register-file RAM configured for sixteen-bit lanes, four CSR slots and 72 words.", "verification_command": "./scripts/verify-external-rtl.sh serv && ./scripts/synth-external-rtl.sh serv serv_rf_ram_w16_c4"},
+    {
+        "id": "serv-rf-ram-w32-c4-001", "source_id": "serv", "split": "train", "design_family": "serv_register_file_ram_32_bit_lane_with_csrs", "source_path": "rtl/serv_rf_ram.v", "testbench": "tests/external/serv/tb_serv_rf_ram_w32_c4.sv", "specification": "Implement the pinned SERV register-file RAM configured for thirty-two-bit lanes, four CSR slots and 36 words.", "verification_command": "./scripts/verify-external-rtl.sh serv && ./scripts/synth-external-rtl.sh serv serv_rf_ram_w32_c4"},
+    {
         "id": "serv-bufreg2-001",
         "source_id": "serv",
         "split": "train",
