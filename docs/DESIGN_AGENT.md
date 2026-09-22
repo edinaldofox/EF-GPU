@@ -123,6 +123,8 @@ ef-gpu campaign-simd4x8 examples/agent/simd4x8-request.json --attempts 3
 O manifesto da campanha enumera cada tentativa, seed, estado e motivo de parada.
 Uma campanha sem candidata válida é um resultado experimental, não uma falha de
 segurança; ela não modifica o `main` e não substitui a revisão humana.
+Se duas tentativas devolvem o mesmo hash de resposta de patch, a campanha para
+cedo para não gastar orçamento repetindo a mesma amostra.
 
 ### Portas de qualidade e segurança
 
@@ -282,6 +284,8 @@ ef-gpu campaign-simd4x8 examples/agent/simd4x8-request.json --attempts 3
 The campaign manifest lists every attempt, seed, state, and stop reason. A
 campaign without a valid candidate is an experimental result, not a safety
 failure; it never changes `main` or replaces human review.
+If two attempts return the same patch-response hash, the campaign stops early
+instead of spending budget on the same sample again.
 
 ### Quality gates and safety
 

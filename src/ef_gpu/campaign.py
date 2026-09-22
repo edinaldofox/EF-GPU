@@ -30,6 +30,17 @@ def _write_manifest(output: Path, manifest: dict[str, Any]) -> None:
     (output / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
 
 
+def _response_sha256(attempt_output: Path) -> str | None:
+    """Read the model-response fingerprint recorded by the patch gate."""
+    metadata_path = attempt_output / "candidate.patch.meta.json"
+    try:
+        metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
+        response_hash = metadata.get("response", {}).get("sha256")
+    except (OSError, json.JSONDecodeError, AttributeError):
+        return None
+    return response_hash if isinstance(response_hash, str) else None
+
+
 def run_simd4x8_campaign(
     request_path: Path,
     output: Path,
@@ -65,6 +76,7 @@ def run_simd4x8_campaign(
         print(f"campaign invalid-worktree: {output / 'manifest.json'}")
         return 2
 
+    seen_response_hashes: dict[str, int] = {}
     for index in range(attempts):
         attempt_seed = seed + index
         attempt_output = output / f"attempt-{index + 1:03d}"
@@ -79,6 +91,7 @@ def run_simd4x8_campaign(
             returncode = 2
             status = "runner-error"
             error = str(exception)
+        response_sha256 = _response_sha256(attempt_output)
         manifest["attempts"].append(
             {
                 "index": index + 1,
@@ -87,6 +100,7 @@ def run_simd4x8_campaign(
                 "status": status,
                 "path": attempt_output.name,
                 "error": error,
+                "response_sha256": response_sha256,
             }
         )
         if status == "candidate-valid":
@@ -100,6 +114,20 @@ def run_simd4x8_campaign(
             _write_manifest(output, manifest)
             print(f"campaign campaign-valid: {output / 'manifest.json'}")
             return 0
+        if response_sha256 and response_sha256 in seen_response_hashes:
+            manifest.update(
+                {
+                    "status": "campaign-stopped-duplicate-response",
+                    "stop_reason": "duplicate patch response",
+                    "duplicate_of_attempt": seen_response_hashes[response_sha256],
+                    "finished_at_utc": datetime.now(UTC).isoformat(),
+                }
+            )
+            _write_manifest(output, manifest)
+            print(f"campaign stopped on duplicate response: {output / 'manifest.json'}")
+            return 1
+        if response_sha256:
+            seen_response_hashes[response_sha256] = index + 1
 
     manifest.update(
         {

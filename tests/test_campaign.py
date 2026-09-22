@@ -50,6 +50,31 @@ def test_campaign_blocks_a_dirty_worktree(monkeypatch, tmp_path) -> None:
     assert manifest["status"] == "invalid-worktree"
 
 
+def test_campaign_stops_when_the_patch_response_is_duplicated(monkeypatch, tmp_path) -> None:
+    monkeypatch.setattr("ef_gpu.campaign._git", _git_clean)
+    seeds: list[int] = []
+
+    def iterate(_request: Path, output: Path, *, model: str, seed: int) -> int:
+        seeds.append(seed)
+        output.mkdir()
+        (output / "manifest.json").write_text('{"status":"patch-rejected"}\n', encoding="utf-8")
+        (output / "candidate.patch.meta.json").write_text(
+            '{"response":{"sha256":"same-response"}}\n', encoding="utf-8"
+        )
+        return 2
+
+    monkeypatch.setattr("ef_gpu.campaign.run_autonomous_simd4x8_iteration", iterate)
+    output = tmp_path / "campaign"
+    result = run_simd4x8_campaign(
+        ROOT / "examples/agent/simd4x8-request.json", output, attempts=3, seed=10
+    )
+    manifest = json.loads((output / "manifest.json").read_text(encoding="utf-8"))
+    assert result == 1
+    assert seeds == [10, 11]
+    assert manifest["status"] == "campaign-stopped-duplicate-response"
+    assert manifest["duplicate_of_attempt"] == 1
+
+
 def test_campaign_rejects_an_unbounded_attempt_count(tmp_path) -> None:
     try:
         run_simd4x8_campaign(
