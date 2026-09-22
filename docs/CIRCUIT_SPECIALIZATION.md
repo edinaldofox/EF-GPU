@@ -70,6 +70,11 @@ O corpus v2 adiciona `vpu16_sequencer` ao treino, totalizando sete famílias
 (3 treino, 2 validação e 2 benchmark). Ele preserva todos os arquivos v1 e ainda
 não possui volume suficiente para treinamento.
 
+O corpus v3 alcança a meta estrutural interna da Sprint 2: 20 famílias, sendo
+12 de treino, 4 de validação e 4 benchmarks congelados. Isso permite avançar
+para a revisão de fontes da Sprint 3, mas não autoriza download nem treinamento
+de pesos.
+
 ### Critério para chamar o modelo de especializado
 
 O nome `EF-GPU-Circuit-LoRA` só poderá ser usado depois de registrar, no mínimo:

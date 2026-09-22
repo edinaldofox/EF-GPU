@@ -27,3 +27,8 @@ verified design families.
 `ef-gpu-internal-v2.jsonl` adds `vpu16_sequencer` to the training split while
 keeping v1 unchanged. It has seven families: three train, two validation, and
 two frozen benchmark families. It remains a seed corpus, not training volume.
+
+`ef-gpu-internal-v3.jsonl` reaches the Sprint 2 structural floor: 20 families,
+with 12 train, 4 validation, and 4 frozen benchmark families. Its SFT export
+contains 16 examples and excludes all 4 benchmark examples. This does not
+authorize model-weight training.
