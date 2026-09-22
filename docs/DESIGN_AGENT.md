@@ -293,6 +293,18 @@ disposable worktree and EDA gates. The command never edits the main worktree,
 refuses to overwrite output, records provenance, and still requires
 `stage-simd4x8`; a template is not functional, physical, or production approval.
 
+Para usar essa rota na iteração automática, a LLM deve retornar o campo
+`patch_template` na proposta e o operador escolhe explicitamente a fonte segura:
+
+```bash
+ef-gpu iterate-simd4x8 examples/agent/simd4x8-request.json \
+  --patch-source template
+```
+
+The automatic route requires the LLM proposal to contain `patch_template`; the
+operator must explicitly select `--patch-source template`. The model selects a
+reviewed identifier only. It does not author or modify the diff.
+
 To run this path without intervention between gates, use:
 
 ```bash

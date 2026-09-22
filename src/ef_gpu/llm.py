@@ -17,6 +17,7 @@ from pathlib import Path
 from typing import Any
 
 from ef_gpu.contracts import validate_proposal, validate_request
+from ef_gpu.templates import TEMPLATE_IDS
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -86,6 +87,7 @@ def validate_simd4x8_plan(plan: dict[str, Any]) -> list[str]:
     assumptions = plan.get("assumptions")
     target_files = plan.get("target_files")
     validation = plan.get("validation")
+    patch_template = plan.get("patch_template")
     if not isinstance(changes, list) or not changes or not all(isinstance(item, str) for item in changes):
         errors.append("changes must be a non-empty string list")
     if not isinstance(assumptions, list) or not all(isinstance(item, str) for item in assumptions):
@@ -98,6 +100,8 @@ def validate_simd4x8_plan(plan: dict[str, Any]) -> list[str]:
         errors.append(f"target_files contain unsupported path(s): {', '.join(sorted(unknown))}")
     if not isinstance(validation, str) or "c-reference" not in validation.lower():
         errors.append("validation must explicitly use the C-reference RTL regression")
+    if patch_template not in TEMPLATE_IDS:
+        errors.append(f"patch_template must be one of: {', '.join(sorted(TEMPLATE_IDS))}")
     text = " ".join(changes if isinstance(changes, list) else []).lower()
     forbidden = (
         "new input port",
@@ -153,6 +157,7 @@ def build_simd4x8_proposal(
             "openroad_config": "configs/openroad/simd4x8",
         },
         "changes": changes,
+        "patch_template": plan["patch_template"],
         "assumptions": assumptions,
     }
 
@@ -179,13 +184,14 @@ def generate_simd4x8_proposal(
     plan_schema = {
         "type": "object",
         "additionalProperties": False,
-        "required": ["changes", "assumptions", "target_files", "preserves_interface", "validation"],
+        "required": ["changes", "assumptions", "target_files", "preserves_interface", "validation", "patch_template"],
         "properties": {
             "changes": {"type": "array", "minItems": 1, "items": {"type": "string"}},
             "assumptions": {"type": "array", "items": {"type": "string"}},
             "target_files": {"type": "array", "minItems": 1, "items": {"type": "string", "enum": sorted(ALLOWED_TARGET_FILES)}},
             "preserves_interface": {"const": True},
             "validation": {"type": "string", "minLength": 1},
+            "patch_template": {"type": "string", "enum": sorted(TEMPLATE_IDS)},
         },
     }
     request_summary = {
@@ -202,6 +208,7 @@ def generate_simd4x8_proposal(
         "For this first planning task, propose exactly one testbench-only verification improvement in designs/simd4x8/tb/tb_simd4x8_c_ref.sv. "
         "Do not add modules, RTL, ports, or files. preserves_interface must be true and target_files must contain that testbench path. "
         "validation must explicitly say C-reference RTL regression. changes must be a non-empty list; assumptions must be a list. "
+        "Set patch_template to the single reviewed template identifier testbench-pass-message-label. "
         f"Design request summary: {json.dumps(request_summary, separators=(',', ':'))}"
     )
     response = _post_json(

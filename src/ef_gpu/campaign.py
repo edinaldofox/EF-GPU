@@ -31,14 +31,21 @@ def _write_manifest(output: Path, manifest: dict[str, Any]) -> None:
 
 
 def _response_sha256(attempt_output: Path) -> str | None:
-    """Read the model-response fingerprint recorded by the patch gate."""
-    metadata_path = attempt_output / "candidate.patch.meta.json"
-    try:
-        metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
-        response_hash = metadata.get("response", {}).get("sha256")
-    except (OSError, json.JSONDecodeError, AttributeError):
-        return None
-    return response_hash if isinstance(response_hash, str) else None
+    """Read a model-response or deterministic-template candidate fingerprint."""
+    for name, field_path in (
+        ("candidate.patch.meta.json", ("response", "sha256")),
+        ("candidate.patch.template.meta.json", ("patch_sha256",)),
+    ):
+        try:
+            metadata = json.loads((attempt_output / name).read_text(encoding="utf-8"))
+            value: Any = metadata
+            for field in field_path:
+                value = value.get(field) if isinstance(value, dict) else None
+        except (OSError, json.JSONDecodeError):
+            continue
+        if isinstance(value, str):
+            return value
+    return None
 
 
 def run_simd4x8_campaign(
@@ -48,6 +55,7 @@ def run_simd4x8_campaign(
     attempts: int,
     model: str = DEFAULT_MODEL,
     seed: int = 42,
+    patch_source: str = "model",
 ) -> int:
     """Run bounded independent attempts and stop at the first valid candidate."""
     if not 1 <= attempts <= MAX_ATTEMPTS:
@@ -60,6 +68,7 @@ def run_simd4x8_campaign(
         "started_at_utc": datetime.now(UTC).isoformat(),
         "request": {"path": str(request_path), "sha256": _sha256(request_path)},
         "model": {"id": model, "initial_seed": seed},
+        "patch_source": patch_source,
         "attempt_limit": attempts,
         "git": {"commit": _git("rev-parse", "HEAD"), "status": _git("status", "--porcelain")},
         "attempts": [],
@@ -82,7 +91,11 @@ def run_simd4x8_campaign(
         attempt_output = output / f"attempt-{index + 1:03d}"
         try:
             returncode = run_autonomous_simd4x8_iteration(
-                request_path, attempt_output, model=model, seed=attempt_seed
+                request_path,
+                attempt_output,
+                model=model,
+                seed=attempt_seed,
+                patch_source=patch_source,
             )
             attempt_manifest = json.loads((attempt_output / "manifest.json").read_text(encoding="utf-8"))
             status = attempt_manifest.get("status", "missing-status")

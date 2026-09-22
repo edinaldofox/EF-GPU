@@ -53,12 +53,20 @@ def main() -> int:
     autonomous.add_argument("--output", type=Path, help="directory for the complete attempt record")
     autonomous.add_argument("--model", default="qwen2.5-coder:1.5b-instruct", help="local Ollama planning model")
     autonomous.add_argument("--seed", type=int, default=42, help="deterministic Ollama seed")
+    autonomous.add_argument(
+        "--patch-source", choices=("model", "template"), default="model",
+        help="untrusted model diff or deterministic template selected in the proposal",
+    )
     campaign = subcommands.add_parser("campaign-simd4x8", help="run bounded safe SIMD4x8 agent attempts")
     campaign.add_argument("request", type=Path, help="approved SIMD4x8 design request JSON")
     campaign.add_argument("--attempts", type=int, default=3, help="number of attempts, from 1 to 20")
     campaign.add_argument("--output", type=Path, help="directory for the campaign record")
     campaign.add_argument("--model", default="qwen2.5-coder:1.5b-instruct", help="local Ollama planning model")
     campaign.add_argument("--seed", type=int, default=42, help="initial deterministic Ollama seed")
+    campaign.add_argument(
+        "--patch-source", choices=("model", "template"), default="model",
+        help="untrusted model diff or deterministic template selected in each proposal",
+    )
     feedback = subcommands.add_parser("collect-patch-feedback", help="export reviewed patch attempts to JSONL")
     feedback.add_argument("sources", nargs="+", type=Path, help="run directories or .patch.meta.json files")
     feedback.add_argument("--output", type=Path, required=True, help="new JSONL feedback dataset path")
@@ -142,12 +150,15 @@ def main() -> int:
         return 0
     if args.command == "iterate-simd4x8":
         output = args.output or Path("runs") / f"autonomous-simd4x8-{datetime.now().strftime('%Y%m%dT%H%M%S')}"
-        return run_autonomous_simd4x8_iteration(args.request, output, model=args.model, seed=args.seed)
+        return run_autonomous_simd4x8_iteration(
+            args.request, output, model=args.model, seed=args.seed, patch_source=args.patch_source
+        )
     if args.command == "campaign-simd4x8":
         output = args.output or Path("runs") / f"campaign-simd4x8-{datetime.now().strftime('%Y%m%dT%H%M%S')}"
         try:
             return run_simd4x8_campaign(
-                args.request, output, attempts=args.attempts, model=args.model, seed=args.seed
+                args.request, output, attempts=args.attempts, model=args.model, seed=args.seed,
+                patch_source=args.patch_source,
             )
         except ValueError as error:
             print(f"campaign configuration invalid: {error}")

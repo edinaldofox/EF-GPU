@@ -75,6 +75,10 @@ def validate_proposal(document: Any) -> list[str]:
     errors += _object(document.get("model"), "model")
     errors += _object(document.get("artifacts"), "artifacts")
     errors += _non_empty_list(document.get("changes"), "changes")
+    if "patch_template" in document and (
+        not isinstance(document["patch_template"], str) or not document["patch_template"]
+    ):
+        errors.append("patch_template must be a non-empty string")
     if isinstance(document.get("model"), dict):
         for field in ("id", "revision", "seed"):
             if field not in document["model"]:

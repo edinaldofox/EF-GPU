@@ -17,7 +17,8 @@ def test_campaign_stops_after_the_first_valid_candidate(monkeypatch, tmp_path) -
     monkeypatch.setattr("ef_gpu.campaign._git", _git_clean)
     seeds: list[int] = []
 
-    def iterate(_request: Path, output: Path, *, model: str, seed: int) -> int:
+    def iterate(_request: Path, output: Path, *, model: str, seed: int, patch_source: str) -> int:
+        assert patch_source == "model"
         seeds.append(seed)
         output.mkdir()
         status = "patch-rejected" if seed == 10 else "candidate-valid"
@@ -54,7 +55,8 @@ def test_campaign_stops_when_the_patch_response_is_duplicated(monkeypatch, tmp_p
     monkeypatch.setattr("ef_gpu.campaign._git", _git_clean)
     seeds: list[int] = []
 
-    def iterate(_request: Path, output: Path, *, model: str, seed: int) -> int:
+    def iterate(_request: Path, output: Path, *, model: str, seed: int, patch_source: str) -> int:
+        assert patch_source == "model"
         seeds.append(seed)
         output.mkdir()
         (output / "manifest.json").write_text('{"status":"patch-rejected"}\n', encoding="utf-8")

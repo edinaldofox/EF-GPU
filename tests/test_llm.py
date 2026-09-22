@@ -53,6 +53,7 @@ def test_plan_is_wrapped_in_a_complete_proposal(monkeypatch) -> None:
             "target_files": ["designs/simd4x8/rtl/mult8_iter.sv"],
             "preserves_interface": True,
             "validation": "Run the C-reference RTL regression.",
+            "patch_template": "testbench-pass-message-label",
         },
         model="test-model",
         model_digest="test-digest",
@@ -71,9 +72,24 @@ def test_interface_changing_plan_is_rejected() -> None:
             "target_files": ["designs/simd4x8/rtl/simd4x8_mac_comb_top.sv"],
             "preserves_interface": True,
             "validation": "Run the C-reference RTL regression.",
+            "patch_template": "testbench-pass-message-label",
         }
     )
     assert "changes imply an interface modification" in errors
+
+
+def test_plan_with_an_unknown_template_is_rejected() -> None:
+    errors = validate_simd4x8_plan(
+        {
+            "changes": ["Improve the testbench message."],
+            "assumptions": [],
+            "target_files": ["designs/simd4x8/tb/tb_simd4x8_c_ref.sv"],
+            "preserves_interface": True,
+            "validation": "Run the C-reference RTL regression.",
+            "patch_template": "unreviewed-template",
+        }
+    )
+    assert any(error.startswith("patch_template must be one of:") for error in errors)
 
 
 def test_exact_testbench_patch_accepts_only_the_requested_replacement() -> None:

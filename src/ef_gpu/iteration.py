@@ -12,6 +12,7 @@ from typing import Any
 from ef_gpu.contracts import validate_request
 from ef_gpu.llm import DEFAULT_MODEL, generate_simd4x8_proposal, generate_simd4x8_testbench_patch
 from ef_gpu.staging import stage_simd4x8_patch
+from ef_gpu.templates import TEMPLATE_IDS, emit_simd4x8_template_patch
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -42,12 +43,15 @@ def run_autonomous_simd4x8_iteration(
     *,
     model: str = DEFAULT_MODEL,
     seed: int = 42,
+    patch_source: str = "model",
 ) -> int:
-    """Run proposal, restricted patch drafting, and disposable candidate gates.
+    """Run proposal, a restricted patch source, and disposable candidate gates.
 
     The repository worktree is never changed. A rejected model response is a
     normal terminal outcome and remains auditable under ``output``.
     """
+    if patch_source not in {"model", "template"}:
+        raise ValueError("patch_source must be 'model' or 'template'")
     output.mkdir(parents=True, exist_ok=False)
     request_path = request_path.resolve()
     manifest: dict[str, Any] = {
@@ -59,6 +63,7 @@ def run_autonomous_simd4x8_iteration(
             "sha256": _sha256(request_path) if request_path.is_file() else None,
         },
         "model": {"id": model, "seed": seed},
+        "patch_source": patch_source,
         "git": {"commit": _git("rev-parse", "HEAD"), "status": _git("status", "--porcelain")},
         "steps": [],
     }
@@ -97,28 +102,40 @@ def run_autonomous_simd4x8_iteration(
     )
 
     patch_path = output / "candidate.patch"
+    patch_step_name = "02-restricted-patch" if patch_source == "model" else "02-deterministic-template"
+    patch_metadata = patch_path.with_suffix(
+        ".patch.meta.json" if patch_source == "model" else ".patch.template.meta.json"
+    )
     try:
-        generate_simd4x8_testbench_patch(proposal_path, patch_path, model=model, seed=seed)
+        if patch_source == "model":
+            generate_simd4x8_testbench_patch(proposal_path, patch_path, model=model, seed=seed)
+        else:
+            proposal = json.loads(proposal_path.read_text(encoding="utf-8"))
+            template_id = proposal.get("patch_template") if isinstance(proposal, dict) else None
+            if template_id not in TEMPLATE_IDS:
+                raise ValueError("proposal.patch_template is not a reviewed SIMD4x8 template")
+            emit_simd4x8_template_patch(template_id, patch_path)
     except (OSError, RuntimeError, ValueError, json.JSONDecodeError) as error:
         manifest["steps"].append(
             {
-                "name": "02-restricted-patch",
+                "name": patch_step_name,
                 "status": "rejected",
-                "metadata": patch_path.with_suffix(".patch.meta.json").name,
-                "raw_response": patch_path.with_suffix(".patch.rejected.txt").name,
+                "metadata": patch_metadata.name,
             }
         )
-        _finished(manifest, "patch-rejected", str(error))
+        if patch_source == "model":
+            manifest["steps"][-1]["raw_response"] = patch_path.with_suffix(".patch.rejected.txt").name
+        _finished(manifest, "patch-rejected" if patch_source == "model" else "template-rejected", str(error))
         _write_manifest(output, manifest)
-        print(f"autonomous iteration patch-rejected: {output / 'manifest.json'}")
+        print(f"autonomous iteration {manifest['status']}: {output / 'manifest.json'}")
         return 2
     manifest["steps"].append(
         {
-            "name": "02-restricted-patch",
+            "name": patch_step_name,
             "status": "accepted",
             "path": patch_path.name,
             "sha256": _sha256(patch_path),
-            "metadata": patch_path.with_suffix(".patch.meta.json").name,
+            "metadata": patch_metadata.name,
         }
     )
 
