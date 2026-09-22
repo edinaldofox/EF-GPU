@@ -42,7 +42,7 @@ case "${source_id}" in
     commit="5c08c870315c09ccd9ec64ccde20ab3375b3f273"
     license_path="LICENSE"
     license_sha256="dae852f7354066fe13901a60a49ac4f7e45b9ae16fec901e12e24218da0ea999"
-    test_command="iverilog -g2012 -s tb_femtorv_step1 -o /tmp/femtorv-step1 /source/FemtoRV/TUTORIALS/FROM_BLINKER_TO_RISCV/step1.v /workspace/tests/external/femtorv/tb_femtorv_step1.v && vvp /tmp/femtorv-step1"
+    test_command="bash /workspace/scripts/verify-femtorv-tutorial.sh"
     ;;
   fma-rtl)
     repository="https://github.com/Tachyum-Open-Source/fma-rtl.git"

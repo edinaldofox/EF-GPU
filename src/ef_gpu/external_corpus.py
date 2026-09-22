@@ -133,6 +133,17 @@ EXAMPLES: tuple[dict[str, Any], ...] = (
         "verification_command": "./scripts/verify-external-rtl.sh learn-fpga && ./scripts/synth-external-rtl.sh learn-fpga SOC",
     },
     {
+        "id": "femtorv-step2-001",
+        "source_id": "learn-fpga",
+        "split": "validation",
+        "design_family": "femtorv_tutorial_clock_divided_counter",
+        "source_path": "FemtoRV/TUTORIALS/FROM_BLINKER_TO_RISCV/step2.v",
+        "dependencies": ("FemtoRV/TUTORIALS/FROM_BLINKER_TO_RISCV/clockworks.v", "FemtoRV/RTL/PLL/femtopll.v"),
+        "testbench": "tests/external/femtorv/tb_femtorv_step2.v",
+        "specification": "Implement the pinned FemtoRV five-bit counter gated by the tutorial clock divider and active-high reset input.",
+        "verification_command": "./scripts/verify-external-rtl.sh learn-fpga && ./scripts/synth-external-rtl.sh learn-fpga SOC_step2",
+    },
+    {
         "id": "fazyrv-hadd-001",
         "source_id": "fazyrv",
         "split": "train",
