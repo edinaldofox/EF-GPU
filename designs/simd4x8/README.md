@@ -14,3 +14,21 @@ As duas variantes possuem a mesma interface externa. `start` deve ser pulsado po
 O design usa somente aritmética sem sinal. A próxima evolução deve adicionar banco de registradores vetoriais, fetch/decode e scratchpad, mantendo estas unidades como backend de execução.
 
 `tb/tb_simd4x8_mac.sv` aplica um VMAC de quatro lanes às duas variantes. Ele está pronto para Icarus Verilog ou Verilator; a imagem OpenROAD fixada não inclui simulador.
+
+## Baseline C + RTL
+
+`model/vmac_ref.c` é o modelo C de referência: ele executa as quatro operações
+`acc_lane + a_lane * b_lane` com truncamento de 16 bits por lane. O gerador C
+produz quatro casos de borda e 128 vetores pseudoaleatórios com seed fixa. O
+testbench `tb/tb_simd4x8_c_ref.sv` lê esses valores esperados e compara as duas
+implementações RTL.
+
+Execute a baseline completa com:
+
+```bash
+./scripts/verify-simd4x8.sh
+```
+
+O script constrói uma imagem local de simulação
+(`ef-gpu-sim:ubuntu24.04-iverilog12-v1`) a partir de `docker/sim/Dockerfile` na
+primeira execução. Nenhum PDK é baixado ou usado nessa etapa.

@@ -30,11 +30,11 @@ module tb_simd4x8_mac;
         @(negedge clk);
         start = 1'b0;
 
-        @(posedge comb_done);
+        wait (comb_done);
         #1 assert (comb_result == EXPECTED) else $fatal(1, "combinational VMAC mismatch");
         assert (!comb_busy) else $fatal(1, "combinational VMAC must not stall");
 
-        @(posedge iter_busy);
+        wait (iter_busy);
         @(posedge iter_done);
         #1 assert (iter_result == EXPECTED) else $fatal(1, "iterative VMAC mismatch");
         assert (!iter_busy) else $fatal(1, "iterative VMAC busy after done");
