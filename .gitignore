@@ -9,6 +9,7 @@ __pycache__/
 results/
 runs/
 reports/
+.openroad-work/
 *.vcd
 *.fsdb
 *.gds
