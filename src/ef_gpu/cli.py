@@ -10,6 +10,7 @@ from pathlib import Path
 
 from ef_gpu.contracts import validate_proposal, validate_request
 from ef_gpu.campaign import run_simd4x8_campaign
+from ef_gpu.feedback import collect_patch_feedback
 from ef_gpu.iteration import run_autonomous_simd4x8_iteration
 from ef_gpu.llm import generate_simd4x8_proposal, generate_simd4x8_testbench_patch
 from ef_gpu.pipeline import run_simd4x8_iteration
@@ -50,6 +51,9 @@ def main() -> int:
     campaign.add_argument("--output", type=Path, help="directory for the campaign record")
     campaign.add_argument("--model", default="qwen2.5-coder:1.5b-instruct", help="local Ollama planning model")
     campaign.add_argument("--seed", type=int, default=42, help="initial deterministic Ollama seed")
+    feedback = subcommands.add_parser("collect-patch-feedback", help="export reviewed patch attempts to JSONL")
+    feedback.add_argument("sources", nargs="+", type=Path, help="run directories or .patch.meta.json files")
+    feedback.add_argument("--output", type=Path, required=True, help="new JSONL feedback dataset path")
     stage = subcommands.add_parser("stage-simd4x8", help="validate a testbench patch in a disposable Git worktree")
     stage.add_argument("request", type=Path, help="approved design request JSON")
     stage.add_argument("proposal", type=Path, help="proposal JSON with the base commit")
@@ -127,6 +131,14 @@ def main() -> int:
         except ValueError as error:
             print(f"campaign configuration invalid: {error}")
             return 2
+    if args.command == "collect-patch-feedback":
+        try:
+            summary = collect_patch_feedback(args.sources, args.output)
+        except ValueError as error:
+            print(f"feedback collection failed: {error}")
+            return 2
+        print(f"feedback dataset written: {summary['output']} ({summary['records_written']} records)")
+        return 0
     return 1
 
 

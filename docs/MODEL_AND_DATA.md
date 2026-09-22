@@ -15,11 +15,13 @@ Ele separa dois usos deliberadamente:
   4 GB atualmente detectada; o desempenho não deve ser usado como referência de
   qualidade de RTL.
 - **Baseline de avaliação:** `Qwen/Qwen2.5-Coder-3B-Instruct`, com os mesmos
-  prompts e contratos. Ele é o primeiro candidato para uma máquina com memória
-  suficiente, ou para inferência remota aprovada.
+  prompts e contratos. Ele é o primeiro candidato local em Q4_K_M, com contexto
+  limitado a 1.536 tokens na GPU atual.
 
 A família Qwen2.5-Coder disponibiliza variantes instruct de 1,5 B e 3 B, com
-janela de 32k, e licença Apache-2.0. As fontes são o
+janela de 32k. A licença é específica por peso: o 1,5B instalado é Apache-2.0;
+o 3B instalado está sob Qwen Research License e só pode ser usado em pesquisa e
+avaliação não comercial. As fontes são o
 [repositório do modelo de 3B](https://huggingface.co/Qwen/Qwen2.5-Coder-3B-Instruct)
 e a [lista oficial da família](https://github.com/QwenLM/Qwen2.5-Coder).
 O projeto não baixa nem executa pesos automaticamente: isso exige escolha do
@@ -41,6 +43,21 @@ interface, criem módulos/arquivos ou não indiquem a regressão C+RTL.
 Modelos maiores, como Qwen3-Coder, podem ser comparados depois, mas não são a
 baseline inicial: o objetivo desta fase é validar o ciclo EDA, não maximizar a
 capacidade do modelo.
+
+### Coleta de feedback
+
+O comando abaixo converte metadados de patch em JSONL deduplicado. Cada registro
+contém prompt, resposta, hashes, versão/licença do modelo, portas de validação e
+rótulo `accepted` ou `rejected`:
+
+```bash
+ef-gpu collect-patch-feedback runs/ --output runs/feedback/patches.jsonl
+```
+
+Ele não treina nem publica um modelo. A coleção preserva respostas rejeitadas
+porque elas são sinais de preferência/erro; duplicatas de mesma resposta são
+removidas. Antes de qualquer LoRA, é obrigatório revisar licenças, remover dados
+indevidos, congelar a divisão treino/validação/benchmark e aprovar o uso.
 
 ## Requisitos para dados
 
