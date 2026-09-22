@@ -26,6 +26,10 @@
 - Dataset curado de propostas e evidências de verificação.
 - Avaliação congelada, reprodução de baselines e comparação de modelos.
 - Busca controlada de variantes sob orçamento de ferramentas.
+- Corpus de circuitos com famílias separadas entre treino, validação e benchmark;
+  exportação SFT somente após licença, revisão, simulação RTL e síntese válidas.
+- Adapter LoRA/QLoRA de SystemVerilog somente depois de corpus e benchmark
+  suficientes; pesos, downloads e publicação permanecem fora da automação.
 
 ## Fase 4 — Blocos de GPU
 

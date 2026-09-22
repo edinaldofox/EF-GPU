@@ -4,6 +4,17 @@
 
 O modelo será desenvolvido em etapas: primeiro assistência baseada em recuperação de exemplos e regras; depois ajuste supervisionado em pares especificação→RTL/teste; por fim, otimização por feedback de verificadores e métricas físicas válidas.
 
+### Especialização nativa de SystemVerilog
+
+O Qwen local não recebe especialização nativa apenas por prompts. Para alterar
+os pesos de modo rastreável, o repositório oferece `check-circuit-dataset` e
+`export-circuit-sft`: eles exigem exemplos revisados, licenciados, com simulação
+RTL e síntese aprovadas, separam famílias de design entre splits e excluem o
+benchmark congelado da saída de treino. Consulte
+[Especialização nativa para circuitos](CIRCUIT_SPECIALIZATION.md). A configuração
+em `configs/models/circuit-specialization.json` é somente um plano de QLoRA; não
+representa adapter treinado nem autoriza download ou publicação de pesos.
+
 ### Ponto de partida
 
 O perfil inicial está em

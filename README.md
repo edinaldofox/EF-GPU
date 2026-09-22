@@ -25,6 +25,11 @@ O fluxo completo, os contratos de entrada/saída e as portas de qualidade estão
 JSON versionado em [`schemas/`](schemas/), para que o agente seja integrado ao
 fluxo de desenvolvimento, e não tratado como uma caixa-preta.
 
+O modelo local atual é um ponto de partida de código, ainda **não** um modelo
+com pesos especializados em circuitos. A trilha para um adapter LoRA/QLoRA de
+SystemVerilog — com corpus licenciado, avaliação congelada e validação de dados
+— está em [Especialização nativa para circuitos](docs/CIRCUIT_SPECIALIZATION.md).
+
 ### Estrutura inicial
 
 ```text
@@ -88,6 +93,11 @@ The full workflow, input/output contracts, and quality gates are described in
 [Design agent](docs/DESIGN_AGENT.md). Specifications and proposals use
 versioned JSON in [`schemas/`](schemas/), so the agent is part of the
 development flow rather than a black box.
+
+The current local model is a code-model starting point, **not yet** a model with
+circuit-specialized weights. The path toward a SystemVerilog LoRA/QLoRA adapter
+with licensed corpus, frozen evaluation, and data validation is documented in
+[Native circuit specialization](docs/CIRCUIT_SPECIALIZATION.md).
 
 ### Initial layout
 

@@ -1,0 +1,22 @@
+{
+  "schema_version": "1.0",
+  "purpose": "approved starting configuration for a future circuit-domain LoRA experiment",
+  "base_model": {
+    "id": "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+    "license": "Apache-2.0",
+    "revision": "must be pinned before training"
+  },
+  "adaptation": {
+    "method": "QLoRA",
+    "target_languages": ["SystemVerilog", "Verilog", "C testbench"],
+    "output_directory": "artifacts/models/ef-gpu-circuit-lora",
+    "publish_automatically": false
+  },
+  "data_requirements": {
+    "validator": "ef-gpu check-circuit-dataset",
+    "minimum_verification": ["rtl_simulation=passed", "synthesis=passed"],
+    "benchmark_excluded_from_training": true,
+    "license_and_review_required": true
+  },
+  "status": "configuration-only; no adapter weights have been trained"
+}
