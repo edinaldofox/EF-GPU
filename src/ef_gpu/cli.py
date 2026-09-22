@@ -9,6 +9,7 @@ from datetime import datetime
 from pathlib import Path
 
 from ef_gpu.contracts import validate_proposal, validate_request
+from ef_gpu.iteration import run_autonomous_simd4x8_iteration
 from ef_gpu.llm import generate_simd4x8_proposal, generate_simd4x8_testbench_patch
 from ef_gpu.pipeline import run_simd4x8_iteration
 from ef_gpu.staging import stage_simd4x8_patch
@@ -36,6 +37,11 @@ def main() -> int:
     patch.add_argument("proposal", type=Path, help="validated SIMD4x8 proposal JSON")
     patch.add_argument("--output", type=Path, help="patch path; defaults under runs/")
     patch.add_argument("--seed", type=int, default=42, help="deterministic Ollama seed")
+    autonomous = subcommands.add_parser("iterate-simd4x8", help="run the safe autonomous SIMD4x8 candidate loop")
+    autonomous.add_argument("request", type=Path, help="approved SIMD4x8 design request JSON")
+    autonomous.add_argument("--output", type=Path, help="directory for the complete attempt record")
+    autonomous.add_argument("--model", default="qwen2.5-coder:1.5b-instruct", help="local Ollama planning model")
+    autonomous.add_argument("--seed", type=int, default=42, help="deterministic Ollama seed")
     stage = subcommands.add_parser("stage-simd4x8", help="validate a testbench patch in a disposable Git worktree")
     stage.add_argument("request", type=Path, help="approved design request JSON")
     stage.add_argument("proposal", type=Path, help="proposal JSON with the base commit")
@@ -99,6 +105,9 @@ def main() -> int:
             return 2
         print(f"patch written: {patch_path}")
         return 0
+    if args.command == "iterate-simd4x8":
+        output = args.output or Path("runs") / f"autonomous-simd4x8-{datetime.now().strftime('%Y%m%dT%H%M%S')}"
+        return run_autonomous_simd4x8_iteration(args.request, output, model=args.model, seed=args.seed)
     return 1
 
 

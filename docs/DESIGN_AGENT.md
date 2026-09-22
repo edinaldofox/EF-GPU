@@ -97,9 +97,20 @@ O comando aceita somente um patch que passe `git apply --check`, mude o único
 arquivo permitido **e contenha exatamente** a substituição de mensagem pedida.
 Ele inclui o fonte atual no prompt, mas essa resposta continua não confiável:
 qualquer linha extra ou substituição diferente é salva como rejeitada. Para
-Para toda resposta do modelo, o arquivo vizinho `.patch.meta.json` registra
+toda resposta do modelo, o arquivo vizinho `.patch.meta.json` registra
 prompt, hashes das entradas e resposta, versão/seed do modelo e o resultado das
 portas do patch. Em seguida, use `stage-simd4x8` para a verificação isolada.
+
+Para executar esse percurso sem intervenção entre as portas, use:
+
+```bash
+ef-gpu iterate-simd4x8 examples/agent/simd4x8-request.json
+```
+
+Ele exige uma árvore principal limpa e cria um único diretório em `runs/` com a
+proposta, o patch ou resposta rejeitada, metadados e um `manifest.json` de topo.
+Somente um patch aceito alcança o worktree descartável, onde C+RTL e Yosys são
+executados. Esta etapa não executa OpenROAD, altera RTL nem aprova produção.
 
 ### Portas de qualidade e segurança
 
@@ -235,6 +246,18 @@ untrusted: any extra line or different replacement is saved as rejected. For
 every model response, the neighboring `.patch.meta.json` records the prompt,
 input and response hashes, model version/seed, and patch-gate outcome. Then use
 `stage-simd4x8` for isolated verification.
+
+To run this path without intervention between gates, use:
+
+```bash
+ef-gpu iterate-simd4x8 examples/agent/simd4x8-request.json
+```
+
+It requires a clean main worktree and creates one directory under `runs/` with
+the proposal, patch or rejected response, metadata, and a top-level
+`manifest.json`. Only an accepted patch reaches the disposable worktree, where
+C+RTL and Yosys run. This step does not run OpenROAD, change RTL, or approve
+production.
 
 ### Quality gates and safety
 
