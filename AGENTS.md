@@ -13,6 +13,8 @@ Este repositório é uma plataforma de pesquisa para transformar requisitos em R
    ciclo e as portas de qualidade de `docs/DESIGN_AGENT.md`. Uma proposta que
    falhe `ef-gpu check-request` ou `ef-gpu check-proposal` não deve executar o
    fluxo físico.
+7. Siga a ordem e as portas de bloqueio de `docs/PROCESS_SEQUENCE.md` para
+   mudanças de hardware, admissão de corpus, treinamento e fluxo físico.
 
 ## Alterações em hardware
 

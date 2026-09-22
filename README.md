@@ -29,6 +29,8 @@ O modelo local atual é um ponto de partida de código, ainda **não** um modelo
 com pesos especializados em circuitos. A trilha para um adapter LoRA/QLoRA de
 SystemVerilog — com corpus licenciado, avaliação congelada e validação de dados
 — está em [Especialização nativa para circuitos](docs/CIRCUIT_SPECIALIZATION.md).
+A ordem obrigatória para hardware, corpus, treinamento e fluxo físico está em
+[Sequência de processos](docs/PROCESS_SEQUENCE.md).
 
 ### Estrutura inicial
 
@@ -98,6 +100,8 @@ The current local model is a code-model starting point, **not yet** a model with
 circuit-specialized weights. The path toward a SystemVerilog LoRA/QLoRA adapter
 with licensed corpus, frozen evaluation, and data validation is documented in
 [Native circuit specialization](docs/CIRCUIT_SPECIALIZATION.md).
+The required order for hardware, corpus, training, and physical flow is in
+[Process sequence](docs/PROCESS_SEQUENCE.md).
 
 ### Initial layout
 
