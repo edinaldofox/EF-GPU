@@ -222,6 +222,8 @@ EXAMPLES: tuple[dict[str, Any], ...] = (
         "verification_command": "./scripts/verify-external-rtl.sh learn-fpga && ./scripts/synth-external-rtl.sh learn-fpga SOC_step4",
     },
     {
+        "id": "femtorv-step9-001", "source_id": "learn-fpga", "split": "validation", "design_family": "femtorv_tutorial_conditional_branch_control", "source_path": "FemtoRV/TUTORIALS/FROM_BLINKER_TO_RISCV/step9.v", "dependencies": ("FemtoRV/TUTORIALS/FROM_BLINKER_TO_RISCV/riscv_assembly.v", "FemtoRV/TUTORIALS/FROM_BLINKER_TO_RISCV/clockworks.v", "FemtoRV/RTL/PLL/femtopll.v"), "testbench": "tests/external/femtorv/tb_femtorv_step9.v", "specification": "Implement the pinned FemtoRV tutorial conditional-branch predicate and B-type next-PC update for a counted assembly loop.", "verification_command": "./scripts/verify-external-rtl.sh learn-fpga && ./scripts/synth-external-rtl.sh learn-fpga SOC_step9"},
+    {
         "id": "femtorv-step8-001", "source_id": "learn-fpga", "split": "validation", "design_family": "femtorv_tutorial_jump_control_flow", "source_path": "FemtoRV/TUTORIALS/FROM_BLINKER_TO_RISCV/step8.v", "dependencies": ("FemtoRV/TUTORIALS/FROM_BLINKER_TO_RISCV/riscv_assembly.v", "FemtoRV/TUTORIALS/FROM_BLINKER_TO_RISCV/clockworks.v", "FemtoRV/RTL/PLL/femtopll.v"), "testbench": "tests/external/femtorv/tb_femtorv_step8.v", "specification": "Implement the pinned FemtoRV tutorial JAL/JALR next-PC control with label-encoded assembly program.", "verification_command": "./scripts/verify-external-rtl.sh learn-fpga && ./scripts/synth-external-rtl.sh learn-fpga SOC_step8"},
     {
         "id": "femtorv-step7-001",
