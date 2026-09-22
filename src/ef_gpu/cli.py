@@ -10,9 +10,10 @@ from pathlib import Path
 
 from ef_gpu.contracts import validate_proposal, validate_request
 from ef_gpu.campaign import run_simd4x8_campaign
+from ef_gpu.evaluation import evaluate_patch_models
 from ef_gpu.feedback import collect_patch_feedback
 from ef_gpu.iteration import run_autonomous_simd4x8_iteration
-from ef_gpu.llm import generate_simd4x8_proposal, generate_simd4x8_testbench_patch
+from ef_gpu.llm import MODEL_REVISIONS, generate_simd4x8_proposal, generate_simd4x8_testbench_patch
 from ef_gpu.pipeline import run_simd4x8_iteration
 from ef_gpu.staging import stage_simd4x8_patch
 
@@ -54,6 +55,11 @@ def main() -> int:
     feedback = subcommands.add_parser("collect-patch-feedback", help="export reviewed patch attempts to JSONL")
     feedback.add_argument("sources", nargs="+", type=Path, help="run directories or .patch.meta.json files")
     feedback.add_argument("--output", type=Path, required=True, help="new JSONL feedback dataset path")
+    evaluation = subcommands.add_parser("evaluate-patch-models", help="run a narrow reproducible patch evaluation")
+    evaluation.add_argument("proposal", type=Path, help="validated SIMD4x8 proposal JSON")
+    evaluation.add_argument("--models", nargs="+", default=sorted(MODEL_REVISIONS), help="pinned Ollama model tags")
+    evaluation.add_argument("--seed", type=int, default=42, help="deterministic Ollama seed")
+    evaluation.add_argument("--output", type=Path, required=True, help="new directory for evaluation artifacts")
     stage = subcommands.add_parser("stage-simd4x8", help="validate a testbench patch in a disposable Git worktree")
     stage.add_argument("request", type=Path, help="approved design request JSON")
     stage.add_argument("proposal", type=Path, help="proposal JSON with the base commit")
@@ -139,6 +145,12 @@ def main() -> int:
             return 2
         print(f"feedback dataset written: {summary['output']} ({summary['records_written']} records)")
         return 0
+    if args.command == "evaluate-patch-models":
+        try:
+            return evaluate_patch_models(args.proposal, args.output, models=args.models, seed=args.seed)
+        except ValueError as error:
+            print(f"patch evaluation configuration invalid: {error}")
+            return 2
     return 1
 
 

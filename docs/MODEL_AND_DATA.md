@@ -59,6 +59,19 @@ porque elas são sinais de preferência/erro; duplicatas de mesma resposta são
 removidas. Antes de qualquer LoRA, é obrigatório revisar licenças, remover dados
 indevidos, congelar a divisão treino/validação/benchmark e aprovar o uso.
 
+### Avaliação de fumaça comparável
+
+Para comparar os perfis instalados na mesma tarefa mínima de patch, execute:
+
+```bash
+ef-gpu evaluate-patch-models PROPOSTA.json --output runs/evaluation/patch-smoke
+```
+
+O comando usa o mesmo prompt, seed e portas para cada modelo fixado e salva um
+manifesto por resultado. Ele não altera o repositório e não é um benchmark de
+qualidade de RTL: uma tarefa de testbench não mede capacidade de projetar uma
+GPU. O conjunto de benchmark real deve ser congelado e mantido fora de treino.
+
 ## Requisitos para dados
 
 - Registrar origem, licença, versão e transformação de cada item.
