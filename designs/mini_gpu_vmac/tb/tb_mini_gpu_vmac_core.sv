@@ -11,6 +11,8 @@ module tb_mini_gpu_vmac_core;
     logic [63:0] host_memory_write_data = '0;
     logic issue_valid = 1'b0;
     logic [15:0] instruction = '0;
+    logic issue_ready;
+    logic issue_accepted;
     logic busy;
     logic done;
     logic queue_full;
@@ -85,6 +87,21 @@ module tb_mini_gpu_vmac_core;
         wait (busy);
         @(posedge done);
         check_register(3'd5, 64'h0011_0022_0033_0044);
+
+        // A VSTORE presented while a VLOAD is active must not be silently accepted.
+        @(negedge clk);
+        instruction = {4'h2, 3'd6, 5'd0, 4'd13};
+        issue_valid = 1'b1;
+        #1 assert (issue_ready && issue_accepted) else $fatal(1, "idle VLOAD was not accepted");
+        @(negedge clk);
+        instruction = {4'h3, 3'd3, 5'd0, 4'd5};
+        #1 assert (!issue_ready && !issue_accepted)
+            else $fatal(1, "busy VSTORE was unexpectedly accepted");
+        @(posedge done);
+        @(negedge clk);
+        issue_valid = 1'b0;
+        check_register(3'd6, 64'h0011_0022_0033_0044);
+        check_memory(4'd5, '0);
 
         issue({4'h3, 3'd3, 5'd0, 4'd4});
         wait (busy);

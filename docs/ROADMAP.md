@@ -44,4 +44,5 @@
   unidade iterativa trabalha e a inicia depois do write-back.
 - `scratchpad16x64`: memória local de 16 palavras vetoriais de 64 bits,
   integrada por VLOAD/VSTORE. A próxima etapa é definir dependências e hazards
-  de memória para além do descarte seguro de operações recebidas durante `busy`.
+  de memória para além do protocolo `issue_ready`/`issue_accepted`, que evita
+  o aceite de operações durante `busy`.

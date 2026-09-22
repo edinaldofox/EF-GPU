@@ -13,6 +13,8 @@ module mini_gpu_vmac_core #(
     input  logic [63:0] host_memory_write_data,
     input  logic        issue_valid,
     input  logic [15:0] instruction,
+    output logic        issue_ready,
+    output logic        issue_accepted,
     output logic        busy,
     output logic        done,
     output logic        queue_full,
@@ -82,10 +84,14 @@ module mini_gpu_vmac_core #(
     );
 
     assign selected_instruction = queue_launch ? queued_instruction : instruction;
-    assign direct_issue = issue_valid && decoded_valid && !busy && !queued_valid;
-    assign queue_capture = ENABLE_QUEUE && issue_valid && decoded_is_vmac && busy && !queued_valid;
+    // `issue_ready` is data-dependent only while a VMAC queue slot is available.
+    assign issue_ready = (!busy && !queued_valid) ||
+                         (ENABLE_QUEUE && busy && !queued_valid && decoded_is_vmac);
+    assign direct_issue = issue_valid && issue_ready && decoded_valid && !busy;
+    assign queue_capture = issue_valid && issue_ready && decoded_is_vmac && busy;
     assign queue_launch = ENABLE_QUEUE && !busy && queued_valid;
     assign issue_accept = direct_issue || queue_launch;
+    assign issue_accepted = direct_issue || queue_capture;
     assign execute_vmac = busy && pending_is_vmac && vmac_done;
     assign execute_memory = busy && (pending_is_vload || pending_is_vstore);
     assign execute_commit = execute_vmac || execute_memory;
