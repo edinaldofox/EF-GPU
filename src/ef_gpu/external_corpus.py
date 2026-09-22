@@ -128,6 +128,16 @@ EXAMPLES: tuple[dict[str, Any], ...] = (
         "verification_command": "./scripts/verify-external-rtl.sh serv && ./scripts/synth-external-rtl.sh serv serv_bufreg2",
     },
     {
+        "id": "serv-decode-001",
+        "source_id": "serv",
+        "split": "train",
+        "design_family": "serv_riscv_instruction_control_decoder",
+        "source_path": "rtl/serv_decode.v",
+        "testbench": "tests/external/serv/tb_serv_decode.sv",
+        "specification": "Implement the pinned SERV registered RISC-V instruction decoder for load, store and conditional-branch control signals.",
+        "verification_command": "./scripts/verify-external-rtl.sh serv && ./scripts/synth-external-rtl.sh serv serv_decode",
+    },
+    {
         "id": "serv-immdec-001",
         "source_id": "serv",
         "split": "train",
