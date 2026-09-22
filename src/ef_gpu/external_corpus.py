@@ -112,6 +112,16 @@ EXAMPLES: tuple[dict[str, Any], ...] = (
         "verification_command": "./scripts/verify-external-rtl.sh serv && ./scripts/synth-external-rtl.sh serv serv_bufreg2",
     },
     {
+        "id": "serv-immdec-001",
+        "source_id": "serv",
+        "split": "train",
+        "design_family": "serv_serial_immediate_and_register_decoder",
+        "source_path": "rtl/serv_immdec.v",
+        "testbench": "tests/external/serv/tb_serv_immdec.sv",
+        "specification": "Implement the pinned SERV serial immediate decoder with shared register-address state, CSR immediate extraction and immediate-bit selection.",
+        "verification_command": "./scripts/verify-external-rtl.sh serv && ./scripts/synth-external-rtl.sh serv serv_immdec",
+    },
+    {
         "id": "picorv32-pcpi-mul-001",
         "source_id": "picorv32",
         "split": "benchmark",
