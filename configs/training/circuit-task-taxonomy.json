@@ -1,0 +1,22 @@
+{
+  "schema_version": "1.0",
+  "tasks": {
+    "specification-to-systemverilog-with-testbench": {
+      "description": "Implement a reviewed RTL block and deterministic SystemVerilog testbench from a complete specification.",
+      "required_target_fields": ["systemverilog", "testbench"]
+    },
+    "rtl-to-testbench": {
+      "description": "Create a deterministic testbench for reviewed RTL without changing its interface.",
+      "required_target_fields": ["testbench"]
+    },
+    "rtl-bug-fix": {
+      "description": "Repair a bounded RTL defect and preserve the reviewed interface.",
+      "required_target_fields": ["systemverilog", "testbench"]
+    },
+    "eda-report-explanation": {
+      "description": "Explain a verified tool result without claiming unmeasured PPA.",
+      "required_target_fields": ["explanation"]
+    }
+  },
+  "policy": "Task variants from the same design family remain in the same split."
+}

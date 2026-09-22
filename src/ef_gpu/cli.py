@@ -12,6 +12,7 @@ from pathlib import Path
 from ef_gpu.contracts import validate_proposal, validate_request
 from ef_gpu.circuit_data import export_circuit_sft, validate_circuit_dataset
 from ef_gpu.internal_corpus import build_internal_circuit_corpus
+from ef_gpu.readiness import write_circuit_corpus_readiness
 from ef_gpu.campaign import run_simd4x8_campaign
 from ef_gpu.evaluation import evaluate_patch_models
 from ef_gpu.feedback import collect_patch_feedback
@@ -85,6 +86,9 @@ def main() -> int:
         "build-internal-circuit-corpus", help="materialize the licensed EF-GPU seed corpus from verified source blocks"
     )
     internal_corpus.add_argument("--output", type=Path, required=True, help="new internal corpus JSONL path")
+    readiness = subcommands.add_parser("circuit-corpus-readiness", help="report Sprint 2 corpus readiness")
+    readiness.add_argument("source", type=Path, help="validated circuit corpus JSONL")
+    readiness.add_argument("--output", type=Path, required=True, help="new readiness JSON report")
     evaluation = subcommands.add_parser("evaluate-patch-models", help="run a narrow reproducible patch evaluation")
     evaluation.add_argument("proposal", type=Path, help="validated SIMD4x8 proposal JSON")
     evaluation.add_argument("--models", nargs="+", default=sorted(MODEL_REVISIONS), help="pinned Ollama model tags")
@@ -209,6 +213,14 @@ def main() -> int:
             print(f"internal circuit corpus build failed: {error}")
             return 2
         print(f"internal circuit corpus written: {summary['output']} ({summary['records']} records)")
+        return 0
+    if args.command == "circuit-corpus-readiness":
+        try:
+            report = write_circuit_corpus_readiness(args.source, args.output)
+        except ValueError as error:
+            print(f"circuit readiness failed: {error}")
+            return 2
+        print(f"circuit corpus ready for training: {report['ready_for_training']}")
         return 0
     if args.command == "evaluate-patch-models":
         try:
