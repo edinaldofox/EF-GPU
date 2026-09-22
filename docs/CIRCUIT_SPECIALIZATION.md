@@ -48,6 +48,24 @@ capacidade de projeto. O perfil para o primeiro experimento está em
 Ele fixa o método proposto (QLoRA), mas não baixa pesos, não inicia treino, não
 publica adapter e não substitui a avaliação.
 
+### Corpus interno v1
+
+O primeiro corpus materializado está em
+[`datasets/circuit/ef-gpu-internal-v1.jsonl`](../datasets/circuit/ef-gpu-internal-v1.jsonl).
+Ele contém seis famílias EF-GPU de licença Apache-2.0: `alu8` e `simd4x8` em
+treino; `vreg8x64` e `scratchpad16x64` em validação; `vpu16_decode` e
+`mini_gpu_vmac` como benchmark congelado. Cada linha inclui hashes dos fontes.
+O gerador bloqueia o reuso do mesmo conteúdo entre splits:
+
+```bash
+ef-gpu build-internal-circuit-corpus \
+  --output datasets/circuit/ef-gpu-internal-v2.jsonl
+```
+
+São somente seis exemplos e, portanto, não devem treinar um LoRA. O próximo
+incremento de dados deve acrescentar novas famílias licenciadas e verificadas,
+sem mover o benchmark v1 para treino.
+
 ### Critério para chamar o modelo de especializado
 
 O nome `EF-GPU-Circuit-LoRA` só poderá ser usado depois de registrar, no mínimo:

@@ -11,6 +11,7 @@ from pathlib import Path
 
 from ef_gpu.contracts import validate_proposal, validate_request
 from ef_gpu.circuit_data import export_circuit_sft, validate_circuit_dataset
+from ef_gpu.internal_corpus import build_internal_circuit_corpus
 from ef_gpu.campaign import run_simd4x8_campaign
 from ef_gpu.evaluation import evaluate_patch_models
 from ef_gpu.feedback import collect_patch_feedback
@@ -80,6 +81,10 @@ def main() -> int:
     )
     circuit_sft.add_argument("source", type=Path, help="validated circuit-examples JSONL path")
     circuit_sft.add_argument("--output", type=Path, required=True, help="new SFT JSONL path")
+    internal_corpus = subcommands.add_parser(
+        "build-internal-circuit-corpus", help="materialize the licensed EF-GPU seed corpus from verified source blocks"
+    )
+    internal_corpus.add_argument("--output", type=Path, required=True, help="new internal corpus JSONL path")
     evaluation = subcommands.add_parser("evaluate-patch-models", help="run a narrow reproducible patch evaluation")
     evaluation.add_argument("proposal", type=Path, help="validated SIMD4x8 proposal JSON")
     evaluation.add_argument("--models", nargs="+", default=sorted(MODEL_REVISIONS), help="pinned Ollama model tags")
@@ -196,6 +201,14 @@ def main() -> int:
             print(f"circuit SFT export failed: {error}")
             return 2
         print(f"circuit SFT dataset written: {summary['output']} ({summary['examples_exported']} examples)")
+        return 0
+    if args.command == "build-internal-circuit-corpus":
+        try:
+            summary = build_internal_circuit_corpus(args.output)
+        except (OSError, ValueError) as error:
+            print(f"internal circuit corpus build failed: {error}")
+            return 2
+        print(f"internal circuit corpus written: {summary['output']} ({summary['records']} records)")
         return 0
     if args.command == "evaluate-patch-models":
         try:

@@ -40,6 +40,7 @@ def validate_circuit_dataset(path: Path) -> dict[str, Any]:
     records = _read_jsonl(path)
     identifiers: set[str] = set()
     family_splits: dict[str, str] = {}
+    source_hash_splits: dict[str, str] = {}
     split_counts = {split: 0 for split in SPLITS}
 
     for index, record in enumerate(records, start=1):
@@ -79,6 +80,14 @@ def validate_circuit_dataset(path: Path) -> dict[str, Any]:
             raise ValueError(f"record {index}: provenance.source must be a non-empty string")
         if provenance.get("reviewed") is not True:
             raise ValueError(f"record {index}: provenance.reviewed must be true")
+        source_hashes = provenance.get("source_sha256")
+        if source_hashes is not None:
+            if not isinstance(source_hashes, dict) or not all(isinstance(value, str) and value for value in source_hashes.values()):
+                raise ValueError(f"record {index}: provenance.source_sha256 must map paths to non-empty hashes")
+            for source_hash in source_hashes.values():
+                previous_source_split = source_hash_splits.setdefault(source_hash, split)
+                if previous_source_split != split:
+                    raise ValueError(f"record {index}: source content leaks across {previous_source_split}/{split}")
         split_counts[split] += 1
 
     return {

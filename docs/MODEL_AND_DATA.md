@@ -15,6 +15,11 @@ benchmark congelado da saída de treino. Consulte
 em `configs/models/circuit-specialization.json` é somente um plano de QLoRA; não
 representa adapter treinado nem autoriza download ou publicação de pesos.
 
+O corpus interno v1, em `datasets/circuit/ef-gpu-internal-v1.jsonl`, materializa
+seis famílias verificadas com duas em treino, duas em validação e duas em
+benchmark. É uma semente de formato e rastreabilidade, não um corpus com volume
+suficiente para iniciar LoRA.
+
 ### Ponto de partida
 
 O perfil inicial está em
