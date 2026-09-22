@@ -42,7 +42,7 @@ case "${source_id}" in
     commit="1e7221349e7b18b1e20f4b301f3b7a34b5ebd490"
     license_path="LICENSE"
     license_sha256="cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
-    test_command="iverilog -g2012 -s tb_mux2 -o /tmp/fma-mux2 /source/mux2.v /workspace/tests/external/fma/tb_mux2.v && vvp /tmp/fma-mux2 && iverilog -g2012 -s tb_mux5d -o /tmp/fma-mux5d /source/mux5d.v /workspace/tests/external/fma/tb_mux5d.v && vvp /tmp/fma-mux5d && iverilog -g2012 -s tb_dff -o /tmp/fma-dff /source/dff.v /workspace/tests/external/fma/tb_dff.v && vvp /tmp/fma-dff && iverilog -g2012 -s tb_dffe -o /tmp/fma-dffe /source/dffe.v /workspace/tests/external/fma/tb_dffe.v && vvp /tmp/fma-dffe && iverilog -g2012 -s tb_incrementer -o /tmp/fma-inc /source/incrementer.v /workspace/tests/external/fma/tb_incrementer.v && vvp /tmp/fma-inc && iverilog -g2012 -s tb_incrementer_8 -o /tmp/fma-inc8 /source/incrementer_8.v /workspace/tests/external/fma/tb_incrementer_8.v && vvp /tmp/fma-inc8 && iverilog -g2012 -s tb_adder10 -o /tmp/fma-add10 /source/adder10.v /workspace/tests/external/fma/tb_adder10.v && vvp /tmp/fma-add10 && iverilog -g2012 -s tb_adder10_no_cin -o /tmp/fma-add10n /source/adder10_no_cin.v /workspace/tests/external/fma/tb_adder10_no_cin.v && vvp /tmp/fma-add10n && iverilog -g2012 -s tb_adder13 -o /tmp/fma-add13 /source/adder13.v /workspace/tests/external/fma/tb_adder13.v && vvp /tmp/fma-add13"
+    test_command="bash /workspace/scripts/verify-fma-primitives.sh"
     ;;
   *)
     echo "unsupported reviewed source: ${source_id}" >&2

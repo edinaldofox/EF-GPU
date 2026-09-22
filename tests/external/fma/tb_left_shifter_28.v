@@ -1,0 +1,1 @@
+module tb_left_shifter_28;reg [27:0] data_to_be_shifted_left;reg [4:0] left_shift_amount;wire [27:0] left_shifted_data;left_shifter_28 dut(.*);initial begin data_to_be_shifted_left=28'h000001;left_shift_amount=5;#1 assert(left_shifted_data==28'h000020);left_shift_amount=27;#1 assert(left_shifted_data==28'h8000000);$display("FMA left shifter passed");$finish;end endmodule

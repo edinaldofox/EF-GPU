@@ -1,0 +1,37 @@
+{
+  "schema_version": "1.0",
+  "command": "build-external-circuit-corpus",
+  "output": "datasets/circuit/external-candidates-v7.jsonl",
+  "output_sha256": "98983df1f2d02c4486cc3b550a98f9afb7835251afd8ede8b82c37ce2151818d",
+  "benchmark_records": [
+    "picorv32-pcpi-mul-001",
+    "fma-mux2-001",
+    "fma-mux5d-001",
+    "fma-dff-001",
+    "fma-dffe-001",
+    "fma-incrementer-001",
+    "fma-incrementer8-001",
+    "fma-adder10-001",
+    "fma-adder10-no-cin-001",
+    "fma-adder13-001",
+    "fma-incrementer11-001",
+    "fma-adder13-no-cin-001",
+    "fma-adder161-001",
+    "fma-adder162-001",
+    "fma-left-shifter28-001"
+  ],
+  "frozen_benchmark_sha256": "800d50ce9fafefa4f1f33b22bd97855532b4770709dd25d73f703879342f49a4",
+  "created_at_utc": "2026-09-22T18:09:33.575276+00:00",
+  "validation": {
+    "schema_version": "1.0",
+    "records": 27,
+    "splits": {
+      "train": 11,
+      "benchmark": 15,
+      "validation": 1
+    },
+    "families": 27,
+    "training_status": "validated-data-only; no model weights trained"
+  },
+  "training_status": "candidate-data-only; below Sprint 3 volume floor and no model weights trained"
+}

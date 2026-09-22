@@ -74,10 +74,10 @@
       "review": {
         "reviewed_at": "2026-09-22",
         "reviewer": "EF-GPU autonomous intake; human promotion remains required",
-        "scope": "root-level primitive RTL only: mux2, mux5d, dff, dffe, incrementer, incrementer_8, adder10, adder10_no_cin and adder13; no TestFloat/SoftFloat, test harness, generated output, PDK, or FPGA-specific multiplier",
+        "scope": "root-level primitive RTL only: mux2, mux5d, dff, dffe, incrementer, incrementer_8, incrementer_11, adder10, adder10_no_cin, adder13, adder13_no_cin, adder161_no_cin_no_cout, adder162_no_cin and left_shifter_28; no TestFloat/SoftFloat, test harness, generated output, PDK, or FPGA-specific multiplier",
         "status": "approved-for-temporary-extraction"
       },
-      "candidate_paths": ["mux2.v", "mux5d.v", "dff.v", "dffe.v", "incrementer.v", "incrementer_8.v", "adder10.v", "adder10_no_cin.v", "adder13.v"],
+      "candidate_paths": ["mux2.v", "mux5d.v", "dff.v", "dffe.v", "incrementer.v", "incrementer_8.v", "incrementer_11.v", "adder10.v", "adder10_no_cin.v", "adder13.v", "adder13_no_cin.v", "adder161_no_cin_no_cout.v", "adder162_no_cin.v", "left_shifter_28.v"],
       "split": "benchmark"
     }
   ],

@@ -180,6 +180,16 @@ EXAMPLES: tuple[dict[str, Any], ...] = (
         "id": "fma-adder10-no-cin-001", "source_id": "fma-rtl", "split": "benchmark", "design_family": "fma_ten_bit_adder", "source_path": "adder10_no_cin.v", "testbench": "tests/external/fma/tb_adder10_no_cin.v", "specification": "Implement the pinned Tachyum ten-bit adder without carry input.", "verification_command": "./scripts/verify-external-rtl.sh fma-rtl && ./scripts/synth-external-rtl.sh fma-rtl adder10_no_cin"},
     {
         "id": "fma-adder13-001", "source_id": "fma-rtl", "split": "benchmark", "design_family": "fma_thirteen_bit_adder", "source_path": "adder13.v", "testbench": "tests/external/fma/tb_adder13.v", "specification": "Implement the pinned Tachyum thirteen-bit adder with carry input and output.", "verification_command": "./scripts/verify-external-rtl.sh fma-rtl && ./scripts/synth-external-rtl.sh fma-rtl adder13"},
+    {
+        "id": "fma-incrementer11-001", "source_id": "fma-rtl", "split": "benchmark", "design_family": "fma_eleven_bit_incrementer", "source_path": "incrementer_11.v", "testbench": "tests/external/fma/tb_incrementer_11.v", "specification": "Implement the pinned Tachyum eleven-bit incrementer with carry output.", "verification_command": "./scripts/verify-external-rtl.sh fma-rtl && ./scripts/synth-external-rtl.sh fma-rtl incrementer_11"},
+    {
+        "id": "fma-adder13-no-cin-001", "source_id": "fma-rtl", "split": "benchmark", "design_family": "fma_thirteen_bit_adder_without_carry_in", "source_path": "adder13_no_cin.v", "testbench": "tests/external/fma/tb_adder13_no_cin.v", "specification": "Implement the pinned Tachyum thirteen-bit adder without carry input.", "verification_command": "./scripts/verify-external-rtl.sh fma-rtl && ./scripts/synth-external-rtl.sh fma-rtl adder13_no_cin"},
+    {
+        "id": "fma-adder161-001", "source_id": "fma-rtl", "split": "benchmark", "design_family": "fma_161_bit_adder", "source_path": "adder161_no_cin_no_cout.v", "testbench": "tests/external/fma/tb_adder161_no_cin_no_cout.v", "specification": "Implement the pinned Tachyum 161-bit adder without carry ports.", "verification_command": "./scripts/verify-external-rtl.sh fma-rtl && ./scripts/synth-external-rtl.sh fma-rtl adder161_no_cin_no_cout"},
+    {
+        "id": "fma-adder162-001", "source_id": "fma-rtl", "split": "benchmark", "design_family": "fma_162_bit_adder", "source_path": "adder162_no_cin.v", "testbench": "tests/external/fma/tb_adder162_no_cin.v", "specification": "Implement the pinned Tachyum 162-bit adder with carry output.", "verification_command": "./scripts/verify-external-rtl.sh fma-rtl && ./scripts/synth-external-rtl.sh fma-rtl adder162_no_cin"},
+    {
+        "id": "fma-left-shifter28-001", "source_id": "fma-rtl", "split": "benchmark", "design_family": "fma_28_bit_left_shifter", "source_path": "left_shifter_28.v", "testbench": "tests/external/fma/tb_left_shifter_28.v", "specification": "Implement the pinned Tachyum 28-bit variable left shifter.", "verification_command": "./scripts/verify-external-rtl.sh fma-rtl && ./scripts/synth-external-rtl.sh fma-rtl left_shifter_28"},
 )
 
 

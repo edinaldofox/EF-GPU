@@ -1,0 +1,1 @@
+module tb_adder162_no_cin;reg [161:0] op_a,op_b;wire [161:0] result;wire cout;adder162_no_cin dut(.*);initial begin op_a={162{1'b1}};op_b=1;#1 assert(cout && result==0);$display("FMA adder162 passed");$finish;end endmodule
